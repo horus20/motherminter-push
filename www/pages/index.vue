@@ -511,6 +511,7 @@
             notice: this.createParamMessage,
           }
         })
+        this.companyLink = `${BACKEND_BASE_URL}/api/company/${this.company.uid}/get_wallet?count=1`
         console.log(this.company)
 
         this.loadAdditionalInfo()
