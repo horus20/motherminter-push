@@ -1,0 +1,932 @@
+<template>
+  <div class="wrapper">
+    <!-- Header -->
+    <header>
+      <a href="/" class="logo">Push.</a>
+      <div class="hamburger" v-on:click="toggleMenu()">
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+      </div>
+    </header>
+    <div class="menu" v-bind:class="{ 'menu-visible': isShowMenu }" v-if="isShowMenu">
+      <ul class="nav">
+        <li><a href="/">{{ $t('menu.home') }}.</a></li>
+        <li><a href="#">{{ $t('menu.about') }}.</a></li>
+        <li><a href="#">{{ $t('menu.account') }}.</a></li>
+        <li><a href="#" v-on:click="startCreateMenu()">{{ $t('menu.createWallet') }}.</a></li>
+      </ul>
+      <div class="lang-block">
+        <button class="btn" v-bind:class="{ 'lang-active': currentLang === 'en' }"  v-on:click="changeLocale('en')"><img src="/assets/img/svg/en.svg" alt="">En</button>
+        <button class="btn" v-bind:class="{ 'lang-active': currentLang === 'ru' }"  v-on:click="changeLocale('ru')"><img src="/assets/img/svg/rus.svg" alt="">Rus</button>
+      </div>
+    </div>
+    <!-- /Header -->
+    <main>
+      <div v-if="isShowLoader" class="lds-ripple"><div></div><div></div></div>
+
+      <template v-if="screenStart">
+        <!-- Start page -->
+        <div class="container" style="text-align: center; font-size: 24px">
+          <h1 style="padding-top: 36vh; margin-bottom: 32px">{{ $t('password.havePassword') }}</h1>
+          <a v-on:click="openPasswordPage">{{ $t('yes') }}</a>
+          <a style="margin-left: 50%" v-on:click="login()">{{ $t('no') }}</a>
+        </div>
+        <!-- /Start page -->
+      </template>
+
+      <template v-if="screenPassword">
+        <!-- Password -->
+        <div class="container">
+          <div class="password">
+            <h1>{{ $t('password.enterPassword') }}:</h1>
+            <input type="password" v-bind:placeholder="$t('password.passwordPlaceholder')" v-model="password"/>
+            <a class="btn" v-on:click="login()">{{ $t('password.accessWallet') }}</a>
+          </div>
+        </div>
+        <!-- /Password -->
+      </template>
+
+      <template v-if="step === 1">
+        <!-- Main -->
+        <div class="container">
+          <div class="main common-wrap">
+            <h1>{{ $t('main.youBalance') }}:</h1>
+            <p class="balance" v-for="balance in balances">{{ balance.amount }} {{ balance.coin }}</p>
+            <p class="currency">~{{ balanceSumUSD }} USD</p>
+            <p class="transfer">{{ $t('main.transferSection') }}</p>
+            <div class="transfer-items">
+              <a class="transfer__item" v-on:click="showTransfer()">
+                <img src="assets/img/svg/person.svg" alt="">
+                <p v-html="newLineLabel($t('main.anotherPerson'))"></p>
+              </a>
+              <a class="transfer__item" v-on:click="showMyTransfer()">
+                <img src="assets/img/svg/wallet.svg" alt="">
+                <p v-html="newLineLabel($t('main.youWallet'))"></p>
+              </a>
+              <a class="transfer__item" v-on:click="showFund()">
+                <img src="assets/img/svg/charity.svg" alt="">
+                <p v-html="newLineLabel($t('main.charityFund'))"></p>
+              </a>
+            </div>
+            <p class="transfer">{{ $t('main.spendSection') }}</p>
+            <div class="transfer-items">
+              <a class="transfer__item" v-on:click="showMobile()">
+                <img src="assets/img/svg/services.svg" alt="">
+                <p v-html="newLineLabel($t('main.mobileService'))"></p>
+              </a>
+              <a class="transfer__item" v-on:click="showGames()">
+                <img src="assets/img/svg/games.svg" alt="">
+                <p v-html="newLineLabel($t('main.games'))"></p>
+              </a>
+              <span class="transfer__item">
+                <img src="assets/img/svg/food.svg" alt="" v-on:click="showFood()">
+                <p style="color: #989ba9" v-html="newLineLabel($t('main.foodDelivery'))"></p>
+              </span>
+            </div>
+            <!--                <button class="btn btn-more">More info</button>-->
+          </div>
+        </div>
+        <!-- /Main -->
+      </template>
+
+      <!-- Content__Item-07 -->
+      <div v-if="isNeedAction" class="container">
+        <div class="feedback feedback-action common-wrap">
+          <p v-if="isFeedback">{{ $t('action.toReceive') }} <span>{{ balanceSumBIP }} BIP</span> (~ ${{ balanceSumUSD }}) {{ $t('action.afterReceive') }}:</p>
+          <p v-if="!isFeedback">{{ $t('action.toReceive') }} <span>{{ balanceSumBIP }} BIP</span> (~ ${{ balanceSumUSD }}) {{ $t('action.afterReceiveActive') }}:</p>
+          <p class="explanation" v-if="companyMsg !== ''">{{ companyMsg }}</p>
+          <div class="text-wrap">
+            <textarea id="ta" v-model="replyMsg" maxlength="140" v-if="isFeedback" v-bind:placeholder="$t('action.placeholder')"></textarea>
+            <textarea id="ta" v-model="replyMsg" maxlength="140" v-if="!isFeedback" v-bind:placeholder="$t('action.placeholderActive')"></textarea>
+            <div class="max-lenght" v-if="isFeedback">
+              <span v-if="msgSize === maxLen">min {{ minLen }}/ max {{ maxLen }}</span>
+              <span v-if="msgSize !== maxLen">{{ msgSize }}</span>
+              <img v-if="isMinMsgSize" src="/assets/img/svg/like.svg" alt="">
+              <img v-if="!isMinMsgSize" src="/assets/img/svg/action_grey.svg" alt="">
+            </div>
+          </div>
+          <button class="btn" v-on:click="sendReply()">{{ $t('action.access') }}</button>
+        </div>
+      </div>
+      <!-- /Content__Item-07 -->
+
+      <!-- Another Persone -->
+      <div v-if="step === 2" class="container">
+        <div class="another-persone common-wrap">
+          <h1>{{ $t('main.youBalance') }}:</h1>
+          <p class="balance" v-for="balance in balances">{{ balance.amount }} {{ balance.coin }}</p>
+          <p class="currency">~{{ balanceSumUSD }} USD</p>
+          <p class="transfer">{{ $t('main.transferSection') }}</p>
+          <img class="icon" src="/assets/img/svg/person.svg" alt="">
+          <p class="insert">{{ $t('main.haveWallet') }}?</p>
+          <a class="btn btn-persone" v-on:click="showTransferPart21()">{{ $t('yes') }}</a>
+          <a class="btn btn-persone" v-on:click="showTransferPart22()">{{ $t('no') }}</a>
+          <a class="btn btn-more btn-back" v-on:click="goBack()"><img src="/assets/img/svg/back.svg" alt="">{{ $t('back') }}</a>
+        </div>
+      </div>
+      <!-- /Another Persone -->
+
+      <!-- Another Persone (Dont Wallet) -->
+      <div v-if="step === 22" class="container">
+        <div class="another-persone another-persone__dont-wallet common-wrap">
+          <h1>{{ $t('main.youBalance') }}:</h1>
+          <p class="balance" v-for="balance in balances">{{ balance.amount }} {{ balance.coin }}</p>
+          <p class="currency">~{{ balanceSumUSD }} USD</p>
+          <img class="icon" src="/assets/img/svg/person.svg" alt="">
+          <p class="insert">{{ $t('main.createNewPush') }}</p>
+          <a class="btn" v-on:click="showTransferPart32()">{{ $t('main.createSend') }}</a>
+          <a class="btn btn-more btn-back" v-on:click="goBack()"><img src="/assets/img/svg/back.svg" alt="">{{ $t('back') }}</a>
+        </div>
+      </div>
+      <!-- /Another Persone (Dont Wallet) -->
+
+      <!-- Another Persone (Have Wallet) -->
+      <div v-if="step === 21" class="container">
+        <div class="another-persone__have-wallet common-wrap">
+          <h1>{{ $t('main.youBalance') }}:</h1>
+          <p class="balance" v-for="balance in balances">{{ balance.amount }} {{ balance.coin }}</p>
+          <p class="currency">~{{ balanceSumUSD }} USD</p>
+          <img class="icon" src="/assets/img/svg/person.svg" alt="">
+          <p class="insert" v-model="transfer.address">{{ $t('main.insertAddress') }}:</p>
+          <input type="text" placeholder="Address">
+          <a class="btn" v-on:click="showTransferPart31()">{{ $t('Send') }}</a>
+          <a class="btn btn-more btn-back" v-on:click="goBack()"><img src="/assets/img/svg/back.svg" alt="">{{ $t('back') }}</a>
+        </div>
+      </div>
+      <!-- /Another Persone (Have Wallet) -->
+
+      <div v-if="step === 42" class="container">
+        <div class="content__item content__success content__success-multiple">
+          <h5>{{ $t('success') }}!</h5>
+          <p>{{ $t('create.willReceive') }}:</p>
+          <div class="score">
+            <p class="balance">{{ transfer.value }} {{ transfer.symbol }}</p>
+            <p class="currency">~{{ balanceSumUSD }} USD</p>
+          </div>
+          <p class="share">Share this link or QR:</p>
+          <div class="copy_link">
+            <p>{{ createdLink }}</p>
+            <div class="buttons">
+              <button id="#copy" class="btn btn-copy" v-on:click="copyToClipboard(createdLink)">{{ $t('Link') }}<img src="/assets/img/svg/copy.svg" alt=""></button>
+              <button class="btn btn-copy btn-qr" v-on:click="toggleShowQR()">QR<img src="/assets/img/svg/qr_link_blue.svg" alt=""></button>
+              <button class="btn btn-copy btn-share">{{ $t('Share') }}<img src="/assets/img/svg/share.svg" alt=""></button>
+              <button class="btn btn-copy btn-more" v-on:click="toggleShowDir()">{{ $t('More') }}<span>...</span></button>
+            </div>
+          </div>
+          <div class="back"></div>
+        </div>
+      </div>
+
+      <!-- Your Wallet -->
+      <div v-if="step === 3" class="container">
+        <div class="your-wallet common-wrap">
+          <h1>{{ $t('main.youBalance') }}:</h1>
+          <p class="balance" v-for="balance in balances">{{ balance.amount }} {{ balance.coin }}</p>
+          <p class="currency">~{{ balanceSumUSD }} USD</p>
+          <img class="icon" src="/assets/img/svg/wallet.svg" alt="">
+          <p class="insert" v-model="transfer.address">{{ $t('main.insertAddress') }}:</p>
+          <input type="text" placeholder="Address">
+          <a class="btn" v-on:click="showTransferPart31()">{{ $t('Send') }}</a>
+          <a class="btn btn-more btn-back" v-on:click="goBack()"><img src="/assets/img/svg/back.svg" alt="">{{ $t('back') }}</a>
+        </div>
+      </div>
+      <!-- /Your Wallet -->
+
+      <!-- Mobile Services -->
+      <div v-if="step === 4" class="container">
+        <div class="mobile-services common-wrap">
+          <h1>{{ $t('main.youBalance') }}:</h1>
+          <p class="balance" v-for="balance in balances">{{ balance.amount }} {{ balance.coin }}</p>
+          <p class="currency">~{{ balanceSumUSD }} USD</p>
+          <img class="icon" src="/assets/img/svg/services.svg" alt="">
+          <p class="insert">{{ $t('main.mobileTitle') }}:</p>
+          <input id="phone" type="text" v-model="transfer.address" placeholder="+7 9...">
+          <p class='recevie'>{{ $t('main.mobileRecv') }}:<br>
+            <span>~{{ balanceSumUSD }} USD</span>
+            <!--<span>~0.01 KZT</span>
+            <span>~0.01 UAH</span>
+            <span>~0.01 BYN</span>-->
+          </p>
+          <button class="btn" v-on:click="showMobileRun()">{{ $t('Send') }}</button>
+          <a class="btn btn-more btn-back" v-on:click="goBack()"><img src="/assets/img/svg/back.svg" alt="">{{ $t('back') }}</a>
+        </div>
+      </div>
+      <!-- /Mobile Services -->
+
+      <!-- Games -->
+      <div v-if="step === 5" class="container">
+        <div class="games common-wrap">
+          <h1>{{ $t('main.youBalance') }}:</h1>
+          <p class="balance" v-for="balance in balances">{{ balance.amount }} {{ balance.coin }}</p>
+          <p class="currency">~{{ balanceSumUSD }} USD</p>
+          <img class="icon" src="/assets/img/svg/games.svg" alt="">
+          <p class="description">{{ $t('main.timeloop') }}</p>
+          <button class="btn" v-on:click="showGamesRun()">{{ $t('main.timeloopBtn') }}</button>
+          <a class="btn btn-more btn-back" v-on:click="goBack()"><img src="/assets/img/svg/back.svg" alt="">{{ $t('back') }}</a>
+        </div>
+      </div>
+      <!-- /Games -->
+
+      <!-- Charity Fund -->
+      <div v-if="step === 6" class="container">
+        <div class="charity-fund common-wrap">
+          <h1>{{ $t('main.youBalance') }}:</h1>
+          <p class="balance" v-for="balance in balances">{{ balance.amount }} {{ balance.coin }}</p>
+          <p class="currency">~{{ balanceSumUSD }} USD</p>
+          <img class="icon" src="/assets/img/svg/charity.svg" alt="">
+          <p class="description">{{ $t('main.dobro') }}</p>
+          <button class="btn" v-on:click="showFundRun()">{{ $t('Send') }}</button>
+          <a class="btn btn-more btn-back" v-on:click="goBack()"><img src="/assets/img/svg/back.svg" alt="">{{ $t('back') }}</a>
+        </div>
+      </div>
+      <!-- /Charity Fund -->
+
+    </main>
+    <!-- / -->
+
+    <!-- Modal Alert -->
+    <div class="modal-alert" v-bind:class="{ 'modal-activation-error': isShowError }" v-if="isShowError">
+      <div class="close-modal-alert" v-on:click="closeError()">
+        <span></span><span></span>
+      </div>
+      <p>{{ errorMsg }}</p>
+    </div>
+    <!-- /Modal Alert -->
+
+    <!-- Modal -->
+    <div v-if="step === 200" class="modal-alert" v-bind:class="{ 'modal-activation-error': (step === 200) }">
+      <img v-bind:src="successIcon" alt="">
+      <p class="yipe">Yippee!</p>
+      <p>{{ transfer.value }} {{ transfer.symbol }}<br>
+        {{ $t('main.successSent') }}
+        <template v-if="isDobro">
+          <br><template v-html="newLineLabel($t('dobroSuccess'))"></template>
+        </template>
+      </p>
+      <template v-if="successLink">
+        <p class="pers-link">{{ $t('timeloopLink') }}:</p>
+        <a v-bind:href="successLink" target="_blank" class="link">{{ successLink }}</a>
+        <a v-bind:href="successLink" class="btn btn-link" target="_blank">{{ $t('playNow') }}</a>
+      </template>
+    </div>
+    <!-- /Modal -->
+
+    <!-- Modal QR -->
+    <div class="modal-alert modal-qr" v-bind:class="{ 'modal-activation-qr': isShowModalQR }" v-if="isShowModalQR">
+      <div class="close-modal-alert" v-on:click="toggleShowQR()">
+        <span></span><span></span>
+      </div>
+      <qrcode v-bind:value="createdLink" :options="{ width: 250 }" tag="img"></qrcode>
+    </div>
+    <!-- /Modal QR -->
+
+    <!-- Direct Links -->
+    <div class="modal-alert modal-dir-links" v-bind:class="{ 'modal-activation-dir': isShowModalDir }" v-if="isShowModalDir">
+      <h5>{{ $t('directLinks.title') }}:</h5>
+      <div class="links-items">
+        <div class="links__item">
+          <img src="/assets/img/svg/services.svg" alt="">
+          <span>Mobile<br>services</span>
+          <img src="/assets/img/svg/copy.svg" alt="">
+          <img onclick="showModalQR()" class="qr" src="/assets/img/svg/qr_link_blue.svg" alt="">
+        </div>
+        <div class="links__item">
+          <img src="/assets/img/svg/games.svg" alt="">
+          <span>Games</span>
+          <img src="/assets/img/svg/copy.svg" alt="">
+          <img onclick="showModalQR()" class="qr" src="/assets/img/svg/qr_link_blue.svg" alt="">
+        </div>
+        <div class="links__item">
+          <img src="/assets/img/svg/charity.svg" alt="">
+          <span>Charity<br>fund</span>
+          <img src="/assets/img/svg/copy.svg" alt="">
+          <img onclick="showModalQR()" class="qr" src="/assets/img/svg/qr_link_blue.svg" alt="">
+        </div>
+        <div class="links__item">
+          <img src="/assets/img/svg/fuel.svg" alt="">
+          <span>gas<br>bonus</span>
+          <p>Coming soon.<br>Powered by NUT.<br><img src="/assets/img/svg/hazelnut.svg" alt=""></p>
+        </div>
+      </div>
+      <button v-on:click="toggleShowDir()" class="btn btn-more btn-back"><img src="/assets/img/svg/back.svg" alt="">back</button>
+    </div>
+    <!-- /Direct Links -->
+
+    <!-- Footer -->
+    <footer>
+      <a href="https://www.minter.network/" target="_blank" class="copy">Powered by <span>Minter</span></a>
+    </footer>
+    <!-- /Footer -->
+    <!-- /Page -->
+  </div>
+</template>
+
+<script>
+  import Vue from 'vue'
+  import VueClipboard from 'vue-clipboard2'
+
+  import {
+    BACKEND_BASE_URL, createCompany,
+    createWallet, DEFAULT_SYMBOL, generateWalletUid,
+    getAddressBalance, getBipPrice,
+    getCoinExchangeList,
+    getFiatExchangeList,
+    LINK, prettyFormat
+  } from './core'
+  import axios from 'axios'
+  import { Decimal } from 'decimal.js'
+  import TxDataSend from 'minterjs-tx/src/tx-data/send'
+  import { convertToPip, toBuffer } from 'minterjs-util'
+  import { coinToBuffer } from 'minterjs-tx/src/helpers'
+  import { Tx, TX_TYPE } from 'minterjs-tx'
+  import TxSignature from 'minterjs-tx/src/tx-signature'
+  import * as cryptoRandomString from 'crypto-random-string'
+  import { SHA256 } from 'crypto-js'
+
+  if (process.client) {
+    Vue.use(VueClipboard)
+  }
+
+  export default {
+    data () {
+      return {
+        isShowLoader: false,
+        screenStart: true,
+        screenPassword: false,
+        isNeedAction: false,
+        isFeedback: true,
+
+        isShowModalQR: false,
+        isShowModalDir: false,
+
+        isDobro: false,
+
+        prevStep: [],
+        step: 0,
+
+        password: '',
+        uid: '',
+        privateKey: '',
+        address: '',
+        companyMsg: '',
+        replyMsg: '',
+
+        errorMsg: '',
+        isShowError: false,
+        isShowMenu: false,
+
+        balances: [],
+        coins: [],
+        bipToUSD: null,
+        fiat: [],
+        balanceSumUSD: 0,
+        balanceSumBIP: 0,
+        isBalanceUpdated: false,
+
+        maxLen: 140,
+        minLen: 100,
+
+        transfer: {
+          address: '',
+          value: '',
+          symbol: '',
+        },
+        successIcon: '/assets/img/svg/person.svg',
+        successLink: '',
+      }
+    },
+    created () {
+      this.uid = this.$route.params.id
+      this.checkAuth()
+    },
+    computed: {
+      currentLang() {
+        return this.$i18n.locale
+      },
+      createdLink() {
+        return `${LINK}${this.createParamUID}`
+      },
+      msgSize() {
+        return this.maxLen - this.replyMsg.length
+      },
+      isMinMsgSize() {
+        return this.replyMsg.length > this.minLen
+      }
+    },
+    // method
+    methods: {
+      goBack: function () {
+        this.step = this.prevStep.pop()
+        return false
+      },
+      changeLocale: function (locale) {
+        this.$i18n.setLocaleCookie(locale)
+        this.$i18n.setLocale(locale)
+      },
+      toggleMenu: function () {
+        this.isShowMenu = !this.isShowMenu
+      },
+      openPasswordPage: function () {
+        this.screenPassword = true
+        this.screenStart = false
+      },
+      openMainPage: async function () {
+        this.screenPassword = false
+        this.screenStart = false
+        this.step = 1
+        this.prevStep = []
+        this.isNeedAction = false
+
+        await this.loadAdditionalInfo()
+        // this.loadCoins()
+        this.updateBalance()
+      },
+      checkAuth: async function () {
+        try {
+          this.isShowLoader = true
+          const response = await axios.get(`${BACKEND_BASE_URL}/api/${this.uid}`)
+          if (response && response.status === 200) {
+            if (response.data.status === 70 || response.data.status === 71) { // new
+              this.isFeedback = (response.data.status === 70)
+              this.isNeedAction = true
+              this.screenPassword = false
+              this.screenStart = false
+
+              const wallet = await createWallet(this.uid)
+              this.address = wallet.address
+              this.privateKey = wallet.privateKey
+
+              // load company params
+              const afterActivateResponse = await axios.post(`${BACKEND_BASE_URL}/api/${this.uid}/after`, {
+                mxaddress: this.address,
+              })
+
+              if (afterActivateResponse.status === 200 && afterActivateResponse.data) {
+                this.activateParams = afterActivateResponse.data
+                this.companyMsg = this.activateParams.notice
+              }
+
+              this.loadAdditionalInfo()
+              this.updateBalance()
+            }
+          }
+        } catch (error) {
+          this.isCreateNew = false
+          console.error(error)
+        }
+        this.isShowLoader = false
+      },
+      login: async function () {
+        this.isShowLoader = true
+        try {
+          const wallet = await createWallet(this.uid, this.password)
+          this.privateKey = wallet.privateKey
+          this.address = wallet.address
+
+          // try activate
+          const response = await axios.post(`${BACKEND_BASE_URL}/api/${this.uid}`, {
+            mxaddress: this.address,
+          })
+          if (response.status === 200) {
+            if (response.data.status === 100) {
+              // login success
+              this.openMainPage()
+              return
+            }
+          }
+          // show error
+        } catch (error) {
+          console.error(error)
+          //this.$bvModal.show('modalError')
+        }
+        this.errorMsg = this.$t('errors.authError')
+        // this.$bvModal.show('modalError')
+        this.isShowLoader = false
+      },
+      sendReply: async function () {
+        if (isFeedback && this.replyMsg.length < this.minLen) {
+          return false
+        }
+        if (!isFeedback && this.replyMsg.length < 8) {
+          return false
+        }
+        // send reply to company
+        const afterActivateResponse = await axios.post(`${BACKEND_BASE_URL}/api/${this.uid}/reply`, {
+          mxaddress: this.address,
+          reply: this.replyMsg,
+        })
+
+        if (afterActivateResponse.status === 200 && afterActivateResponse.data && afterActivateResponse.data.status === 'ok') {
+          this.openMainPage()
+        }
+        return false
+      },
+      updateBalance: async function () {
+        if (!this.address) {
+          return false;
+        }
+        this.isShowLoader = true
+
+        try {
+          this.balanceSumUSD = new Decimal(0)
+          this.balanceSumBIP = new Decimal(0)
+          const balances = await getAddressBalance(this.address)
+          this.balances = balances
+            .filter(({ amount }) => {
+              return new Decimal(amount).gt(0)
+            })
+            .map(({ coin, amount }) => {
+              let usdAmount = 0
+              let bipAmount = 0
+              if (new Decimal(amount).gt(0)) {
+                const coinToDef = this.coins[coin]
+                if (coinToDef || coin === DEFAULT_SYMBOL) {
+                  bipAmount = new Decimal(amount)
+                    .mul(coinToDef ?? 1)
+                  this.balanceSumBIP = this.balanceSumBIP.plus(bipAmount)
+                }
+
+                if (this.bipToUSD) {
+                  usdAmount = bipAmount
+                    .mul(this.bipToUSD)
+                  this.balanceSumUSD = this.balanceSumUSD.plus(usdAmount)
+                }
+
+                this.transfer.value = amount
+                this.transfer.symbol = coin
+              }
+
+              return {
+                coin,
+                amount: prettyFormat(amount),
+                usdAmount
+              }
+            })
+        } catch (error) {
+          console.error(error)
+          // this.errorMsg = error.message
+          // this.isShowError = true
+        }
+        this.isBalanceUpdated = false
+        this.isShowLoader = false
+      },
+      newLineLabel(label) {
+        return label.split('|').join('<br>')
+      },
+      closeError: function () {
+        this.isShowError = false
+      },
+      loadAdditionalInfo: async function () {
+        this.bipToUSD = await getBipPrice()
+        if (this.fiat.length === 0) {
+          this.fiat = getFiatExchangeList()
+        }
+      },
+      loadCoins: function () {
+        this.isShowLoader = true
+        if (this.coins.length === 0) {
+          getCoinExchangeList()
+            .then((coins) => {
+              this.coins = coins
+              this.isShowLoader = false
+            })
+        }
+      },
+      // application
+      showTransfer: function () {
+        this.prevStep.push(this.step)
+        this.step = 2
+
+        this.successIcon = '/assets/img/svg/person.svg'
+      },
+      showTransferPart21: function () {
+        this.prevStep.push(this.step)
+        this.step = 21
+      },
+      showTransferPart22: function () {
+        this.prevStep.push(this.step)
+        this.step = 22
+      },
+      showTransferPart31: async function () {
+        this.prevStep.push(this.step)
+        this.step = 31
+
+        if (this.transfer.address) {
+          this.useMax(1)
+          const result = await this.sendTransfer(this.transfer.address, this.transfer.value, this.transfer.symbol)
+          if (result) {
+            this.step = 200
+          }
+        }
+      },
+      showTransferPart32: async function () {
+        this.prevStep.push(this.step)
+        this.step = 32
+
+        try {
+          // generate wallet, start check balance
+          this.createParamUID = await generateWalletUid()
+          const wallet = await createWallet(this.createParamUID, '')
+          // send info to server
+          const company = await createCompany({
+            type: 'simple',
+            uid: this.createParamUID,
+            mxaddress: wallet.address,
+          })
+
+          this.transfer.address = wallet.address
+          this.useMax(2)
+          const result = await this.sendTransfer(this.transfer.address, this.transfer.value, this.transfer.symbol)
+          if (result) {
+            this.step = 42
+
+          }
+        } catch (error) {
+          //this.errorMsg = error
+          console.error(error)
+        }
+      },
+      showMyTransfer: function () {
+        this.prevStep.push(this.step)
+        this.step = 3
+        this.successIcon = '/assets/img/svg/wallet.svg'
+      },
+      showFund: function () {
+        this.prevStep.push(this.step)
+        this.step = 6
+      },
+      showFundRun: async function () {
+        this.transfer.address = 'Mxb3a5a735b1cdc88090bbd6c253fba1bc78e1b5d0'
+        this.useMax(1)
+        if (this.transfer.address) {
+          this.useMax(1)
+          const result = await this.sendTransfer(this.transfer.address, this.transfer.value, this.transfer.symbol)
+          if (result) {
+            this.step = 200
+            this.successIcon = '/assets/img/svg/charity.svg'
+            this.isDobro = true
+          }
+        }
+      },
+      showMobile: function () {
+        this.prevStep.push(this.step)
+        this.step = 4
+      },
+      showMobileRun: async function () {
+        // send to bipToPhone
+        if (this.transfer.address.length < 11) {
+          return false;
+        }
+
+        this.isShowLoader = true
+        try {
+          const response = await axios.post(`${BACKEND_BASE_URL}/api/${this.uid}/services/phone`, {
+            mxaddress: this.address,
+            phone: this.transfer.address,
+          })
+          if (response && response.status === 200) {
+            if (response.data) {
+              this.useMax(3)
+              const mxaddress = response.data
+              const result = await this.sendTransfer(mxaddress, this.transfer.value, this.transfer.symbol)
+              if (result) {
+                this.successIcon = '/assets/img/svg/services.svg'
+                this.step = 200
+              }
+
+            } else {
+              this.errorMsg = this.$t('errors.phoneError')
+              this.isShowError = true
+            }
+          } else {
+            throw new Error(response.status)
+          }
+        } catch (error) {
+          console.error(error)
+        }
+        this.isShowLoader = false
+      },
+      showGames: function () {
+        this.prevStep.push(this.step)
+        this.step = 5
+      },
+      showGamesRun: async function () {
+        this.isShowLoader = true
+        this.transfer.address = '0x0'
+        this.useMax(4)
+        // create timeloop link
+        const secretCode = cryptoRandomString({
+          length: 10,
+          type: 'hex',
+        })
+        const secretCodeHash = SHA256(secretCode).toString()
+        const timeloopAddress = 'Mx3650064486380210127159872871912061022891'
+        const link = `https://timeloop.games/?gift=${secretCode}`
+        const result = await this.sendTransfer(timeloopAddress, this.transfer.value, this.transfer.symbol, secretCodeHash)
+        if (result) {
+          this.successIcon = '/assets/img/svg/games.svg'
+          this.successLink = link
+          this.step = 200
+        }
+        this.isShowLoader = false
+      },
+      showFood: function () {
+
+      },
+      sendTransfer: async function (to, value, symbol, payload = null) {
+        try {
+          const txData = new TxDataSend({
+            to: toBuffer(to),
+            coin: coinToBuffer(symbol),
+            value: `0x${convertToPip(value, 'hex')}`,
+          })
+          const txParams = {
+            nonce: String('0x' + this.toHex(this.nonce)),
+            chainId: '0x01',
+            gasPrice: '0x01',
+            gasCoin: coinToBuffer(symbol),
+            type: TX_TYPE.SEND,
+            data: txData.serialize(),
+            signatureType: '0x01'
+          }
+          if (payload) {
+            txParams.payload = `0x${Buffer.from(payload, 'utf-8').toString('hex')}`
+          }
+
+          const tx = new Tx(txParams)
+          const privateKeyBuffer = Buffer.from(this.privateKey, 'hex')
+          tx.signatureData = (new TxSignature()).sign(tx.hash(false), privateKeyBuffer).serialize()
+          const serializedTx = tx.serialize().toString('hex')
+
+          // send to back
+          const txHash = await axios.post(`${BACKEND_BASE_URL}/api/${this.uid}/send`, {
+            mxaddress: this.address,
+            rawTx: serializedTx,
+          })
+
+          return true
+        } catch (error) {
+          console.error(error)
+          this.errorMsg = 'Извините при отправке произошла ошибка'
+
+          return false
+        }
+      },
+      useMax: function (type = 1) {
+        if (this.transfer.symbol === '') {
+          return
+        }
+        let index = 0
+        for(index; index < this.balances.length; index +=1 ) {
+          if (this.balances[index].coin === this.transfer.symbol) {
+            break;
+          }
+        }
+
+        if (type === 1) {// simple transfer
+          const fee = new Decimal(0.01).div(this.coins[this.transfer.symbol])
+          this.transfer.value = new Decimal(this.balances[index].amount).minus(fee).toString()
+        }
+        if (type === 2) {// pushwallet
+          const fee = new Decimal(0.01).div(this.coins[this.transfer.symbol])
+          this.transfer.value = new Decimal(this.balances[index].amount).minus(fee).toString()
+        }
+        if (type === 3) {// phone
+          const fee = new Decimal(0.01).div(this.coins[this.transfer.symbol])
+          this.transfer.value = new Decimal(this.balances[index].amount).minus(fee).toString()
+        }
+        if (type === 4) {// timeloop
+          const fee = new Decimal(0.138).div(this.coins[this.transfer.symbol])
+          this.transfer.value = new Decimal(this.balances[index].amount).minus(fee).toString()
+        }
+      },
+      copyToClipboard: function (message) {
+        this.$copyText(message).then(function (e) {
+        }, function (e) {
+          console.log(message, e)
+        })
+      },
+      toggleShowDir: function () {
+        this.isShowModalDir = !this.isShowModalDir
+      },
+      toggleShowQR: function () {
+        this.isShowModalQR = !this.isShowModalQR
+      },
+    },
+    // html header section
+    head: {
+      meta: [
+        // { charset: 'utf-8' },
+        // { name: 'viewport', content: 'width=device-width, initial-scale=1.0' },
+        { name: 'msapplication-TileColor', content: '#ffffff' },
+        { name: 'msapplication-TileImage', content: '/ms-icon-144x144.png' },
+        { name: 'theme-color', content: '#ffffff' },
+      ],
+      link: [
+        { rel: 'apple-touch-icon', size: '57x57', href: '/apple-icon-57x57.png', },
+        { rel: 'apple-touch-icon', size: '60x60', href: '/apple-icon-60x60.png', },
+        { rel: 'apple-touch-icon', size: '72x72', href: '/apple-icon-72x72.png', },
+        { rel: 'apple-touch-icon', size: '76x76', href: '/apple-icon-76x76.png', },
+        { rel: 'apple-touch-icon', size: '114x114', href: '/apple-icon-114x114.png', },
+        { rel: 'apple-touch-icon', size: '120x120', href: '/apple-icon-120x120.png', },
+        { rel: 'apple-touch-icon', size: '144x144', href: '/apple-icon-144x144.png', },
+        { rel: 'apple-touch-icon', size: '152x152', href: '/apple-icon-152x152.png', },
+        { rel: 'apple-touch-icon', size: '180x180', href: '/apple-icon-180x180.png', },
+        { rel: 'icon', type: 'image/png', size: '192x192', href: '/android-icon-192x192.png', },
+        { rel: 'icon', type: 'image/png', size: '36x36', href: '/android-icon-36x36.png', },
+        { rel: 'icon', type: 'image/png', size: '96x96', href: '/android-icon-96x96.png', },
+        { rel: 'icon', type: 'image/png', size: '48x48', href: '/android-icon-48x48.png', },
+        { rel: 'manifest', href: '/manifest.json' },
+      ]
+    }
+  }
+</script>
+
+<style>
+  .header-section {
+    margin-bottom: 5px;
+  }
+  .balances {
+    margin-top: 5px;
+  }
+  .balance-usd {
+    font-size: 16pt;
+  }
+  .balance-fiat {
+    font-size: 12pt;
+  }
+  .balance-token {
+    margin-right: 10px;
+  }
+  .language-box {
+    font-size: 10pt;
+  }
+  .balance-section {
+    margin-bottom: 20px;
+  }
+  .transfer-section {
+    margin-bottom: 20px;
+  }
+  .payment-sections {
+    margin-bottom: 20px;
+  }
+  .pincode {
+    margin-bottom: 10px;
+
+  }
+  .loader-modal {
+    background: transparent;
+    border: none;
+  }
+  .max-btn {
+    float: right;
+    position: absolute;
+    right: 4px;
+    top: 38px;
+    padding: 2px 10px;
+  }
+  .menu-visible {
+    opacity: 1;
+    z-index: 9;
+  }
+  .modal-activation-error {
+    opacity: 1;
+    z-index: 5;
+    margin-top: 0;
+  }
+  .lds-ripple {
+    display: inline-block;
+    position: relative;
+    width: 80px;
+    height: 80px;
+  }
+  .lds-ripple div {
+    position: absolute;
+    border: 4px solid #dfc;
+    opacity: 1;
+    border-radius: 50%;
+    animation: lds-ripple 1s cubic-bezier(0, 0.2, 0.8, 1) infinite;
+  }
+  .lds-ripple div:nth-child(2) {
+    animation-delay: -0.5s;
+  }
+  @keyframes lds-ripple {
+    0% {
+      top: 36px;
+      left: 36px;
+      width: 0;
+      height: 0;
+      opacity: 1;
+    }
+    100% {
+      top: 0px;
+      left: 0px;
+      width: 72px;
+      height: 72px;
+      opacity: 0;
+    }
+  }
+</style>

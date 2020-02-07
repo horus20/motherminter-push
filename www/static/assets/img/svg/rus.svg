@@ -1,0 +1,24 @@
+<svg id="Rus" xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32">
+  <defs>
+    <style>
+      .cls-1 {
+        fill: #f72717;
+      }
+
+      .cls-1, .cls-2, .cls-3 {
+        fill-rule: evenodd;
+      }
+
+      .cls-2 {
+        fill: #e7e7e7;
+      }
+
+      .cls-3 {
+        fill: #0036aa;
+      }
+    </style>
+  </defs>
+  <path id="Shape_1_copy" data-name="Shape 1 copy" class="cls-1" d="M977.826,220A16,16,0,0,1,963,230H963a16,16,0,0,1-14.822-10h29.652Z" transform="translate(-947 -198)"/>
+  <path id="Shape_1_copy_2" data-name="Shape 1 copy 2" class="cls-2" d="M948.174,208a15.991,15.991,0,0,1,29.652,0H948.174Z" transform="translate(-947 -198)"/>
+  <path id="Shape_1_copy_3" data-name="Shape 1 copy 3" class="cls-3" d="M947,214a15.941,15.941,0,0,1,1.178-6.012h29.644a15.93,15.93,0,0,1,0,12.024H948.178A15.941,15.941,0,0,1,947,214Z" transform="translate(-947 -198)"/>
+</svg>

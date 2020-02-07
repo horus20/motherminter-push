@@ -1,0 +1,19 @@
+<svg id="icon" xmlns="http://www.w3.org/2000/svg" width="32" height="26" viewBox="0 0 32 26">
+  <defs>
+    <style>
+      .cls-1 {
+        fill: #4a40fd;
+      }
+
+      .cls-1, .cls-2 {
+        fill-rule: evenodd;
+      }
+
+      .cls-2 {
+        fill: #f2093d;
+      }
+    </style>
+  </defs>
+  <path id="Rounded_Rectangle_1" data-name="Rounded Rectangle 1" class="cls-1" d="M2415,184h-16a4,4,0,0,1-4-4V168a4,4,0,0,1,4-4h16a4,4,0,0,1,4,4v12A4,4,0,0,1,2415,184Zm0-18h-16v1h1v1h1v1h1v1h1v1h1v1h1v1h1v1h2v-1h1v-1h1v-1h1v-1h1v-1h1v-1h1v-1h1v-1h0Zm2,2h-1v1h-1v1h-1v1h-1v1h-1v1h-1v1h-1v1h-1v1h-4v-1h-1v-1h-1v-1h-1v-1h-1v-1h-1v-1h-1v-1h-1v-1h-1v12a2,2,0,0,0,2,2h16a2,2,0,0,0,2-2V168Z" transform="translate(-2395 -158)"/>
+  <path class="cls-2" d="M2420.5,171a6.5,6.5,0,1,1,6.5-6.5A6.5,6.5,0,0,1,2420.5,171Zm1.5-10-0.76-.1q-0.285.2-.54,0.356c-0.18.1-.35,0.2-0.52,0.283s-0.34.161-.52,0.23-0.47.171-.66,0.233v1a6.845,6.845,0,0,0,.92-0.342,3.318,3.318,0,0,0,.66-0.374v5.772L2422,168v-7Z" transform="translate(-2395 -158)"/>
+</svg>

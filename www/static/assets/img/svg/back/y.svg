@@ -1,0 +1,16 @@
+<svg id="Y" xmlns="http://www.w3.org/2000/svg" width="28" height="34" viewBox="0 0 28 34">
+  <defs>
+    <style>
+      .cls-1 {
+        fill: #f1f1f1;
+        fill-rule: evenodd;
+      }
+
+      .cls-2 {
+        fill: #4c1cbc;
+      }
+    </style>
+  </defs>
+  <path id="Easy_copy" data-name="Easy copy" class="cls-1" d="M915,599l-6.609,14.336a13.367,13.367,0,0,0-.774,1.945h-0.07q-0.587-1.687-.7-1.945L899,599h-6l12,21v13h5V620l11-21h-6Z" transform="translate(-893 -599)"/>
+  <rect class="cls-2" x="12" y="21" width="5" height="13"/>
+</svg>

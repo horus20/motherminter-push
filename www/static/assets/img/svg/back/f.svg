@@ -1,0 +1,19 @@
+<svg id="F" xmlns="http://www.w3.org/2000/svg" width="18" height="34" viewBox="0 0 18 34">
+  <defs>
+    <style>
+      .cls-1 {
+        fill: #f1f1f1;
+      }
+
+      .cls-1, .cls-2 {
+        fill-rule: evenodd;
+      }
+
+      .cls-2 {
+        fill: #ffd753;
+      }
+    </style>
+  </defs>
+  <path id="Fast_copy_5" data-name="Fast copy 5" class="cls-1" d="M694,260H676v34h6V280h11v-5H682V265h12v-5Z" transform="translate(-676 -260)"/>
+  <path id="Fast_copy_4" data-name="Fast copy 4" class="cls-2" d="M682,294h-6V260h6v34Z" transform="translate(-676 -260)"/>
+</svg>

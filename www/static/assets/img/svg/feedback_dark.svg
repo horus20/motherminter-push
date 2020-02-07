@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" viewBox="0 0 26 26">
+	<defs>
+		<style type="text/css">
+			.st0{fill:#1b2139;}
+		</style>
+	</defs>
+	<path class="st0" d="M22,21.1h-9.6L4,26v-4.9c-2.2,0-4-1.8-4-4V4c0-2.2,1.8-4,4-4h18c2.2,0,4,1.8,4,4v13C26,19.3,24.2,21.1,22,21.1z
+		 M19,5H7v2h12L19,5L19,5z M19,9H7v2h12L19,9L19,9z M19,13H7v2h12L19,13L19,13z"/>
+</svg>

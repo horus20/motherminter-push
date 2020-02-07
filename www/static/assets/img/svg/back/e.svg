@@ -1,0 +1,19 @@
+<svg id="E" xmlns="http://www.w3.org/2000/svg" width="18" height="34" viewBox="0 0 18 34">
+  <defs>
+    <style>
+      .cls-1 {
+        fill: #f1f1f1;
+      }
+
+      .cls-1, .cls-2 {
+        fill-rule: evenodd;
+      }
+
+      .cls-2 {
+        fill: #f2093d;
+      }
+    </style>
+  </defs>
+  <path id="Easy_copy_5" data-name="Easy copy 5" class="cls-1" d="M777,248H765V238h11v-5H765v-9h12v-5H759v34h18v-5Z" transform="translate(-759 -219)"/>
+  <path id="Easy_copy_4" data-name="Easy copy 4" class="cls-2" d="M765,253h-6V219h6v34Z" transform="translate(-759 -219)"/>
+</svg>
