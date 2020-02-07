@@ -3,7 +3,7 @@
     <!-- Header -->
     <header>
       <a href="/" class="logo">Push.</a>
-      <div class="hamburger" v-on:click="toggleMenu()">
+      <div :class="{'hamburger-active': IsActiveHamburgerClass}" class="hamburger" v-on:click="toggleMenu()">
         <span></span>
         <span></span>
         <span></span>
@@ -12,6 +12,7 @@
       </div>
     </header>
 
+    <transition name="fade">
     <div class="menu" v-bind:class="{ 'menu-visible': isShowMenu }" v-if="isShowMenu">
       <ul class="nav">
         <li><a href="/">{{ $t('menu.home') }}.</a></li>
@@ -24,6 +25,7 @@
         <button class="btn" v-bind:class="{ 'lang-active': currentLang === 'ru' }"  v-on:click="changeLocale('ru')"><img src="/assets/img/svg/rus.svg" alt="">Rus</button>
       </div>
     </div>
+    </transition>
     <!-- /Header -->
     <main>
       <div v-if="isShowLoader" class="lds-ripple"><div></div><div></div></div>
@@ -31,6 +33,7 @@
         <div class="conten-items">
 
           <!-- Content__Item-01 -->
+          <transition name="fade">
           <div v-if="step === 1" class="content__item content__start content__item-active">
             <p>{{ $t('index.preTitle') }}</p>
             <h1>{{ $t('index.title') }}</h1>
@@ -48,10 +51,12 @@
               </div>
             </div>
           </div>
+          </transition>
           <!-- /Content__Item-01 -->
 
           <!-- Content Choose Wallet -->
-          <div v-if="step === 2" class="content__item content__choose-wallet content__item-active">
+          <transition name="fade">
+          <div v-if="step === 2" class="content__item content__choose-wallet content__item-active step-2">
             <h5 v-html="newLineLabel($t('create.title'))"></h5>
             <div class="buttons">
               <button v-on:click="isCreateOne = true" class="btn btn-radio" v-bind:class="{ 'btn-radio__active': isCreateOne }">
@@ -74,9 +79,11 @@
               </div>
             </div>
           </div>
+          </transition>
           <!-- /Content Choose Wallet -->
 
           <!-- Content Attach Messege -->
+          <transition name="fade">
           <div v-if="step === 3" class="content__item content__attach-messege content__item-active">
             <form>
 
@@ -96,9 +103,11 @@
             <button class="btn" v-on:click="startCreateWallet()">{{ $t('goToNext') }}</button>
             <a class="btn btn-more btn-back" v-on:click="goBack()"><img src="/assets/img/svg/back.svg" alt="">{{ $t('back') }}</a>
           </div>
+          </transition>
           <!-- /Content Attach Messege -->
 
           <!-- Content Describe Feedback -->
+          <transition name="fade">
           <div v-if="step === 31" class="content__item content__describe-action content__item-active content__item-active">
             <p>{{ $t('create.feedbackTitle') }}</p>
             <div class="text-wrap">
@@ -112,9 +121,11 @@
             <button class="btn" v-on:click="startCreateWallet()">{{ $t('goToNext') }}</button>
             <a class="btn btn-more btn-back" v-on:click="goBack()"><img src="/assets/img/svg/back.svg" alt="">{{ $t('back') }}</a>
           </div>
+          </transition>
           <!-- /Content Describe Feedback -->
 
           <!-- Content Describe Action -->
+          <transition name="fade">
           <div v-if="step === 32" class="content__item content__describe-action content__item-active content__item-active">
             <p>{{ $t('create.actionTitle') }}</p>
             <div class="text-wrap">
@@ -128,9 +139,11 @@
             <button class="btn" v-on:click="startCreateWallet()">{{ $t('goToNext') }}</button>
             <a class="btn btn-more btn-back" v-on:click="goBack()"><img src="/assets/img/svg/back.svg" alt="">{{ $t('back') }}</a>
           </div>
+          </transition>
           <!-- /Content Describe Action -->
 
           <!-- Content Type Wallet -->
+          <transition name="fade">
           <div v-if="step === 6" class="content__item content__type-wallet content__item-active">
             <h1>{{ $t('create.numberCreate') }}?</h1>
             <a class="more-about" v-on:click="toggleShowNType()">{{ $t('create.learnMore') }}</a>
@@ -139,9 +152,11 @@
 
             <a class="btn btn-more btn-back" v-on:click="goBack()"><img src="/assets/img/svg/back.svg" alt="">{{ $t('back') }}</a>
           </div>
+          </transition>
           <!-- /Content Type Wallet -->
 
           <!-- Content Form multiply single unlim  -->
+          <transition name="fade">
           <div v-if="step === 7" class="content__item content__form content__item-active">
             <p class="unlimited" v-if="!createParamIsFixed">{{ $t('create.numberWalletUnlim') }}</p>
             <input type="text" v-if="createParamIsFixed" class="input" v-bind:placeholder="$t('create.numberWallet')" v-model="createParamCount">
@@ -153,14 +168,16 @@
             <button class="btn" v-on:click="startCreateWallet()">{{ $t('goToNext') }}</button>
             <a class="btn btn-more btn-back" v-on:click="goBack()"><img src="/assets/img/svg/back.svg" alt="">{{ $t('back') }}</a>
           </div>
+          </transition>
           <!-- /Content Form -->
 
           <!-- Content Coins Address -->
+          <transition name="fade">
           <div v-if="step === 4" class="content__item content__coins-address content__item-active">
             <h5>{{ $t('create.plzFill') }}</h5>
-            <div class="copy_link">
+            <div :class="{'active-copy' : isCopieded}" class="copy_link">
               <p>{{ addressForFilling }}</p>
-              <button class="btn btn-copy" v-on:click="copyToClipboard(addressForFilling)">Copy<img src="/assets/img/svg/copy.svg" alt=""></button>
+              <button class="btn btn-copy" v-on:click="copyToClipboard(addressForFilling, $event)">Copy<img src="/assets/img/svg/copy.svg" alt=""></button>
             </div>
             <div class="qr-code" v-if="typeof addressForFilling !== 'undefined'">
               <qrcode v-bind:value="addressForFilling" :options="{ width: 121 }" tag="img"></qrcode>
@@ -168,9 +185,11 @@
             <button class="btn" v-bind:class="{ 'disabled': !isAddressFilling }"  v-on:click="startCreateSuccess()">{{ $t('goToNext') }}</button>
             <a class="btn btn-more btn-back" v-on:click="goBack()"><img src="/assets/img/svg/back.svg" alt="">{{ $t('back') }}</a>
           </div>
+          </transition>
           <!-- /Content Coins Address -->
 
           <!-- Content Success -->
+          <transition name="fade">
           <div v-if="step === 5" class="content__item content__success content__item-active">
             <h1>{{ $t('success') }}!</h1>
             <p>{{ $t('create.willReceive') }}:</p>
@@ -191,9 +210,11 @@
             <a class="btn btn-more btn-back" v-on:click="goBack()"><img src="/assets/img/svg/back.svg" alt="">{{ $t('back') }}</a>
             <div class="back"></div>
           </div>
+          </transition>
           <!-- /Content Success -->
 
           <!-- Content Success -->
+          <transition name="fade">
           <div v-if="step === 51" class="content__item content__success content__success-multiple content__item-active">
             <h5>{{ $t('success') }}!</h5>
             <p v-if="!createParamIsFixed" v-html="newLineLabel($t('create.successUnlim'))">:</p>
@@ -213,6 +234,7 @@
             </div>
             <a class="btn btn-more btn-back" v-on:click="goBack()"><img src="/assets/img/svg/back.svg" alt="">{{ $t('back') }}</a>
           </div>
+          </transition>
           <!-- /Content Success -->
 
         </div>
@@ -351,6 +373,8 @@
         isActiveTrigger01: false,
         isActiveTrigger02: false,
         isAddressFilling: false,
+        IsActiveHamburgerClass: false,
+        isCopieded: false,
 
         // create wallet params
         createParamMessage: '',
@@ -375,6 +399,7 @@
 
         maxLen: 140,
         minLen: 100,
+
       }
     },
     created () {
@@ -401,6 +426,7 @@
       },
       toggleMenu: function () {
         this.isShowMenu = !this.isShowMenu
+        this.IsActiveHamburgerClass = !this.IsActiveHamburgerClass
       },
       toggleShowType: function () {
         this.isShowModalType = !this.isShowModalType
@@ -580,13 +606,16 @@
 
         return false
       },
-      copyToClipboard: function (message) {
-        this.$copyText(message).then(function (e) {
+      copyToClipboard: function (message, event) {
+        this.$copyText(message).then( (e) => {
+          event.target.textContent = 'Copied to buffer'
+          this.isCopieded = true
         }, function (e) {
           console.log(message, e)
         })
       },
       checkFilledBalance: async function () {
+        debugger
         try {
           this.balanceSumUSD = new Decimal(0)
           const balances = await getAddressBalance(this.addressForFilling)
@@ -618,7 +647,7 @@
         } catch (error) {
           console.error(error)
           // this.errorMsg = error.message
-          // this.isShowError = true
+          this.isShowError = true
         }
       },
       prettyFormat: function (value) {
@@ -721,4 +750,14 @@
       opacity: 0;
     }
   }
+  .fade-enter-active {
+    transition: opacity .8s;
+  }
+  .fade-leave-active {
+    transition: opacity .3s;
+  }
+  .fade-enter, .fade-leave-to {
+    opacity: 0;
+  }
+
 </style>

@@ -432,9 +432,9 @@ header {
   -ms-flex: none;
   flex: none;
   overflow: hidden;
-  -webkit-transition: margin .3s;
+ /* -webkit-transition: margin .3s;
   -o-transition: margin .3s;
-  transition: margin .3s;
+  transition: margin .3s;*/
   padding: 0 35px; }
 
 .conntent__item-active {
@@ -549,8 +549,8 @@ header {
       background: #fff; }
     .content__choose-wallet .btn-radio .internal {
       position: absolute;
-      top: 2px;
-      left: 2px;
+      top: 1px;
+      left: 1px;
       width: 9px;
       height: 9px;
       background: #fff;
@@ -659,6 +659,18 @@ header {
     font-size: 24px;
     margin-bottom: 16px;
     text-align: center; }
+  .content__coins-address .copy_link.active-copy .btn-copy {
+    transition: all .5s;
+    border-color: #63d96e;
+    color: #63d96e;
+  }
+  .content__coins-address .copy_link.active-copy .btn-copy img {
+    display: none;
+  }
+  .content__coins-address .copy_link.active-copy {
+    transition: all .5s;
+    color: #63d96e;
+  }
   .content__coins-address .copy_link {
     font: 12px/1 "SegoeUIBold", sans-serif;
     color: var(--blue); }
