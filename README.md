@@ -1,5 +1,5 @@
 # Push.
-Send Minter coins with ease.
+Send, receive and spend Minter coins with ease.
 
 ## Description
 
