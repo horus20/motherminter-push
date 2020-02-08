@@ -32,6 +32,11 @@ export class Wallet {
   @Column('text', {nullable: true})
   params: string;
 
+  @Expose()
+  isProtected() {
+    return this.company ? this.company.isProtected : false
+  }
+
   getParams() {
     return JSON.parse(this.params ?? '{}');
   }

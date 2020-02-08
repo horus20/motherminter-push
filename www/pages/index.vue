@@ -155,7 +155,7 @@
           </transition>
           <!-- /Content Type Wallet -->
 
-          <!-- Content Form multiply single unlim  -->
+          <!-- Content Form multiply simple unlim  -->
           <transition name="fade">
           <div v-if="step === 7" class="content__item content__form content__item-active">
             <p class="unlimited" v-if="!createParamIsFixed">{{ $t('create.numberWalletUnlim') }}</p>
@@ -165,7 +165,7 @@
             <!--<input type="text" class="input" v-bind:placeholder="$t('create.numberWallet')" placeholder="Message (optional)">-->
             <input type="text" class="input" v-bind:placeholder="$t('create.yourEmail')" v-model="createParamEmail">
             <input type="text" class="input" v-bind:placeholder="$t('create.passToCompany')" v-model="createParamCompanyPass">
-            <button class="btn" v-on:click="startCreateWallet()">{{ $t('goToNext') }}</button>
+            <button class="btn" v-on:click="startCreateCompany()">{{ $t('goToNext') }}</button>
             <a class="btn btn-more btn-back" v-on:click="goBack()"><img src="/assets/img/svg/back.svg" alt="">{{ $t('back') }}</a>
           </div>
           </transition>
@@ -174,6 +174,9 @@
           <!-- Content Coins Address -->
           <transition name="fade">
           <div v-if="step === 4" class="content__item content__coins-address content__item-active">
+            <h5 v-if="!this.isBalanceGreatThenZero">{{ $t('create.plzFill') }}</h5>
+            <h5 v-if="this.isBalanceGreatThenZero">{{ $t('create.plzFillPart1') }} <span v-on:click="copyToClipboard(minNewBalance)">{{ minNewBalance }} {{ $t('create.minBalanceCoin')}}</span> {{ $t('create.plzFillPart2') }}</h5>
+            <div :class="{'active-copy' : isCopieded}" class="copy_link">
             <h5>{{ $t('create.plzFill') }}</h5>
             <div :class="{'active-copy' : isCopiededAdress}" class="copy_link">
               <p>{{ addressForFilling }}</p>
@@ -195,14 +198,14 @@
             <p>{{ $t('create.willReceive') }}:</p>
             <div class="score">
               <p class="balance" v-for="balance in balances">{{ prettyFormat(balance.amount) }} {{ balance.coin }}</p>
-              <p class="currency">~{{ balanceSumUSD }} USD</p>
+              <p class="currency">~{{ balanceSum }}</p>
             </div>
             <p class="share">{{ $t('create.shareLink') }}:</p>
             <div :class="{'active-copy' : isCopiededSuccess}" class="copy_link">
               <p>{{ createdLink }}</p>
               <div class="buttons">
                 <button class="btn btn-copy btn-link-copy" v-on:click="copyToClipboard(createdLink, $event)">{{ $t('Link') }}<img src="/assets/img/svg/copy.svg" alt=""></button>
-                <button class="btn btn-copy btn-qr" v-on:click="toggleShowQR()">QR<img src="/assets/img/svg/qr_link_blue.svg" alt=""></button>
+                <button class="btn btn-copy btn-qr" v-on:click="toggleShowQR(createdLink)">QR<img src="/assets/img/svg/qr_link_blue.svg" alt=""></button>
                 <button class="btn btn-copy btn-share">{{ $t('Share') }}<img src="/assets/img/svg/share.svg" alt=""></button>
                 <button class="btn btn-copy btn-more" v-on:click="toggleShowDir()">{{ $t('More') }}<span>...</span></button>
               </div>
@@ -221,7 +224,7 @@
             <p v-if="createParamIsFixed">{{ createParamCount }} <span v-html="newLineLabel($t('create.successFixed'))"></span></p>
             <div class="score">
               <p class="balance" v-for="balance in balances">{{ prettyFormat(balance.amount) }} {{ balance.coin }}</p>
-              <p class="currency">~{{ balanceSumUSD }} USD</p>
+              <p class="currency">~{{ balanceSum }}</p>
             </div>
             <p class="share">{{ $t('create.walletList') }}:</p>
             <div class="send_link">
@@ -283,7 +286,7 @@
       <div class="close-modal-alert" v-on:click="toggleShowQR()">
         <span></span><span></span>
       </div>
-      <qrcode v-bind:value="createdLink" :options="{ width: 250 }" tag="img"></qrcode>
+      <qrcode v-bind:value="qrLink" :options="{ width: 250 }" tag="img"></qrcode>
     </div>
     <!-- /Modal QR -->
 
@@ -294,20 +297,20 @@
         <div class="links__item">
           <img src="/assets/img/svg/services.svg" alt="">
           <span>Mobile<br>services</span>
-          <img src="/assets/img/svg/copy.svg" alt="">
-          <img onclick="showModalQR()" class="qr" src="/assets/img/svg/qr_link_blue.svg" alt="">
+          <img v-on:click="copyToClipboard(createdLinkMobile)" src="/assets/img/svg/copy.svg" alt="">
+          <img v-on:click="toggleShowQR(createdLinkMobile)" class="qr" src="/assets/img/svg/qr_link_blue.svg" alt="">
         </div>
         <div class="links__item">
           <img src="/assets/img/svg/games.svg" alt="">
           <span>Games</span>
-          <img src="/assets/img/svg/copy.svg" alt="">
-          <img onclick="showModalQR()" class="qr" src="/assets/img/svg/qr_link_blue.svg" alt="">
+          <img v-on:click="copyToClipboard(createdLinkGame)" src="/assets/img/svg/copy.svg" alt="">
+          <img v-on:click="toggleShowQR(createdLinkGame)" class="qr" src="/assets/img/svg/qr_link_blue.svg" alt="">
         </div>
         <div class="links__item">
           <img src="/assets/img/svg/charity.svg" alt="">
           <span>Charity<br>fund</span>
-          <img src="/assets/img/svg/copy.svg" alt="">
-          <img onclick="showModalQR()" class="qr" src="/assets/img/svg/qr_link_blue.svg" alt="">
+          <img v-on:click="copyToClipboard(createdLinkFund)" src="/assets/img/svg/copy.svg" alt="">
+          <img v-on:click="toggleShowQR(createdLinkFund)" class="qr" src="/assets/img/svg/qr_link_blue.svg" alt="">
         </div>
         <div class="links__item">
           <img src="/assets/img/svg/fuel.svg" alt="">
@@ -348,7 +351,7 @@
     getCoinExchangeList,
     getFiatExchangeList,
     getBipPrice,
-    prettyFormat, createCompany, DEFAULT_SYMBOL
+    prettyFormat, createCompany, DEFAULT_SYMBOL, getFiatByLocale, ACTIVATE_FEE
   } from './core'
 
   if (process.client) {
@@ -366,6 +369,7 @@
         errorMsg: '',
         isShowError: false,
 
+        isShowLoader: false,
         isShowMenu: false,
         isShowModalType: false,
         isShowModalNType: false,
@@ -379,6 +383,8 @@
         isCopiededAdress: false,
         isCopiededSuccess: false,
 
+        qrLink: 'empty',
+
         // create wallet params
         createParamMessage: '',
         createParamPassword: '',
@@ -391,6 +397,8 @@
         createParamCompanyPass: '',
         company: null,
         companyLink: '',
+        minNewBalance: 0,
+        isBalanceGreatThenZero: false,
 
         balances: [],
         addressForFilling: 'empty',
@@ -399,6 +407,7 @@
         bipToUSD: null,
         fiat: [],
         balanceSumUSD: 0,
+        balanceSumFiat: 0,
 
         maxLen: 140,
         minLen: 100,
@@ -414,12 +423,29 @@
       createdLink() {
         return `${LINK}${this.createParamUID}`
       },
+      createdLinkMobile() {
+        return `${LINK}${this.createParamUID}#mobile`
+      },
+      createdLinkGame() {
+        return `${LINK}${this.createParamUID}#game`
+      },
+      createdLinkFund() {
+        return `${LINK}${this.createParamUID}#fund`
+      },
       msgSize() {
         return this.maxLen - this.createParamMessage.length
       },
       isMinMsgSize() {
         return this.createParamMessage.length > this.minLen
-      }
+      },
+      balanceSum() {
+        const fiatVal = getFiatByLocale(this.currentLang)
+        const fiatSymbol = fiatVal ? fiatVal.symbol : ''
+        if (this.currentLang === 'en') {
+          return `${this.balanceSumUSD.toFixed(4)} $`
+        }
+        return `${this.balanceSumFiat.toFixed(2)} ${fiatSymbol}`
+      },
     },
     // method
     methods: {
@@ -437,8 +463,9 @@
       toggleShowNType: function () {
         this.isShowModalNType = !this.isShowModalNType
       },
-      toggleShowQR: function () {
+      toggleShowQR: function (link = 'empty') {
         this.isShowModalQR = !this.isShowModalQR
+        this.qrLink = link
       },
       toggleShowDir: function () {
         this.isShowModalDir = !this.isShowModalDir
@@ -462,6 +489,8 @@
         this.createParamMessage = ''
         this.createParamBalance = ''
         this.createParamUID = ''
+        this.minNewBalance = new Decimal(0)
+        this.isBalanceGreatThenZero = false
       },
       startCreateSimple: function () {
         this.prevStep.push(this.step)
@@ -536,6 +565,7 @@
           uid: this.createParamUID,
           mxaddress: wallet.address,
           email: this.createParamEmail,
+          protected: (this.createParamPassword && this.createParamPassword.length > 0),
           params: {
             notice: this.createParamMessage,
           }
@@ -569,6 +599,12 @@
             amount: this.createParamBalance,
           }
         })
+        this.minNewBalance = new Decimal(this.createParamBalance)
+          .plus(ACTIVATE_FEE)
+          .mul(this.createParamCount)
+        if (this.minNewBalance.gt(0)) {
+          this.isBalanceGreatThenZero = true
+        }
 
         if (company && company.warehouseWallet && company.warehouseWallet.mxaddress) {
           this.addressForFilling = company.warehouseWallet.mxaddress
@@ -587,6 +623,7 @@
       },
       loadAdditionalInfo: async function () {
         this.bipToUSD = await getBipPrice()
+        this.fiat = await getFiatExchangeList()
         this.coins = getCoinExchangeList()
         this.fiat = getFiatExchangeList()
       },
@@ -596,6 +633,8 @@
         }
 
         if (!this.isAddressFilling) {
+          this.errorMsg = this.$t('errors.balanceError')
+          this.isShowError = true
           return false
         }
         clearInterval(this.checkInterval)
@@ -625,6 +664,7 @@
       checkFilledBalance: async function () {
         try {
           this.balanceSumUSD = new Decimal(0)
+          this.balanceSumFiat = new Decimal(0)
           const balances = await getAddressBalance(this.addressForFilling)
           this.balances = balances
             .filter(({ amount }) => {
@@ -632,7 +672,7 @@
             })
             .map(({ coin, amount }) => {
               let usdAmount = 0
-              if (new Decimal(amount).gt(0)) {
+              if (new Decimal(amount).gt(this.minNewBalance)) {
                 this.isAddressFilling = true
 
                 const coinToDef = this.coins[coin]
@@ -651,6 +691,16 @@
                 usdAmount
               }
             })
+
+          this.balanceSumFiat = this.balanceSumUSD
+          const fiatVal = getFiatByLocale(this.currentLang)
+          if (fiatVal) {
+            const fiatCur = this.fiat[fiatVal.name]
+            if (this.currentLang !== 'en' && fiatCur) {
+              this.balanceSumFiat = this.balanceSumUSD
+                .mul(fiatCur)
+            }
+          }
         } catch (error) {
           console.error(error)
           // this.errorMsg = error.message
