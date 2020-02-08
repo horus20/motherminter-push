@@ -29,14 +29,14 @@
                 <div class="conten-items">
                     <!-- Content Start -->
                     <div class="content__item about">
-                        <h1>About</h1>
-                        <p>This link-wallet is powered by Minter, a blockchain network that lets people, projects, and companies create and manage their own coins and exchange them at a fair price with absolute and instant liquidity.</p>
-                        <p class="caption">Useful links:</p>
+                        <h1>{{ $t('about.title') }}</h1>
+                        <p>{{ $t('about.text') }}</p>
+                        <p class="caption">{{ $t('about.titleLink') }}</p>
                         <ul class="useful-links">
-                            <li><a target="_blank" rel="nofollow" href="https://www.minter.network/">What is Minter</a></li>
-                            <li><a target="_blank" rel="nofollow" href="https://about.minter.network/">About Network</a></li>
-                            <li><a target="_blank" rel="nofollow" href="https://console.minter.network/">Consol wallet</a></li>
-                            <li><a target="_blank" rel="nofollow" href="https://t.me/MinterTeam">Telegram</a></li>
+                            <li><a target="_blank" rel="nofollow" href="https://www.minter.network/">{{ $t('about.link1') }}</a></li>
+                            <li><a target="_blank" rel="nofollow" href="https://about.minter.network/">{{ $t('about.link2') }}</a></li>
+                            <li><a target="_blank" rel="nofollow" href="https://console.minter.network/">{{ $t('about.link3') }}</a></li>
+                            <li><a target="_blank" rel="nofollow" href="https://t.me/MinterTeam">{{ $t('about.link4') }}</a></li>
                         </ul>
                     </div>
                     <!-- /Content Start -->
