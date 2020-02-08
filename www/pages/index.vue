@@ -28,7 +28,10 @@
     </transition>
     <!-- /Header -->
     <main>
-      <div v-if="isShowLoader" class="lds-ripple"><div></div><div></div></div>
+      <div v-if="isShowLoader"  class="louder">
+        <div class="louder-wrap"><div class="lds-ripple"><div></div><div></div></div></div>
+      </div>
+
       <div class="container">
         <div class="conten-items">
 
