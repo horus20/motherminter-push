@@ -1,7 +1,7 @@
 {
   "name": "minter-push-client",
   "version": "1.0.0",
-  "description": "Minter push wallet (Frontend part)",
+  "description": "Send, receive and spend Minter coins with ease!",
   "author": "Horus",
   "private": true,
   "scripts": {
