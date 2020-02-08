@@ -58,7 +58,7 @@ export default {
     messageOpt: 'Сообщение (необязательно)',
     yourEmail: 'Ваш email',
     passToCompany: 'Пароль для управления кампанией',
-    successFixed: 'создано кошельков|с общим балансом:',
+    successFixed: '- создано кошельков|с общим балансом:',
     successUnlim: 'Ссылка на API метод|успешно создана с балансом:',
     walletList: 'Ваш список кошельков',
     sendEmail: 'На email',
