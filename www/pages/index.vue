@@ -111,10 +111,10 @@
           <div v-if="step === 31" class="content__item content__describe-action content__item-active content__item-active">
             <p>{{ $t('create.feedbackTitle') }}</p>
             <div class="text-wrap">
-              <textarea id="ta" name="" maxlength="140" v-bind:placeholder="$t('create.feedbackPlaceholder')" v-model="createParamMessage"></textarea>
+              <textarea id="ta" name="" maxlength="140" v-bind:placeholder="$t('create.feedbackPlaceholder')" @input="inputValue(0, $event)" v-model="createParamMessage"></textarea>
               <div class="max-lenght">
                 <span id="max_lenght">{{ msgSize }}</span>
-                <img src="/assets/img/svg/feedback_grey.svg" alt="">
+                <img v-show="isTextarea[0]" src="/assets/img/svg/feedback_grey.svg" alt="">
               </div>
             </div>
             <input type="text" v-bind:placeholder="$t('create.backEmail')" v-model="createParamEmail">
@@ -129,10 +129,10 @@
           <div v-if="step === 32" class="content__item content__describe-action content__item-active content__item-active">
             <p>{{ $t('create.actionTitle') }}</p>
             <div class="text-wrap">
-              <textarea id="ta" name="" maxlength="140" v-bind:placeholder="$t('create.actionPlaceholder')" v-model="createParamMessage"></textarea>
+              <textarea id="ta" name="" maxlength="140" v-bind:placeholder="$t('create.actionPlaceholder')" @input="inputValue(1, $event)" v-model="createParamMessage"></textarea>
               <div class="max-lenght">
                 <span id="max_lenght">{{ msgSize }}</span>
-                <img src="/assets/img/svg/action_grey.svg" alt="">
+                <img v-show="isTextarea[1]" src="/assets/img/svg/action_grey.svg" alt="">
               </div>
             </div>
             <input type="text" v-bind:placeholder="$t('create.actionEmail')">
@@ -397,6 +397,7 @@
         IsActiveHamburgerClass: false,
         isCopiededAdress: false,
         isCopiededSuccess: false,
+        isTextarea: [true, true],
 
         qrLink: 'empty',
 
@@ -810,7 +811,15 @@
       validateEmail(email) {
         const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
         return re.test(String(email).toLowerCase())
+      },
+      inputValue:function (param, e) {
+        if(e.target.value.length > 0) {
+          this.isTextarea[param] = false
+        }else {
+          this.isTextarea[param] = true
+        }
       }
+
     },
     // html header section
     head: {
@@ -850,7 +859,7 @@
   }
   .modal-activation-qr {
     opacity: 1;
-    z-index: 5;
+    z-index: 12;
     margin-top: 0;
   }
   .modal-activation-dir {

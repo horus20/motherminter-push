@@ -3,7 +3,7 @@
     <!-- Header -->
     <header>
       <a href="/" class="logo">Push.</a>
-      <div class="hamburger" v-on:click="toggleMenu()">
+      <div :class="{'hamburger-active': IsActiveHamburgerClass}"  class="hamburger" v-on:click="toggleMenu()">
         <span></span>
         <span></span>
         <span></span>
@@ -11,6 +11,7 @@
         <span></span>
       </div>
     </header>
+    <transition name="fade">
     <div class="menu" v-bind:class="{ 'menu-visible': isShowMenu }" v-if="isShowMenu">
       <ul class="nav">
         <li><a href="/">{{ $t('menu.home') }}.</a></li>
@@ -23,6 +24,7 @@
         <button class="btn" v-bind:class="{ 'lang-active': currentLang === 'ru' }"  v-on:click="changeLocale('ru')"><img src="/assets/img/svg/rus.svg" alt="">Rus</button>
       </div>
     </div>
+    </transition>
     <!-- /Header -->
     <main>
       <div v-if="isShowLoader" class="lds-ripple"><div></div><div></div></div>
@@ -380,6 +382,7 @@
         errorMsg: '',
         isShowError: false,
         isShowMenu: false,
+        IsActiveHamburgerClass,
 
         balances: [],
         coins: [],
@@ -441,6 +444,7 @@
       },
       toggleMenu: function () {
         this.isShowMenu = !this.isShowMenu
+        this.IsActiveHamburgerClass = !this.IsActiveHamburgerClass
       },
       openPasswordPage: function () {
         this.screenPassword = true
@@ -1011,5 +1015,14 @@
       height: 72px;
       opacity: 0;
     }
+  }
+  .fade-enter-active {
+    transition: opacity .8s;
+  }
+  .fade-leave-active {
+    transition: opacity .3s;
+  }
+  .fade-enter, .fade-leave-to {
+    opacity: 0;
   }
 </style>
