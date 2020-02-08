@@ -48,10 +48,12 @@
       <template v-if="screenPassword">
         <!-- Password -->
         <div class="container">
+          <div class="main common-wrap">
           <div class="password">
             <h1>{{ $t('password.enterPassword') }}:</h1>
             <input type="password" v-bind:placeholder="$t('password.passwordPlaceholder')" v-model="password"/>
             <a class="btn" v-on:click="login()">{{ $t('password.accessWallet') }}</a>
+          </div>
           </div>
         </div>
         <!-- /Password -->
@@ -495,9 +497,10 @@
         this.updateBalance()
       },
       checkAuth: async function () {
+        let response
         try {
           this.isShowLoader = true
-          const response = await axios.get(`${BACKEND_BASE_URL}/api/${this.uid}`)
+          response = await axios.get(`${BACKEND_BASE_URL}/api/${this.uid}`)
           if (response && response.status === 200) {
             if (response.data.status === 70 || response.data.status === 71) { // new
               this.isFeedback = (response.data.status === 70)
@@ -534,13 +537,16 @@
                 // show password
                 this.openPasswordPage()
               }
+              else {
+                this.login()
+              }
             }
           }
         } catch (error) {
           this.isCreateNew = false
           console.error(error)
+          this.openPasswordPage()
         }
-        this.login()
         this.isShowLoader = false
       },
       login: async function () {
