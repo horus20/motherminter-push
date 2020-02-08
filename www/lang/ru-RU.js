@@ -61,8 +61,8 @@ export default {
     successFixed: 'создано кошельков|с общим балансом:',
     successUnlim: 'Ссылка на API метод|успешно создана с балансом:',
     walletList: 'Ваш список кошельков',
-    sendEmail: 'Выслать на email',
-    sendList: 'Загрузить',
+    sendEmail: 'На email',
+    sendList: 'Копировать',
     shareList: 'Поделиться',
   },
   password: {
