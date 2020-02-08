@@ -22,7 +22,7 @@ export default {
     home: 'Главная',
     about: 'Инфо',
     account: 'Аккаунт',
-    createWallet: 'Создать кошелек',
+    createWallet: 'Создать',
   },
   create: {
     title: 'Сколько кошельков|вы хотите создать?',
