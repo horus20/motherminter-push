@@ -8,7 +8,7 @@ import { CompanyStatus, WalletStatus } from '../enum';
 import { WalletDto } from '../dto';
 import { WarehouseService } from './warehouse.service';
 
-const PUSH_WALLET_ID_LENGTH = 8;
+const PUSH_WALLET_ID_LENGTH = 6;
 
 @Injectable()
 export class WalletService {

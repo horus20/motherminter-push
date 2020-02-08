@@ -166,9 +166,14 @@ export class WarehouseService {
       gasCoin: feeSymbol,
       payload: '',
     };
-    const txHash = await this.minter.postTx(txParams);
-    global.console.info(`New transfer from ${from.mxaddress} to ${to}. txHash: ${txHash}`);
-    return true;
+    try {
+      const txHash = await this.minter.postTx(txParams);
+      global.console.info(`New transfer from ${from.mxaddress} to ${to}. txHash: ${txHash}`);
+      return true;
+    } catch (error) {
+      global.console.error(error, txParams);
+      return false;
+    }
   }
 
   async sendRawTx(mxaddress, rawTx: string): Promise<string> {
