@@ -55,7 +55,7 @@
             <div class="menu" v-bind:class="{ 'menu-visible': isShowMenu }" v-if="isShowMenu">
                 <ul class="nav">
                     <li><a href="/">{{ $t('menu.home') }}.</a></li>
-                    <li><a href="/about/test">{{ $t('menu.about') }}.</a></li>
+                    <li><a href="/about/">{{ $t('menu.about') }}.</a></li>
                     <!--<li><a href="#">{{ $t('menu.account') }}.</a></li>-->
                     <li><a href="#" v-on:click="startCreateMenu()">{{ $t('menu.createWallet') }}.</a></li>
                 </ul>
@@ -357,588 +357,588 @@
             </div>
             <p>{{ errorMsg }}</p>
         </div>
-        <!-- /Modal Alert --
-        </div>
-    </template>
+        <!-- /Modal Alert -->
+    </div>
+</template>
 
-    <script>
-      import Vue from 'vue'
-      import VueClipboard from 'vue-clipboard2'
-      import axios from 'axios'
-      import VueQrcode from '@chenfengyuan/vue-qrcode'
-      import { Decimal } from 'decimal.js'
+<script>
+  import Vue from 'vue'
+  import VueClipboard from 'vue-clipboard2'
+  import axios from 'axios'
+  import VueQrcode from '@chenfengyuan/vue-qrcode'
+  import { Decimal } from 'decimal.js'
 
-      import {
-        LINK,
-        BACKEND_BASE_URL,
-        createWallet,
-        generateWalletUid,
-        getAddressBalance,
-        getCoinExchangeList,
-        getFiatExchangeList,
-        getBipPrice,
-        prettyFormat, createCompany, DEFAULT_SYMBOL, getFiatByLocale, ACTIVATE_FEE
-      } from './core'
+  import {
+    LINK,
+    BACKEND_BASE_URL,
+    createWallet,
+    generateWalletUid,
+    getAddressBalance,
+    getCoinExchangeList,
+    getFiatExchangeList,
+    getBipPrice,
+    prettyFormat, createCompany, DEFAULT_SYMBOL, getFiatByLocale, ACTIVATE_FEE
+  } from './core'
 
-      if (process.client) {
-        Vue.use(VueClipboard)
+  if (process.client) {
+    Vue.use(VueClipboard)
+  }
+
+  export default {
+    components: {
+      //qrcode: VueQrcode,
+    },
+    data () {
+      return {
+        step: 1,
+        prevStep: [],
+        errorMsg: '',
+        isShowError: false,
+
+        isShowLoader: false,
+        isShowMenu: false,
+        isShowModalType: false,
+        isShowModalNType: false,
+        isShowModalQR: false,
+        isShowModalDir: false,
+        isCreateOne: true,
+        isActiveTrigger01: false,
+        isActiveTrigger02: false,
+        isAddressFilling: false,
+        IsActiveHamburgerClass: false,
+        isCopiededAdress: false,
+        isCopiededSuccess: false,
+        isTextarea: [true, true],
+        isHideAboutBlock: false,
+
+        qrLink: 'empty',
+
+        // create wallet params
+        createParamMessage: '',
+        createParamPassword: '',
+        createParamEmail: '',
+        createParamUID: '',
+        createParamType: 'simple',
+        createParamCount: 0,
+        createParamIsFixed: true,
+        createParamBalance: '',
+        createParamCompanyPass: '',
+        company: null,
+        companyLink: '',
+        minNewBalance: 0,
+        isBalanceGreatThenZero: false,
+
+        balances: [],
+        addressForFilling: 'empty',
+        checkInterval: null,
+        coins: [],
+        bipToUSD: null,
+        fiat: [],
+        balanceSumUSD: 0,
+        balanceSumFiat: 0,
+
+        maxLen: 140,
+        minLen: 100,
+
       }
+    },
+    created () {
+    },
+    computed: {
+      currentLang() {
+        return this.$i18n.locale
+      },
+      createdLink() {
+        return `${LINK}${this.createParamUID}`
+      },
+      createdLinkMobile() {
+        return `${LINK}${this.createParamUID}#mobile`
+      },
+      createdLinkGame() {
+        return `${LINK}${this.createParamUID}#game`
+      },
+      createdLinkFund() {
+        return `${LINK}${this.createParamUID}#fund`
+      },
+      msgSize() {
+        return this.maxLen - this.createParamMessage.length
+      },
+      isMinMsgSize() {
+        return this.createParamMessage.length > this.minLen
+      },
+      balanceSum() {
+        const fiatVal = getFiatByLocale(this.currentLang)
+        const fiatSymbol = fiatVal ? fiatVal.symbol : ''
+        if (this.currentLang === 'en') {
+          return `${this.balanceSumUSD.toFixed(4)} $`
+        }
+        return `${this.balanceSumFiat.toFixed(2)} ${fiatSymbol}`
+      },
+    },
+    // method
+    methods: {
+      changeLocale: function (locale) {
+        this.$i18n.setLocaleCookie(locale)
+        this.$i18n.setLocale(locale)
+      },
+      toggleMenu: function () {
+        this.isShowMenu = !this.isShowMenu
+        this.IsActiveHamburgerClass = !this.IsActiveHamburgerClass
+      },
+      toggleShowType: function () {
+        this.isShowModalType = !this.isShowModalType
+      },
+      toggleShowNType: function () {
+        this.isShowModalNType = !this.isShowModalNType
+      },
+      toggleShowQR: function (link = 'empty') {
+        this.isShowModalQR = !this.isShowModalQR
+        this.qrLink = link
+      },
+      toggleShowDir: function () {
+        this.isShowModalDir = !this.isShowModalDir
+      },
+      closeError: function () {
+        this.isShowError = false
+      },
+      startCreateMenu: function () {
+        this.startCreate()
+        this.toggleMenu()
+        return false
+      },
+      startCreate: function () {
+        this.prevStep.push(this.step)
+        this.step = 2
+        return false
+      },
+      clearParams: function () {
+        this.createParamCompanyPass = ''
+        this.createParamEmail = ''
+        this.createParamMessage = ''
+        this.createParamBalance = ''
+        this.createParamUID = ''
+        this.minNewBalance = new Decimal(0)
+        this.isBalanceGreatThenZero = false
+      },
+      startCreateSimple: function () {
+        this.prevStep.push(this.step)
+        if (this.isCreateOne) {
+          this.step = 3
+          this.createParamType = 'simple'
+        } else {
+          this.step = 6
+          this.createParamType = 'complex'
+        }
+        this.clearParams()
+        return false
+      },
+      startCreateFeedback: function () {
+        this.prevStep.push(this.step)
+        if (this.isCreateOne) {
+          this.step = 31
+          this.createParamType = 'simple_feedback'
+        } else {
+          this.step = 6
+          this.createParamType = 'complex_feedback'
+        }
+        this.clearParams()
+        return false
+      },
+      startCreateAction: function () {
+        this.prevStep.push(this.step)
+        if (this.isCreateOne) {
+          this.step = 32
+          this.createParamType = 'simple_action'
+        }
+        this.clearParams()
+        return false
+      },
+      startCreateMultiFixed: function () {
+        this.createParamIsFixed = true
+        this.createParamCount = ''
+        this.prevStep.push(this.step)
+        this.step = 7
+        return false
+      },
+      startCreateMultiUnlim: function () {
+        this.createParamIsFixed = false
+        this.createParamCount = 0
+        this.prevStep.push(this.step)
+        this.step = 7
+        return false
+      },
+      goBack: function () {
+        this.step = this.prevStep.pop()
+        return false
+      },
+      newLineLabel(label) {
+        return label.split('|').join('<br>')
+      },
+      startCreateWallet: async function () {
+        if (this.isActiveTrigger02 && !this.createParamPassword) {
+          this.errorMsg = this.$t('errors.passErrorEmpty')
+          this.isShowError = true
+          return false
+        }
 
-      export default {
-        components: {
-          //qrcode: VueQrcode,
-        },
-        data () {
-          return {
-            step: 1,
-            prevStep: [],
-            errorMsg: '',
-            isShowError: false,
+        if ((this.step === 31 || this.step === 32) && this.createParamMessage.length === 0) {
+          this.errorMsg = this.$t('errors.emptyText')
+          this.isShowError = true
+          return false
+        }
 
-            isShowLoader: false,
-            isShowMenu: false,
-            isShowModalType: false,
-            isShowModalNType: false,
-            isShowModalQR: false,
-            isShowModalDir: false,
-            isCreateOne: true,
-            isActiveTrigger01: false,
-            isActiveTrigger02: false,
-            isAddressFilling: false,
-            IsActiveHamburgerClass: false,
-            isCopiededAdress: false,
-            isCopiededSuccess: false,
-            isTextarea: [true, true],
-            isHideAboutBlock: false,
+        if ((this.step === 31 || this.step === 32) && !this.validateEmail(this.createParamEmail)) {
+          this.errorMsg = this.$t('errors.failEmail')
+          this.isShowError = true
+          return false
+        }
 
-            qrLink: 'empty',
+        this.prevStep.push(this.step)
+        this.step = 4
 
-            // create wallet params
-            createParamMessage: '',
-            createParamPassword: '',
-            createParamEmail: '',
-            createParamUID: '',
-            createParamType: 'simple',
-            createParamCount: 0,
-            createParamIsFixed: true,
-            createParamBalance: '',
-            createParamCompanyPass: '',
-            company: null,
-            companyLink: '',
-            minNewBalance: 0,
-            isBalanceGreatThenZero: false,
+        // generate wallet, start check balance
+        this.createParamUID = await generateWalletUid()
+        const wallet = await createWallet(this.createParamUID, this.createParamPassword)
+        if (wallet && wallet.address) {
+          this.addressForFilling = wallet.address
+        } else {
+          this.addressForFilling = 'empty'
+        }
 
-            balances: [],
-            addressForFilling: 'empty',
-            checkInterval: null,
-            coins: [],
-            bipToUSD: null,
-            fiat: [],
-            balanceSumUSD: 0,
-            balanceSumFiat: 0,
-
-            maxLen: 140,
-            minLen: 100,
-
+        // send info to server
+        this.company = await createCompany({
+          type: this.createParamType,
+          uid: this.createParamUID,
+          mxaddress: wallet.address,
+          email: this.createParamEmail,
+          protected: (this.createParamPassword && this.createParamPassword.length > 0),
+          params: {
+            notice: this.createParamMessage,
           }
-        },
-        created () {
-        },
-        computed: {
-          currentLang() {
-            return this.$i18n.locale
-          },
-          createdLink() {
-            return `${LINK}${this.createParamUID}`
-          },
-          createdLinkMobile() {
-            return `${LINK}${this.createParamUID}#mobile`
-          },
-          createdLinkGame() {
-            return `${LINK}${this.createParamUID}#game`
-          },
-          createdLinkFund() {
-            return `${LINK}${this.createParamUID}#fund`
-          },
-          msgSize() {
-            return this.maxLen - this.createParamMessage.length
-          },
-          isMinMsgSize() {
-            return this.createParamMessage.length > this.minLen
-          },
-          balanceSum() {
-            const fiatVal = getFiatByLocale(this.currentLang)
-            const fiatSymbol = fiatVal ? fiatVal.symbol : ''
-            if (this.currentLang === 'en') {
-              return `${this.balanceSumUSD.toFixed(4)} $`
-            }
-            return `${this.balanceSumFiat.toFixed(2)} ${fiatSymbol}`
-          },
-        },
-        // method
-        methods: {
-          changeLocale: function (locale) {
-            this.$i18n.setLocaleCookie(locale)
-            this.$i18n.setLocale(locale)
-          },
-          toggleMenu: function () {
-            this.isShowMenu = !this.isShowMenu
-            this.IsActiveHamburgerClass = !this.IsActiveHamburgerClass
-          },
-          toggleShowType: function () {
-            this.isShowModalType = !this.isShowModalType
-          },
-          toggleShowNType: function () {
-            this.isShowModalNType = !this.isShowModalNType
-          },
-          toggleShowQR: function (link = 'empty') {
-            this.isShowModalQR = !this.isShowModalQR
-            this.qrLink = link
-          },
-          toggleShowDir: function () {
-            this.isShowModalDir = !this.isShowModalDir
-          },
-          closeError: function () {
-            this.isShowError = false
-          },
-          startCreateMenu: function () {
-            this.startCreate()
-            this.toggleMenu()
-            return false
-          },
-          startCreate: function () {
-            this.prevStep.push(this.step)
-            this.step = 2
-            return false
-          },
-          clearParams: function () {
-            this.createParamCompanyPass = ''
-            this.createParamEmail = ''
-            this.createParamMessage = ''
-            this.createParamBalance = ''
-            this.createParamUID = ''
-            this.minNewBalance = new Decimal(0)
-            this.isBalanceGreatThenZero = false
-          },
-          startCreateSimple: function () {
-            this.prevStep.push(this.step)
-            if (this.isCreateOne) {
-              this.step = 3
-              this.createParamType = 'simple'
+        })
+        this.companyLink = `${BACKEND_BASE_URL}/api/company/${this.company.uid}/get_wallet?count=1`
+        console.log(this.company)
+
+        this.loadAdditionalInfo()
+        // start update balance
+        /*const self = this
+        this.checkInterval = setInterval(function(){
+          self.checkFilledBalance()
+        }, 7 * 1000)*/
+
+        return false
+      },
+      startCreateCompanyParams: async function () {
+        if (!this.createParamBalance) {
+          this.errorMsg = this.$t('errors.balanceEmpty')
+          this.isShowError = true
+          return false
+        }
+
+        if (!this.createParamCount && this.createParamIsFixed) {
+          this.errorMsg = this.$t('errors.countEmpty')
+          this.isShowError = true
+          return false
+        }
+
+        if (!this.validateEmail(this.createParamEmail)) {
+          this.errorMsg = this.$t('errors.failEmail')
+          this.isShowError = true
+          return false
+        }
+
+        if (!this.createParamCompanyPass) {
+          this.errorMsg = this.$t('errors.passErrorEmpty')
+          this.isShowError = true
+          return false
+        }
+
+        if (this.createParamType === 'complex_feedback') {
+          this.prevStep.push(this.step)
+          this.step = 71
+        } else {
+          this.startCreateCompany()
+        }
+      },
+      startCreateCompany: async function () {
+        if (this.createParamType === 'complex_feedback' && this.createParamMessage.length === 0) {
+          this.errorMsg = this.$t('errors.emptyText')
+          this.isShowError = true
+          return false
+        }
+
+        this.prevStep.push(this.step)
+        this.step = 4
+
+        // send info to server
+        const company = await createCompany({
+          type: this.createParamType,
+          uid: '',
+          mxaddress: '',
+          email: this.createParamEmail,
+          password: this.createParamCompanyPass,
+          params: {
+            notice: this.createParamMessage,
+            count: this.createParamCount,
+            amount: this.createParamBalance,
+          }
+        })
+        this.minNewBalance = new Decimal(this.createParamBalance)
+          .plus(ACTIVATE_FEE)
+          .mul(this.createParamCount)
+        if (this.minNewBalance.gt(0)) {
+          this.isBalanceGreatThenZero = true
+        }
+
+        if (company && company.warehouseWallet && company.warehouseWallet.mxaddress) {
+          this.addressForFilling = company.warehouseWallet.mxaddress
+        } else {
+          this.addressForFilling = 'empty'
+        }
+        this.company = company
+        this.loadAdditionalInfo()
+        // start update balance
+        /*const self = this
+        this.checkInterval = setInterval(function(){
+          self.checkFilledBalance()
+        }, 7 * 1000)*/
+
+        return false
+      },
+      loadAdditionalInfo: async function () {
+        this.bipToUSD = await getBipPrice()
+        this.fiat = await getFiatExchangeList()
+        this.coins = getCoinExchangeList()
+        this.fiat = getFiatExchangeList()
+      },
+      startCreateSuccess: async function () {
+        if (!this.isAddressFilling) {
+          await this.checkFilledBalance()
+        }
+
+        if (!this.isAddressFilling) {
+          this.errorMsg = this.$t('errors.balanceError')
+          this.isShowError = true
+          return false
+        }
+        clearInterval(this.checkInterval)
+        this.prevStep.push(this.step)
+
+        if (this.isCreateOne) {
+          this.step = 5
+        } else {
+          this.step = 51
+        }
+
+        return false
+      },
+      copyToClipboard: function (message, event = null) {
+        this.$copyText(message).then( (e) => {
+          if (event) {
+            if (event.target.classList.contains('btn-link-copy')) {
+              event.target.textContent = 'Copied'
+              this.isCopiededSuccess = true
             } else {
-              this.step = 6
-              this.createParamType = 'complex'
+              event.target.textContent = 'Copied to buffer'
+              this.isCopiededAdress = true
             }
-            this.clearParams()
-            return false
-          },
-          startCreateFeedback: function () {
-            this.prevStep.push(this.step)
-            if (this.isCreateOne) {
-              this.step = 31
-              this.createParamType = 'simple_feedback'
-            } else {
-              this.step = 6
-              this.createParamType = 'complex_feedback'
-            }
-            this.clearParams()
-            return false
-          },
-          startCreateAction: function () {
-            this.prevStep.push(this.step)
-            if (this.isCreateOne) {
-              this.step = 32
-              this.createParamType = 'simple_action'
-            }
-            this.clearParams()
-            return false
-          },
-          startCreateMultiFixed: function () {
-            this.createParamIsFixed = true
-            this.createParamCount = ''
-            this.prevStep.push(this.step)
-            this.step = 7
-            return false
-          },
-          startCreateMultiUnlim: function () {
-            this.createParamIsFixed = false
-            this.createParamCount = 0
-            this.prevStep.push(this.step)
-            this.step = 7
-            return false
-          },
-          goBack: function () {
-            this.step = this.prevStep.pop()
-            return false
-          },
-          newLineLabel(label) {
-            return label.split('|').join('<br>')
-          },
-          startCreateWallet: async function () {
-            if (this.isActiveTrigger02 && !this.createParamPassword) {
-              this.errorMsg = this.$t('errors.passErrorEmpty')
-              this.isShowError = true
-              return false
-            }
-
-            if ((this.step === 31 || this.step === 32) && this.createParamMessage.length === 0) {
-              this.errorMsg = this.$t('errors.emptyText')
-              this.isShowError = true
-              return false
-            }
-
-            if ((this.step === 31 || this.step === 32) && !this.validateEmail(this.createParamEmail)) {
-              this.errorMsg = this.$t('errors.failEmail')
-              this.isShowError = true
-              return false
-            }
-
-            this.prevStep.push(this.step)
-            this.step = 4
-
-            // generate wallet, start check balance
-            this.createParamUID = await generateWalletUid()
-            const wallet = await createWallet(this.createParamUID, this.createParamPassword)
-            if (wallet && wallet.address) {
-              this.addressForFilling = wallet.address
-            } else {
-              this.addressForFilling = 'empty'
-            }
-
-            // send info to server
-            this.company = await createCompany({
-              type: this.createParamType,
-              uid: this.createParamUID,
-              mxaddress: wallet.address,
-              email: this.createParamEmail,
-              protected: (this.createParamPassword && this.createParamPassword.length > 0),
-              params: {
-                notice: this.createParamMessage,
-              }
+          }
+        }, function (e) {
+          console.log(message, e)
+        })
+      },
+      checkFilledBalance: async function () {
+        try {
+          this.balanceSumUSD = new Decimal(0)
+          this.balanceSumFiat = new Decimal(0)
+          const balances = await getAddressBalance(this.addressForFilling)
+          this.balances = balances
+            .filter(({ amount }) => {
+              return new Decimal(amount).gt(0)
             })
-            this.companyLink = `${BACKEND_BASE_URL}/api/company/${this.company.uid}/get_wallet?count=1`
-            console.log(this.company)
+            .map(({ coin, amount }) => {
+              let usdAmount = 0
+              if (new Decimal(amount).gte(this.minNewBalance)) {
+                this.isAddressFilling = true
 
-            this.loadAdditionalInfo()
-            // start update balance
-            /*const self = this
-            this.checkInterval = setInterval(function(){
-              self.checkFilledBalance()
-            }, 7 * 1000)*/
+                const coinToDef = this.coins[coin]
+                if (coinToDef || coin === DEFAULT_SYMBOL) {
+                  usdAmount = new Decimal(amount)
+                    .mul(coinToDef ?? 1)
+                    .mul(this.bipToUSD)
 
-            return false
-          },
-          startCreateCompanyParams: async function () {
-            if (!this.createParamBalance) {
-              this.errorMsg = this.$t('errors.balanceEmpty')
-              this.isShowError = true
-              return false
-            }
-
-            if (!this.createParamCount && this.createParamIsFixed) {
-              this.errorMsg = this.$t('errors.countEmpty')
-              this.isShowError = true
-              return false
-            }
-
-            if (!this.validateEmail(this.createParamEmail)) {
-              this.errorMsg = this.$t('errors.failEmail')
-              this.isShowError = true
-              return false
-            }
-
-            if (!this.createParamCompanyPass) {
-              this.errorMsg = this.$t('errors.passErrorEmpty')
-              this.isShowError = true
-              return false
-            }
-
-            if (this.createParamType === 'complex_feedback') {
-              this.prevStep.push(this.step)
-              this.step = 71
-            } else {
-              this.startCreateCompany()
-            }
-          },
-          startCreateCompany: async function () {
-            if (this.createParamType === 'complex_feedback' && this.createParamMessage.length === 0) {
-              this.errorMsg = this.$t('errors.emptyText')
-              this.isShowError = true
-              return false
-            }
-
-            this.prevStep.push(this.step)
-            this.step = 4
-
-            // send info to server
-            const company = await createCompany({
-              type: this.createParamType,
-              uid: '',
-              mxaddress: '',
-              email: this.createParamEmail,
-              password: this.createParamCompanyPass,
-              params: {
-                notice: this.createParamMessage,
-                count: this.createParamCount,
-                amount: this.createParamBalance,
-              }
-            })
-            this.minNewBalance = new Decimal(this.createParamBalance)
-              .plus(ACTIVATE_FEE)
-              .mul(this.createParamCount)
-            if (this.minNewBalance.gt(0)) {
-              this.isBalanceGreatThenZero = true
-            }
-
-            if (company && company.warehouseWallet && company.warehouseWallet.mxaddress) {
-              this.addressForFilling = company.warehouseWallet.mxaddress
-            } else {
-              this.addressForFilling = 'empty'
-            }
-            this.company = company
-            this.loadAdditionalInfo()
-            // start update balance
-            /*const self = this
-            this.checkInterval = setInterval(function(){
-              self.checkFilledBalance()
-            }, 7 * 1000)*/
-
-            return false
-          },
-          loadAdditionalInfo: async function () {
-            this.bipToUSD = await getBipPrice()
-            this.fiat = await getFiatExchangeList()
-            this.coins = getCoinExchangeList()
-            this.fiat = getFiatExchangeList()
-          },
-          startCreateSuccess: async function () {
-            if (!this.isAddressFilling) {
-              await this.checkFilledBalance()
-            }
-
-            if (!this.isAddressFilling) {
-              this.errorMsg = this.$t('errors.balanceError')
-              this.isShowError = true
-              return false
-            }
-            clearInterval(this.checkInterval)
-            this.prevStep.push(this.step)
-
-            if (this.isCreateOne) {
-              this.step = 5
-            } else {
-              this.step = 51
-            }
-
-            return false
-          },
-          copyToClipboard: function (message, event = null) {
-            this.$copyText(message).then( (e) => {
-              if (event) {
-                if (event.target.classList.contains('btn-link-copy')) {
-                  event.target.textContent = 'Copied'
-                  this.isCopiededSuccess = true
-                } else {
-                  event.target.textContent = 'Copied to buffer'
-                  this.isCopiededAdress = true
+                  this.balanceSumUSD = this.balanceSumUSD.plus(usdAmount)
                 }
               }
-            }, function (e) {
-              console.log(message, e)
+
+              return {
+                coin,
+                amount,
+                usdAmount
+              }
             })
-          },
-          checkFilledBalance: async function () {
-            try {
-              this.balanceSumUSD = new Decimal(0)
-              this.balanceSumFiat = new Decimal(0)
-              const balances = await getAddressBalance(this.addressForFilling)
-              this.balances = balances
-                .filter(({ amount }) => {
-                  return new Decimal(amount).gt(0)
-                })
-                .map(({ coin, amount }) => {
-                  let usdAmount = 0
-                  if (new Decimal(amount).gte(this.minNewBalance)) {
-                    this.isAddressFilling = true
 
-                    const coinToDef = this.coins[coin]
-                    if (coinToDef || coin === DEFAULT_SYMBOL) {
-                      usdAmount = new Decimal(amount)
-                        .mul(coinToDef ?? 1)
-                        .mul(this.bipToUSD)
-
-                      this.balanceSumUSD = this.balanceSumUSD.plus(usdAmount)
-                    }
-                  }
-
-                  return {
-                    coin,
-                    amount,
-                    usdAmount
-                  }
-                })
-
+          this.balanceSumFiat = this.balanceSumUSD
+          const fiatVal = getFiatByLocale(this.currentLang)
+          if (fiatVal) {
+            const fiatCur = this.fiat[fiatVal.name]
+            if (this.currentLang !== 'en' && fiatCur) {
               this.balanceSumFiat = this.balanceSumUSD
-              const fiatVal = getFiatByLocale(this.currentLang)
-              if (fiatVal) {
-                const fiatCur = this.fiat[fiatVal.name]
-                if (this.currentLang !== 'en' && fiatCur) {
-                  this.balanceSumFiat = this.balanceSumUSD
-                    .mul(fiatCur)
-                }
-              }
-            } catch (error) {
-              console.error(error)
-              // this.errorMsg = error.message
-              this.isShowError = true
-            }
-          },
-          prettyFormat: function (value) {
-            return prettyFormat(value)
-          },
-          sendListToEmail: async function () {
-            try {
-              const response = await axios.post(`${BACKEND_BASE_URL}/api/company/${this.company.uid}/email`)
-
-              if (response && response.status === 200) {
-                this.errorMsg = this.$t('successMsg.successSend')
-                this.isShowError = true
-              }
-            } catch (error) {
-              this.errorMsg = this.$t('error.errorSend')
-              this.isShowError = true
-            }
-          },
-          copyList: function () {
-            if (this.company && this.company.wallets) {
-              const links = this.company.wallets
-                .map(({ uid }) => `${LINK}${uid}`)
-                .join(' ; ')
-              this.copyToClipboard(links)
-            }
-          },
-          copyUrlSuccess: function () {
-            this.copyToClipboard(this.companyLink)
-          },
-          validateEmail(email) {
-            const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
-            return re.test(String(email).toLowerCase())
-          },
-          inputValue:function (param, e) {
-            if(e.target.value.length > 0) {
-              this.isTextarea[param] = false
-            }else {
-              this.isTextarea[param] = true
+                .mul(fiatCur)
             }
           }
+        } catch (error) {
+          console.error(error)
+          // this.errorMsg = error.message
+          this.isShowError = true
+        }
+      },
+      prettyFormat: function (value) {
+        return prettyFormat(value)
+      },
+      sendListToEmail: async function () {
+        try {
+          const response = await axios.post(`${BACKEND_BASE_URL}/api/company/${this.company.uid}/email`)
 
-        },
-        // html header section
-        head: {
-          meta: [
-            { name: 'msapplication-TileColor', content: '#ffffff' },
-            { name: 'msapplication-TileImage', content: '/ms-icon-144x144.png' },
-            { name: 'theme-color', content: '#ffffff' },
-          ],
-          link: [
-            { rel: 'apple-touch-icon', size: '57x57', href: '/apple-icon-57x57.png', },
-            { rel: 'apple-touch-icon', size: '60x60', href: '/apple-icon-60x60.png', },
-            { rel: 'apple-touch-icon', size: '72x72', href: '/apple-icon-72x72.png', },
-            { rel: 'apple-touch-icon', size: '76x76', href: '/apple-icon-76x76.png', },
-            { rel: 'apple-touch-icon', size: '114x114', href: '/apple-icon-114x114.png', },
-            { rel: 'apple-touch-icon', size: '120x120', href: '/apple-icon-120x120.png', },
-            { rel: 'apple-touch-icon', size: '144x144', href: '/apple-icon-144x144.png', },
-            { rel: 'apple-touch-icon', size: '152x152', href: '/apple-icon-152x152.png', },
-            { rel: 'apple-touch-icon', size: '180x180', href: '/apple-icon-180x180.png', },
-            { rel: 'icon', type: 'image/png', size: '192x192', href: '/android-icon-192x192.png', },
-            { rel: 'icon', type: 'image/png', size: '36x36', href: '/android-icon-36x36.png', },
-            { rel: 'icon', type: 'image/png', size: '96x96', href: '/android-icon-96x96.png', },
-            { rel: 'icon', type: 'image/png', size: '48x48', href: '/android-icon-48x48.png', },
-            { rel: 'manifest', href: '/manifest.json' },
-          ]
+          if (response && response.status === 200) {
+            this.errorMsg = this.$t('successMsg.successSend')
+            this.isShowError = true
+          }
+        } catch (error) {
+          this.errorMsg = this.$t('error.errorSend')
+          this.isShowError = true
+        }
+      },
+      copyList: function () {
+        if (this.company && this.company.wallets) {
+          const links = this.company.wallets
+            .map(({ uid }) => `${LINK}${uid}`)
+            .join(' ; ')
+          this.copyToClipboard(links)
+        }
+      },
+      copyUrlSuccess: function () {
+        this.copyToClipboard(this.companyLink)
+      },
+      validateEmail(email) {
+        const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+        return re.test(String(email).toLowerCase())
+      },
+      inputValue:function (param, e) {
+        if(e.target.value.length > 0) {
+          this.isTextarea[param] = false
+        }else {
+          this.isTextarea[param] = true
         }
       }
-    </script>
 
-    <style>
-        .menu-visible {
+    },
+    // html header section
+    head: {
+      meta: [
+        { name: 'msapplication-TileColor', content: '#ffffff' },
+        { name: 'msapplication-TileImage', content: '/ms-icon-144x144.png' },
+        { name: 'theme-color', content: '#ffffff' },
+      ],
+      link: [
+        { rel: 'apple-touch-icon', size: '57x57', href: '/apple-icon-57x57.png', },
+        { rel: 'apple-touch-icon', size: '60x60', href: '/apple-icon-60x60.png', },
+        { rel: 'apple-touch-icon', size: '72x72', href: '/apple-icon-72x72.png', },
+        { rel: 'apple-touch-icon', size: '76x76', href: '/apple-icon-76x76.png', },
+        { rel: 'apple-touch-icon', size: '114x114', href: '/apple-icon-114x114.png', },
+        { rel: 'apple-touch-icon', size: '120x120', href: '/apple-icon-120x120.png', },
+        { rel: 'apple-touch-icon', size: '144x144', href: '/apple-icon-144x144.png', },
+        { rel: 'apple-touch-icon', size: '152x152', href: '/apple-icon-152x152.png', },
+        { rel: 'apple-touch-icon', size: '180x180', href: '/apple-icon-180x180.png', },
+        { rel: 'icon', type: 'image/png', size: '192x192', href: '/android-icon-192x192.png', },
+        { rel: 'icon', type: 'image/png', size: '36x36', href: '/android-icon-36x36.png', },
+        { rel: 'icon', type: 'image/png', size: '96x96', href: '/android-icon-96x96.png', },
+        { rel: 'icon', type: 'image/png', size: '48x48', href: '/android-icon-48x48.png', },
+        { rel: 'manifest', href: '/manifest.json' },
+      ]
+    }
+  }
+</script>
+
+<style>
+    .menu-visible {
+        opacity: 1;
+        z-index: 9;
+    }
+    .modal-activation-types-active {
+        opacity: 1;
+        z-index: 11;
+    }
+    .modal-activation-qr {
+        opacity: 1;
+        z-index: 12;
+        margin-top: 0;
+    }
+    .modal-activation-dir {
+        opacity: 1;
+        z-index: 11;
+    }
+    .modal-activation-error {
+        opacity: 1;
+        z-index: 5;
+        margin-top: 0;
+    }
+    .lds-ripple {
+        display: inline-block;
+        position: relative;
+        width: 80px;
+        height: 80px;
+    }
+    .lds-ripple div {
+        position: absolute;
+        border: 4px solid #dfc;
+        opacity: 1;
+        border-radius: 50%;
+        animation: lds-ripple 1s cubic-bezier(0, 0.2, 0.8, 1) infinite;
+    }
+    .lds-ripple div:nth-child(2) {
+        animation-delay: -0.5s;
+    }
+    @keyframes lds-ripple {
+        0% {
+            top: 36px;
+            left: 36px;
+            width: 0;
+            height: 0;
             opacity: 1;
-            z-index: 9;
         }
-        .modal-activation-types-active {
-            opacity: 1;
-            z-index: 11;
-        }
-        .modal-activation-qr {
-            opacity: 1;
-            z-index: 12;
-            margin-top: 0;
-        }
-        .modal-activation-dir {
-            opacity: 1;
-            z-index: 11;
-        }
-        .modal-activation-error {
-            opacity: 1;
-            z-index: 5;
-            margin-top: 0;
-        }
-        .lds-ripple {
-            display: inline-block;
-            position: relative;
-            width: 80px;
-            height: 80px;
-        }
-        .lds-ripple div {
-            position: absolute;
-            border: 4px solid #dfc;
-            opacity: 1;
-            border-radius: 50%;
-            animation: lds-ripple 1s cubic-bezier(0, 0.2, 0.8, 1) infinite;
-        }
-        .lds-ripple div:nth-child(2) {
-            animation-delay: -0.5s;
-        }
-        @keyframes lds-ripple {
-            0% {
-                top: 36px;
-                left: 36px;
-                width: 0;
-                height: 0;
-                opacity: 1;
-            }
-            100% {
-                top: 0px;
-                left: 0px;
-                width: 72px;
-                height: 72px;
-                opacity: 0;
-            }
-        }
-        .fade-enter-active {
-            transition: opacity .8s;
-        }
-        .fade-leave-active {
-            transition: opacity .3s;
-        }
-        .fade-enter, .fade-leave-to {
+        100% {
+            top: 0px;
+            left: 0px;
+            width: 72px;
+            height: 72px;
             opacity: 0;
         }
+    }
+    .fade-enter-active {
+        transition: opacity .8s;
+    }
+    .fade-leave-active {
+        transition: opacity .3s;
+    }
+    .fade-enter, .fade-leave-to {
+        opacity: 0;
+    }
 
-        .fadeDown-enter-active {
-            animation: bounce-in .5s;
+    .fadeDown-enter-active {
+        animation: bounce-in .5s;
+    }
+    .fadeDown-leave-active {
+        animation: bounce-in .5s reverse;
+    }
+    @keyframes bounce-in {
+        0% {
+            opacity: 0;
+            transform: translateY(-50px);
         }
-        .fadeDown-leave-active {
-            animation: bounce-in .5s reverse;
+        100% {
+            opacity: 1;
+            transform: translateY(0px);
         }
-        @keyframes bounce-in {
-            0% {
-                opacity: 0;
-                transform: translateY(-50px);
-            }
-            100% {
-                opacity: 1;
-                transform: translateY(0px);
-            }
-        }
-    </style>
+    }
+</style>
