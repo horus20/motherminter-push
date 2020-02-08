@@ -113,10 +113,10 @@ export default {
 
   },
   errors: {
-    authError: 'Error auth. Check you link and password is exist',
+    authError: 'Error auth. Check your link and password',
     phoneError: 'Sorry. Invalid phone number',
     balanceError: 'Error. Balance is empty or less than the minimum',
-    sendError: 'Error on send transaction, try later',
+    sendError: 'Error on sending transaction, try later',
     params: 'Error on params',
     passErrorEmpty: 'Error. Password is empty',
     emptyText: 'Error. Text is empty',
