@@ -2,7 +2,7 @@
     <div>
         <header>
             <a href="/" class="logo">Push.</a>
-            <div class="hamburger" onclick="activeMenu()">
+            <div :class="{'hamburger-active': IsActiveHamburgerClass}" class="hamburger" v-on:click="toggleMenu()">
                 <span></span>
                 <span></span>
                 <span></span>
@@ -51,17 +51,64 @@
         <!-- /Footer -->
         <!-- /Page -->
         <!-- Scripts -->
-        <!--<script src="assets/js/jQuery.min.js"></script>-->
-        <!--<script src="assets/js/custom.js"></script>-->
+        <transition name="fade">
+            <div class="menu" v-bind:class="{ 'menu-visible': isShowMenu }" v-if="isShowMenu">
+                <ul class="nav">
+                    <li><a href="/">{{ $t('menu.home') }}.</a></li>
+                    <li><a href="/about/">{{ $t('menu.about') }}.</a></li>
+                    <li><a href="#">{{ $t('menu.account') }}.</a></li>
+                    <li><a href="#" v-on:click="startCreateMenu()">{{ $t('menu.createWallet') }}.</a></li>
+                </ul>
+                <div class="lang-block">
+                    <button class="btn" v-bind:class="{ 'lang-active': currentLang === 'en' }"  v-on:click="changeLocale('en')"><img src="/assets/img/svg/en.svg" alt="">En</button>
+                    <button class="btn" v-bind:class="{ 'lang-active': currentLang === 'ru' }"  v-on:click="changeLocale('ru')"><img src="/assets/img/svg/rus.svg" alt="">Rus</button>
+                </div>
+            </div>
+        </transition>
     </div>
 </template>
 
 <script>
+  import Vue from 'vue'
+
   export default {
-    name: "about"
+    name: "about",
+    data() {
+      return {
+        IsActiveHamburgerClass: false,
+        isShowMenu: false
+      }
+    },
+    methods: {
+      toggleMenu: function () {
+        this.isShowMenu = !this.isShowMenu
+        this.IsActiveHamburgerClass = !this.IsActiveHamburgerClass
+      },
+      changeLocale: function (locale) {
+        this.$i18n.setLocaleCookie(locale)
+        this.$i18n.setLocale(locale)
+      },
+    },
+    computed: {
+      currentLang() {
+        return this.$i18n.locale
+      },
+    }
   }
 </script>
 
 <style scoped>
-
+    .menu-visible {
+        opacity: 1;
+        z-index: 9;
+    }
+    .fade-enter-active {
+        transition: opacity .8s;
+    }
+    .fade-leave-active {
+        transition: opacity .3s;
+    }
+    .fade-enter, .fade-leave-to {
+        opacity: 0;
+    }
 </style>
