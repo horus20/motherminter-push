@@ -358,6 +358,7 @@
         screenPassword: false,
         isNeedAction: false,
         isFeedback: true,
+        isBalanceEmpty: false,
 
         isShowModalQR: false,
         isShowModalDir: false,
@@ -620,6 +621,13 @@
             this.nonce = Number(response.data.data.nonce) + 1
           }
 
+        if (!this.isBalanceEmpty && this.balanceSumBIP.lte(0)) {
+          this.isBalanceEmpty = true;
+          const self = this
+          setTimeout(() => {
+            self.updateBalance()
+          }, 7*1000)
+        }
         } catch (error) {
           console.error(error)
           // this.errorMsg = error.message
