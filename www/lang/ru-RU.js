@@ -87,7 +87,7 @@ export default {
     youWallet: 'На ваш|кошелек',
     charityFund: 'Фонду|помощи',
     spendSection: 'или потратить на:',
-    mobileService: 'мобильный',
+    mobileService: 'телефон',
     games: 'Игры',
     foodDelivery: 'Доставка|еды',
     haveWallet: 'Есть ли у получателя адрес кошелька в сети Минтер',
