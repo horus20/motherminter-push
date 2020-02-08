@@ -366,6 +366,7 @@
 
         prevStep: [],
         step: 0,
+        startHash: '',
 
         password: '',
         uid: '',
@@ -400,6 +401,7 @@
     },
     created () {
       this.uid = this.$route.params.id
+      this.startHash = this.$route.hash
       this.checkAuth()
     },
     computed: {
@@ -436,8 +438,19 @@
       openMainPage: async function () {
         this.screenPassword = false
         this.screenStart = false
-        this.step = 1
         this.prevStep = []
+        if (this.startHash === '#mobile') {
+          this.prevStep.push(1)
+          this.step = 4
+        } else if (this.startHash === '#game') {
+          this.prevStep.push(1)
+          this.step = 5
+        } else if (this.startHash === '#fund') {
+          this.prevStep.push(1)
+          this.step = 6
+        } else {
+          this.step = 1
+        }
         this.isNeedAction = false
 
         await this.loadAdditionalInfo()

@@ -202,7 +202,7 @@
               <p>{{ createdLink }}</p>
               <div class="buttons">
                 <button class="btn btn-copy" v-on:click="copyToClipboard(createdLink)">{{ $t('Link') }}<img src="/assets/img/svg/copy.svg" alt=""></button>
-                <button class="btn btn-copy btn-qr" v-on:click="toggleShowQR()">QR<img src="/assets/img/svg/qr_link_blue.svg" alt=""></button>
+                <button class="btn btn-copy btn-qr" v-on:click="toggleShowQR(createdLink)">QR<img src="/assets/img/svg/qr_link_blue.svg" alt=""></button>
                 <button class="btn btn-copy btn-share">{{ $t('Share') }}<img src="/assets/img/svg/share.svg" alt=""></button>
                 <button class="btn btn-copy btn-more" v-on:click="toggleShowDir()">{{ $t('More') }}<span>...</span></button>
               </div>
@@ -281,7 +281,7 @@
       <div class="close-modal-alert" v-on:click="toggleShowQR()">
         <span></span><span></span>
       </div>
-      <qrcode v-bind:value="createdLink" :options="{ width: 250 }" tag="img"></qrcode>
+      <qrcode v-bind:value="qrLink" :options="{ width: 250 }" tag="img"></qrcode>
     </div>
     <!-- /Modal QR -->
 
@@ -292,20 +292,20 @@
         <div class="links__item">
           <img src="/assets/img/svg/services.svg" alt="">
           <span>Mobile<br>services</span>
-          <img src="/assets/img/svg/copy.svg" alt="">
-          <img onclick="showModalQR()" class="qr" src="/assets/img/svg/qr_link_blue.svg" alt="">
+          <img v-on:click="copyToClipboard(createdLinkMobile)" src="/assets/img/svg/copy.svg" alt="">
+          <img v-on:click="toggleShowQR(createdLinkMobile)" class="qr" src="/assets/img/svg/qr_link_blue.svg" alt="">
         </div>
         <div class="links__item">
           <img src="/assets/img/svg/games.svg" alt="">
           <span>Games</span>
-          <img src="/assets/img/svg/copy.svg" alt="">
-          <img onclick="showModalQR()" class="qr" src="/assets/img/svg/qr_link_blue.svg" alt="">
+          <img v-on:click="copyToClipboard(createdLinkGame)" src="/assets/img/svg/copy.svg" alt="">
+          <img v-on:click="toggleShowQR(createdLinkGame)" class="qr" src="/assets/img/svg/qr_link_blue.svg" alt="">
         </div>
         <div class="links__item">
           <img src="/assets/img/svg/charity.svg" alt="">
           <span>Charity<br>fund</span>
-          <img src="/assets/img/svg/copy.svg" alt="">
-          <img onclick="showModalQR()" class="qr" src="/assets/img/svg/qr_link_blue.svg" alt="">
+          <img v-on:click="copyToClipboard(createdLinkFund)" src="/assets/img/svg/copy.svg" alt="">
+          <img v-on:click="toggleShowQR(createdLinkFund)" class="qr" src="/assets/img/svg/qr_link_blue.svg" alt="">
         </div>
         <div class="links__item">
           <img src="/assets/img/svg/fuel.svg" alt="">
@@ -376,6 +376,8 @@
         IsActiveHamburgerClass: false,
         isCopieded: false,
 
+        qrLink: 'empty',
+
         // create wallet params
         createParamMessage: '',
         createParamPassword: '',
@@ -411,6 +413,15 @@
       createdLink() {
         return `${LINK}${this.createParamUID}`
       },
+      createdLinkMobile() {
+        return `${LINK}${this.createParamUID}#mobile`
+      },
+      createdLinkGame() {
+        return `${LINK}${this.createParamUID}#game`
+      },
+      createdLinkFund() {
+        return `${LINK}${this.createParamUID}#fund`
+      },
       msgSize() {
         return this.maxLen - this.createParamMessage.length
       },
@@ -434,8 +445,9 @@
       toggleShowNType: function () {
         this.isShowModalNType = !this.isShowModalNType
       },
-      toggleShowQR: function () {
+      toggleShowQR: function (link = 'empty') {
         this.isShowModalQR = !this.isShowModalQR
+        this.qrLink = link
       },
       toggleShowDir: function () {
         this.isShowModalDir = !this.isShowModalDir
