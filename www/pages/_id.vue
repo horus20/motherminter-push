@@ -525,14 +525,6 @@
               await this.loadAdditionalInfo()
               this.updateBalance()
             } else {
-              const afterActivateResponse = await axios.post(`${BACKEND_BASE_URL}/api/${this.uid}/after`, {
-                mxaddress: this.address,
-              })
-
-              if (afterActivateResponse.status === 200 && afterActivateResponse.data && afterActivateResponse.data.notice) {
-                this.companyMsg = afterActivateResponse.data.notice
-              }
-
               if (response.data.isProtected) {
                 // show password
                 this.openPasswordPage()
@@ -561,6 +553,14 @@
             mxaddress: this.address,
           })
           if (response.status === 200) {
+            const afterActivateResponse = await axios.post(`${BACKEND_BASE_URL}/api/${this.uid}/after`, {
+              mxaddress: this.address,
+            })
+
+            if (afterActivateResponse.status === 200 && afterActivateResponse.data && afterActivateResponse.data.notice) {
+              this.companyMsg = afterActivateResponse.data.notice
+            }
+
             if (response.data.status === 100) {
               // login success
               this.openMainPage()
