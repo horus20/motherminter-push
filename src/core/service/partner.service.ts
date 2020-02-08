@@ -47,7 +47,7 @@ export class PartnerService {
       const transporter = nodeMailer.createTransport({
         host: emailHost,
         port: emailPort,
-        secure: true,  // true for 465 port, false for other ports
+        secure: false,  // true for 465 port, false for other ports
         auth: {
           user: emailuser,
           pass: emailpass,
