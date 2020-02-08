@@ -101,7 +101,7 @@ export class WarehouseService {
     let type = TX_TYPE.SEND;
     let feeSymbol = symbol;
     let isValid = true;
-    const feeBip = 0.011;
+    const feeBip = 0.01;
 
     if (amount === '') {
       // send all balances
