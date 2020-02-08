@@ -19,8 +19,8 @@
     <div class="menu" v-bind:class="{ 'menu-visible': isShowMenu }" v-if="isShowMenu">
       <ul class="nav">
         <li><a href="/">{{ $t('menu.home') }}.</a></li>
-        <li><a href="#">{{ $t('menu.about') }}.</a></li>
-        <li><a href="#">{{ $t('menu.account') }}.</a></li>
+        <li><a href="/about/">{{ $t('menu.about') }}.</a></li>
+        <!--<li><a href="#">{{ $t('menu.account') }}.</a></li>-->
         <li><a href="/" v-on:click="startCreateMenu()">{{ $t('menu.createWallet') }}.</a></li>
       </ul>
       <div class="lang-block">
