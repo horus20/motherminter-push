@@ -92,7 +92,7 @@ export class CoreController {
 
       await this.partnerService.sendEmail({
         to: company.email,
-        subject: `Wallet list by company #${company.uid}`, // Subject line
+        subject: `Wallet list by multiple mode. Push #${company.uid}`, // Subject line
         text: walletList,
       });
       return true;
