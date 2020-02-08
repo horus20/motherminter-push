@@ -8,7 +8,7 @@ import { CompanyStatus } from '../enum';
 import { WarehouseService } from './warehouse.service';
 import { WalletService } from './wallet.service';
 
-const LINK = 'https://p.motherminter.org/';
+export const LINK = 'https://p.motherminter.org/';
 
 @Injectable()
 export class CompanyService {
@@ -138,5 +138,9 @@ export class CompanyService {
     }
 
     return wallets.map((wallet) => `${LINK}${wallet.wallet}`);
+  }
+
+  async getCompany(uid: string): Promise<Company> {
+    return this.companyRepository.findOneOrFail({uid});
   }
 }

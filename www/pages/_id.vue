@@ -172,7 +172,7 @@
             <div class="buttons">
               <button id="#copy" class="btn btn-copy" v-on:click="copyToClipboard(createdLink)">{{ $t('Link') }}<img src="/assets/img/svg/copy.svg" alt=""></button>
               <button class="btn btn-copy btn-qr" v-on:click="toggleShowQR()">QR<img src="/assets/img/svg/qr_link_blue.svg" alt=""></button>
-              <button class="btn btn-copy btn-share">{{ $t('Share') }}<img src="/assets/img/svg/share.svg" alt=""></button>
+              <button class="btn btn-copy btn-share disabled">{{ $t('Share') }}<img src="/assets/img/svg/share.svg" alt=""></button>
               <button class="btn btn-copy btn-more" v-on:click="toggleShowDir()">{{ $t('More') }}<span>...</span></button>
             </div>
           </div>
@@ -869,8 +869,17 @@
           this.transfer.value = new Decimal(this.balances[index].amount).minus(fee).toString()
         }
       },
-      copyToClipboard: function (message) {
-        this.$copyText(message).then(function (e) {
+      copyToClipboard: function (message, event = null) {
+        this.$copyText(message).then( (e) => {
+          if (event) {
+            if (event.target.classList.contains('btn-link-copy')) {
+              event.target.textContent = 'Copied'
+              this.isCopiededSuccess = true
+            } else {
+              event.target.textContent = 'Copied to buffer'
+              this.isCopiededAdress = true
+            }
+          }
         }, function (e) {
           console.log(message, e)
         })

@@ -122,6 +122,10 @@ export default {
     emptyText: 'Error. Text is empty',
     failEmail: ' Error. Fail email',
     balanceEmpty: 'Error. Balance is empty',
-    countEmpty: 'Error. Count less than 1'
-  }
+    countEmpty: 'Error. Count less than 1',
+    errorSend: 'Error on send to email',
+  },
+  successMsg: {
+    successSend: 'Success send to email',
+  },
 }

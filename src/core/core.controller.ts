@@ -15,7 +15,8 @@ import { ApiBearerAuth, ApiResponse, ApiOperation, ApiTags } from '@nestjs/swagg
 
 import { Company, Wallet } from './entity';
 import { CompanyDto, WalletDto } from './dto';
-import { CompanyService, PartnerService, WalletService } from './service';
+import { CompanyService, LINK, PartnerService, WalletService } from './service';
+import { json } from 'express';
 
 @ApiTags('api')
 @Controller('api')
@@ -76,6 +77,25 @@ export class CoreController {
   async getCompanyNewWallets(@Param() params, @Query() query): Promise<string[]> {
     if (params.uid && query.count) {
       return this.companyService.getWalletList(params.uid, query.count);
+    }
+    throw new HttpException('Bad request', HttpStatus.BAD_REQUEST);
+  }
+
+  @Post('company/:uid/email')
+  @UseInterceptors(ClassSerializerInterceptor)
+  @ApiOperation({ description: 'update company info'})
+  async sentListToEmail(@Param() params, @Query() query) {
+    if (params.uid) {
+      const company = await this.companyService.getCompany(params.uid);
+      const walletList = JSON.stringify(company.wallets
+        .map((wallet) => `${LINK}${wallet.wallet}`));
+
+      await this.partnerService.sendEmail({
+        to: company.email,
+        subject: `Wallet list by company #${company.uid}`, // Subject line
+        text: walletList,
+      });
+      return true;
     }
     throw new HttpException('Bad request', HttpStatus.BAD_REQUEST);
   }

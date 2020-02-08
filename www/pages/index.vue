@@ -221,7 +221,7 @@
               <div class="buttons">
                 <button class="btn btn-copy btn-link-copy" v-on:click="copyToClipboard(createdLink, $event)">{{ $t('Link') }}<img src="/assets/img/svg/copy.svg" alt=""></button>
                 <button class="btn btn-copy btn-qr" v-on:click="toggleShowQR(createdLink)">QR<img src="/assets/img/svg/qr_link_blue.svg" alt=""></button>
-                <button class="btn btn-copy btn-share">{{ $t('Share') }}<img src="/assets/img/svg/share.svg" alt=""></button>
+                <button class="btn btn-copy btn-share disabled">{{ $t('Share') }}<img src="/assets/img/svg/share.svg" alt=""></button>
                 <button class="btn btn-copy btn-more" v-on:click="toggleShowDir()">{{ $t('More') }}<span>...</span></button>
               </div>
             </div>
@@ -244,10 +244,10 @@
             <p class="share">{{ $t('create.walletList') }}:</p>
             <div class="send_link">
               <div class="buttons">
-                <button id="send" class="btn btn-copy disabled" v-on:click="sendListToEmail()">{{ $t('create.sendEmail') }}<img src="/assets/img/svg/email.svg" alt=""></button>
+                <button id="send" class="btn btn-copy" v-on:click="sendListToEmail()">{{ $t('create.sendEmail') }}<img src="/assets/img/svg/email.svg" alt=""></button>
                 <button v-if="createParamIsFixed" id="save" class="btn btn-copy" v-on:click="copyList()">{{ $t('create.sendList') }}<img src="/assets/img/svg/download.svg" alt=""></button>
                 <button v-if="!createParamIsFixed" id="copy" class="btn btn-copy" v-on:click="copyUrlSuccess()">{{ $t('create.copyLink') }}<img src="/assets/img/svg/copy.svg" alt=""></button>
-                <button id="share" class="btn btn-copy">{{ $t('create.shareList') }}<img src="/assets/img/svg/share.svg" alt=""></button>
+                <button id="share" class="btn btn-copy disabled">{{ $t('create.shareList') }}<img src="/assets/img/svg/share.svg" alt=""></button>
               </div>
             </div>
             <a class="btn btn-more btn-back" v-on:click="goBack()"><img src="/assets/img/svg/back.svg" alt="">{{ $t('back') }}</a>
@@ -719,14 +719,16 @@
 
         return false
       },
-      copyToClipboard: function (message, event) {
+      copyToClipboard: function (message, event = null) {
         this.$copyText(message).then( (e) => {
-          if (event.target.classList.contains('btn-link-copy')) {
-            event.target.textContent = 'Copied'
-            this.isCopiededSuccess = true
-          }else {
-            event.target.textContent = 'Copied to buffer'
-            this.isCopiededAdress = true
+          if (event) {
+            if (event.target.classList.contains('btn-link-copy')) {
+              event.target.textContent = 'Copied'
+              this.isCopiededSuccess = true
+            } else {
+              event.target.textContent = 'Copied to buffer'
+              this.isCopiededAdress = true
+            }
           }
         }, function (e) {
           console.log(message, e)
@@ -743,7 +745,7 @@
             })
             .map(({ coin, amount }) => {
               let usdAmount = 0
-              if (new Decimal(amount).gt(this.minNewBalance)) {
+              if (new Decimal(amount).gte(this.minNewBalance)) {
                 this.isAddressFilling = true
 
                 const coinToDef = this.coins[coin]
@@ -781,8 +783,18 @@
       prettyFormat: function (value) {
         return prettyFormat(value)
       },
-      sendListToEmail: function () {
-        // send to email
+      sendListToEmail: async function () {
+        try {
+          const response = await axios.post(`${BACKEND_BASE_URL}/api/company/${this.company.uid}/email`)
+
+          if (response && response.status === 200) {
+            this.errorMsg = this.$t('successMsg.successSend')
+            this.isShowError = true
+          }
+        } catch (error) {
+          this.errorMsg = this.$t('error.errorSend')
+          this.isShowError = true
+        }
       },
       copyList: function () {
         if (this.company && this.company.wallets) {
