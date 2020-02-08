@@ -92,7 +92,7 @@ export class WarehouseService {
     throw new Error('Fail to load balance');
   }
 
-  async transfer(from: Warehouse, to: string, amount: string, symbol: string): Promise<boolean> {
+  async transfer(from: Warehouse, to: string, amount: string, symbol: string = MINTER_DEFAULT_SYMBOL): Promise<boolean> {
     const password = this.configService.get<string>('WAREHOUSE_PASSWORD');
     const privateKey = AES.decrypt(from.seed, password)
       .toString(enc.Utf8);
