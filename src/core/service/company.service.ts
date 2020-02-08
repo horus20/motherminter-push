@@ -27,7 +27,7 @@ export class CompanyService {
       company.password = companyData.password  ?? '';
       company.status = CompanyStatus.ACTIVE;
       company.wallets = [];
-      company.isProtected = companyData.protected;
+      company.isProtected = !!companyData.protected;
       company.setParams(companyData.params);
       company.uid = this.walletService.generateUniqWalletId(10);
 

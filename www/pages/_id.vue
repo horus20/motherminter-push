@@ -493,6 +493,13 @@
 
               await this.loadAdditionalInfo()
               this.updateBalance()
+            } else if (response.data.status === 100) {
+              if (response.data.isProtected) {
+                // show password
+                this.openPasswordPage()
+              } else {
+                this.login()
+              }
             }
           }
         } catch (error) {

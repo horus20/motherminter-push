@@ -560,6 +560,7 @@
           uid: this.createParamUID,
           mxaddress: wallet.address,
           email: this.createParamEmail,
+          protected: (this.createParamPassword && this.createParamPassword.length > 0),
           params: {
             notice: this.createParamMessage,
           }
