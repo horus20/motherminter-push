@@ -94,14 +94,16 @@
               <div class="trigger trigger-01" v-bind:class="{ 'trigger-active': isActiveTrigger01 }" v-on:click="isActiveTrigger01 = !isActiveTrigger01">
                 <span class="trigger_no">{{ $t('NO') }}</span><span class="trigger_circle"></span><span class="trigger_yes">{{ $t('YES') }}</span>
               </div>
-              <input id="input-01" v-if="isActiveTrigger01" type="text" v-bind:placeholder="$t('create.yourMessageHere')" v-model="createParamMessage" style="display: block">
-
+                <transition name="fadeDown">
+                    <input id="input-01" v-if="isActiveTrigger01" type="text" v-bind:placeholder="$t('create.yourMessageHere')" v-model="createParamMessage" style="display: block">
+                </transition>
               <p style="margin-bottom: 0">{{ $t('create.putPassword') }}?</p>
               <div class="trigger trigger-02" v-bind:class="{ 'trigger-active': isActiveTrigger02 }" v-on:click="isActiveTrigger02 = !isActiveTrigger02">
                 <span class="trigger_no">{{ $t('NO') }}</span><span class="trigger_circle"></span><span class="trigger_yes">{{ $t('YES') }}</span>
               </div>
-              <input id="input-02" v-if="isActiveTrigger02" type="password" v-bind:placeholder="$t('create.yourPasswordHere')" v-model="createParamPassword" style="display: block">
-
+                <transition name="fadeDown">
+                    <input id="input-02" v-if="isActiveTrigger02" type="password" v-bind:placeholder="$t('create.yourPasswordHere')" v-model="createParamPassword" style="display: block">
+                </transition>
             </form>
             <button class="btn" v-on:click="startCreateWallet()">{{ $t('goToNext') }}</button>
             <a class="btn btn-more btn-back" v-on:click="goBack()"><img src="/assets/img/svg/back.svg" alt="">{{ $t('back') }}</a>
@@ -167,7 +169,7 @@
             <input type="text" class="input" v-bind:placeholder="$t('create.oneWalletBalance')" v-model="createParamBalance">
             <!--<input type="text" class="input" v-bind:placeholder="$t('create.numberWallet')" placeholder="Message (optional)">-->
             <input type="text" class="input" v-bind:placeholder="$t('create.yourEmail')" v-model="createParamEmail">
-            <input type="text" class="input" v-bind:placeholder="$t('create.passToCompany')" v-model="createParamCompanyPass">
+            <input type="password" class="input" v-bind:placeholder="$t('create.passToCompany')" v-model="createParamCompanyPass">
             <button class="btn" v-on:click="startCreateCompanyParams()">{{ $t('goToNext') }}</button>
             <a class="btn btn-more btn-back" v-on:click="goBack()"><img src="/assets/img/svg/back.svg" alt="">{{ $t('back') }}</a>
           </div>
@@ -237,7 +239,7 @@
           <!-- Content Success -->
           <transition name="fade">
           <div v-if="step === 51" class="content__item content__success content__success-multiple content__item-active">
-            <h5>{{ $t('success') }}!</h5>
+            <h1>{{ $t('success') }}!</h1>
             <p v-if="!createParamIsFixed" v-html="newLineLabel($t('create.successUnlim'))">:</p>
             <p v-if="createParamIsFixed">{{ createParamCount }} <span v-html="newLineLabel($t('create.successFixed'))"></span></p>
             <div class="score">
@@ -250,10 +252,11 @@
                 <button id="send" class="btn btn-copy" v-on:click="sendListToEmail()">{{ $t('create.sendEmail') }}<img src="/assets/img/svg/email.svg" alt=""></button>
                 <button v-if="createParamIsFixed" id="save" class="btn btn-copy" v-on:click="copyList()">{{ $t('create.sendList') }}<img src="/assets/img/svg/download.svg" alt=""></button>
                 <button v-if="!createParamIsFixed" id="copy" class="btn btn-copy" v-on:click="copyUrlSuccess()">{{ $t('create.copyLink') }}<img src="/assets/img/svg/copy.svg" alt=""></button>
-                <button id="share" class="btn btn-copy disabled">{{ $t('create.shareList') }}<img src="/assets/img/svg/share.svg" alt=""></button>
+                <!--<button id="share" class="btn btn-copy disabled">{{ $t('create.shareList') }}<img src="/assets/img/svg/share.svg" alt=""></button>-->
               </div>
             </div>
             <a class="btn btn-more btn-back" v-on:click="goBack()"><img src="/assets/img/svg/back.svg" alt="">{{ $t('back') }}</a>
+              <div class="back"></div>
           </div>
           </transition>
           <!-- /Content Success -->
@@ -271,7 +274,8 @@
 
 
     <!-- Modal Activation Types-->
-    <div class="modal-alert modal-activation-types" v-bind:class="{ 'modal-activation-types-active': isShowModalType }" v-if="isShowModalType">
+      <transition name="fade">
+      <div class="modal-alert modal-activation-types" v-bind:class="{ 'modal-activation-types-active': isShowModalType }" v-if="isShowModalType">
         <div class="container">
             <div class="close-modal-alert" v-on:click="toggleShowType()">
                 <span></span><span></span>
@@ -284,19 +288,24 @@
             <p class="title"><img src="/assets/img/svg/action_dark.svg" alt="">{{ $t('create.action') }}</p>
             <p>{{ $t('create.detailAction') }}</p>
         </div>
-    </div>
+      </div>
+      </transition>
     <!-- /Modal Activation Types -->
 
     <!-- Modal Activation Types-->
+    <transition name="fade">
     <div class="modal-alert modal-activation-types modal-type2" v-bind:class="{ 'modal-activation-types-active': isShowModalNType }" v-if="isShowModalNType">
-      <div class="close-modal-alert" v-on:click="toggleShowNType()">
-        <span></span><span></span>
-      </div>
-      <p class="title"><img src="/assets/img/svg/fixed_1.svg" alt="">{{ $t('Fixed') }}</p>
-      <p v-html="$t('create.fixedDetail')"></p>
-      <p class="title"><img src="/assets/img/svg/unlimited_1.svg" alt="">{{ $t('Unlimited') }}</p>
-      <p v-html="$t('create.unlimDetail')"></p>
+        <div class="container">
+            <div class="close-modal-alert" v-on:click="toggleShowNType()">
+            <span></span><span></span>
+          </div>
+          <p class="title"><img src="/assets/img/svg/fixed_1.svg" alt="">{{ $t('Fixed') }}</p>
+          <p v-html="$t('create.fixedDetail')"></p>
+          <p class="title"><img src="/assets/img/svg/unlimited_1.svg" alt="">{{ $t('Unlimited') }}</p>
+          <p v-html="$t('create.unlimDetail')"></p>
+        </div>
     </div>
+    </transition>
     <!-- /Modal Activation Types -->
 
     <!-- Modal QR -->
@@ -916,4 +925,20 @@
     opacity: 0;
   }
 
+  .fadeDown-enter-active {
+      animation: bounce-in .5s;
+  }
+  .fadeDown-leave-active {
+      animation: bounce-in .5s reverse;
+  }
+  @keyframes bounce-in {
+      0% {
+          opacity: 0;
+          transform: translateY(-50px);
+      }
+      100% {
+          opacity: 1;
+          transform: translateY(0px);
+      }
+  }
 </style>
