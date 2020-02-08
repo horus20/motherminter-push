@@ -108,7 +108,7 @@
               <img v-if="!isMinMsgSize" src="/assets/img/svg/action_grey.svg" alt="">
             </div>
           </div>
-          <button class="btn" v-on:click="sendReply()">{{ $t('action.access') }}</button>
+          <button class="btn" v-bind:class="{ 'disabled': !isMinMsgSize }" v-on:click="sendReply()">{{ $t('action.access') }}</button>
         </div>
       </div>
       <!-- /Content__Item-07 -->
@@ -494,7 +494,7 @@
 
               await this.loadAdditionalInfo()
               this.updateBalance()
-            } else if (response.data.status === 100) {
+            } else {
               if (response.data.isProtected) {
                 // show password
                 this.openPasswordPage()
@@ -537,10 +537,18 @@
         this.isShowLoader = false
       },
       sendReply: async function () {
-        if (isFeedback && this.replyMsg.length < this.minLen) {
+        if (!this.isMinMsgSize) {
           return false
         }
-        if (!isFeedback && this.replyMsg.length < 8) {
+
+        if (this.isFeedback && this.replyMsg.length < this.minLen) {
+          this.errorMsg = this.$t('errors.params')
+          this.isShowError = true
+          return false
+        }
+        if (!this.isFeedback && this.replyMsg.length < 8) {
+          this.errorMsg = this.$t('errors.params')
+          this.isShowError = true
           return false
         }
         // send reply to company

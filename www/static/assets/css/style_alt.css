@@ -1417,3 +1417,9 @@ footer {
     opacity: 0; }
   100% {
     opacity: 0; } }
+.disabled {
+  background: var(--grey) !important;
+}
+.disabled:hover {
+  background: var(--grey) !important;
+}
