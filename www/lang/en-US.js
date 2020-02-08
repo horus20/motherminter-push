@@ -118,5 +118,10 @@ export default {
     balanceError: 'Error. Balance is empty or less than the minimum',
     sendError: 'Error on send transaction, try later',
     params: 'Error on params',
+    passErrorEmpty: 'Error. Password is empty',
+    emptyText: 'Error. Text is empty',
+    failEmail: ' Error. Fail email',
+    balanceEmpty: 'Error. Balance is empty',
+    countEmpty: 'Error. Count less than 1'
   }
 }

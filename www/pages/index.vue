@@ -165,11 +165,28 @@
             <!--<input type="text" class="input" v-bind:placeholder="$t('create.numberWallet')" placeholder="Message (optional)">-->
             <input type="text" class="input" v-bind:placeholder="$t('create.yourEmail')" v-model="createParamEmail">
             <input type="text" class="input" v-bind:placeholder="$t('create.passToCompany')" v-model="createParamCompanyPass">
-            <button class="btn" v-on:click="startCreateCompany()">{{ $t('goToNext') }}</button>
+            <button class="btn" v-on:click="startCreateCompanyParams()">{{ $t('goToNext') }}</button>
             <a class="btn btn-more btn-back" v-on:click="goBack()"><img src="/assets/img/svg/back.svg" alt="">{{ $t('back') }}</a>
           </div>
           </transition>
           <!-- /Content Form -->
+
+          <!-- Content Describe Feedback -->
+          <transition name="fade">
+            <div v-if="step === 71" class="content__item content__describe-action content__item-active content__item-active">
+              <p>{{ $t('create.feedbackTitle') }}</p>
+              <div class="text-wrap">
+                <textarea id="ta" name="" maxlength="140" v-bind:placeholder="$t('create.feedbackPlaceholder')" v-model="createParamMessage"></textarea>
+                <div class="max-lenght">
+                  <span id="max_lenght">{{ msgSize }}</span>
+                  <img src="/assets/img/svg/feedback_grey.svg" alt="">
+                </div>
+              </div>
+              <button class="btn" v-on:click="startCreateCompany()">{{ $t('goToNext') }}</button>
+              <a class="btn btn-more btn-back" v-on:click="goBack()"><img src="/assets/img/svg/back.svg" alt="">{{ $t('back') }}</a>
+            </div>
+          </transition>
+          <!-- /Content Describe Feedback -->
 
           <!-- Content Coins Address -->
           <transition name="fade">
@@ -542,6 +559,24 @@
         return label.split('|').join('<br>')
       },
       startCreateWallet: async function () {
+        if (this.isActiveTrigger02 && !this.createParamPassword) {
+          this.errorMsg = this.$t('errors.passErrorEmpty')
+          this.isShowError = true
+          return false
+        }
+
+        if ((this.step === 31 || this.step === 32) && this.createParamMessage.length === 0) {
+          this.errorMsg = this.$t('errors.emptyText')
+          this.isShowError = true
+          return false
+        }
+
+        if ((this.step === 31 || this.step === 32) && this.createParamEmail.length === 0) {
+          this.errorMsg = this.$t('errors.failEmail')
+          this.isShowError = true
+          return false
+        }
+
         this.prevStep.push(this.step)
         this.step = 4
 
@@ -577,7 +612,39 @@
 
         return false
       },
+      startCreateCompanyParams: async function () {
+        if (!this.createParamBalance) {
+          this.errorMsg = this.$t('errors.balanceEmpty')
+          this.isShowError = true
+          return false
+        }
+
+        if (!this.createParamCount) {
+          this.errorMsg = this.$t('errors.countEmpty')
+          this.isShowError = true
+          return false
+        }
+
+        if (!this.createParamEmail || this.createParamEmail && this.createParamEmail.length === 0) {
+          this.errorMsg = this.$t('errors.failEmail')
+          this.isShowError = true
+          return false
+        }
+
+        if (this.createParamType === 'complex_feedback') {
+          this.prevStep.push(this.step)
+          this.step = 71
+        } else {
+          this.startCreateCompany()
+        }
+      },
       startCreateCompany: async function () {
+        if ((this.createParamType === 'feedback' || this.createParamType === 'action') && this.createParamMessage.length === 0) {
+          this.errorMsg = this.$t('errors.emptyText')
+          this.isShowError = true
+          return false
+        }
+
         this.prevStep.push(this.step)
         this.step = 4
 
