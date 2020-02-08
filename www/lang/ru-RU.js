@@ -1,8 +1,8 @@
 export default {
   yes: 'Да',
-  YES: 'да',
+  YES: 'YES',
   no: 'Нет',
-  NO: 'нет',
+  NO: 'NO',
   back: 'назад',
   goToNext: 'Следующий шаг',
   success: 'Успех',
