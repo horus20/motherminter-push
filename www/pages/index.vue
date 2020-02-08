@@ -432,6 +432,9 @@
       balanceSum() {
         const fiatVal = getFiatByLocale(this.currentLang)
         const fiatSymbol = fiatVal ? fiatVal.symbol : ''
+        if (this.currentLang === 'en') {
+          return `${this.balanceSumUSD.toFixed(2)} $`
+        }
         return `${this.balanceSumFiat.toFixed(2)} ${fiatSymbol}`
       },
     },
