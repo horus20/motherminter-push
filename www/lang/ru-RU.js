@@ -113,12 +113,12 @@ export default {
     phoneError: 'Сожалеем. Введен неправильный номер телефона.',
   },
   about: {
-    title: 'About',
-    text: 'This link-wallet is powered by Minter, a blockchain network that lets people, projects, and companies create and manage their own coins and exchange them at a fair price with absolute and instant liquidity.',
-    titleLink: 'Useful links:',
-    link1: 'What is Minter',
-    link2: 'About Network',
-    link3: 'Consol wallet',
-    link4: 'Telegram',
+    title: 'Инфо',
+    text: 'Push - это удобный веб-кошелек работающий на технологии Минтер, позволяющей физическим лицам, проектам и компаниям выпускать собственные монеты с абсолютной и мгновенной ликвидностью.',
+    titleLink: 'Полезные ссылки:',
+    link1: 'Что такое Минтер',
+    link2: 'Сеть Минтер',
+    link3: 'Консольный кошелек',
+    link4: 'Телеграм',
   }
 }
