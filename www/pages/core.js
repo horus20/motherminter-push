@@ -167,3 +167,18 @@ export function toHex (d) {
 export function prettyFormat (value) {
   return Number(value).toFixed(5)
 }
+
+export function getFiatByLocale (locale) {
+  const fiatLocale = {
+    'en': {
+      name: 'USD',
+      symbol: '$',
+    },
+    'ru': {
+      name: 'USD',
+      symbol: 'руб',
+    },
+  }
+
+  return fiatLocale[locale]
+}

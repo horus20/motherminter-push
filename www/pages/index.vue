@@ -195,7 +195,7 @@
             <p>{{ $t('create.willReceive') }}:</p>
             <div class="score">
               <p class="balance" v-for="balance in balances">{{ prettyFormat(balance.amount) }} {{ balance.coin }}</p>
-              <p class="currency">~{{ balanceSumUSD }} USD</p>
+              <p class="currency">~{{ balanceSum }}</p>
             </div>
             <p class="share">{{ $t('create.shareLink') }}:</p>
             <div class="copy_link">
@@ -221,7 +221,7 @@
             <p v-if="createParamIsFixed">{{ createParamCount }} <span v-html="newLineLabel($t('create.successFixed'))"></span></p>
             <div class="score">
               <p class="balance" v-for="balance in balances">{{ prettyFormat(balance.amount) }} {{ balance.coin }}</p>
-              <p class="currency">~{{ balanceSumUSD }} USD</p>
+              <p class="currency">~{{ balanceSum }}</p>
             </div>
             <p class="share">{{ $t('create.walletList') }}:</p>
             <div class="send_link">
@@ -346,7 +346,7 @@
     getCoinExchangeList,
     getFiatExchangeList,
     getBipPrice,
-    prettyFormat, createCompany, DEFAULT_SYMBOL
+    prettyFormat, createCompany, DEFAULT_SYMBOL, getFiatByLocale
   } from './core'
 
   if (process.client) {
@@ -398,6 +398,7 @@
         bipToUSD: null,
         fiat: [],
         balanceSumUSD: 0,
+        balanceSumFiat: 0,
 
         maxLen: 140,
         minLen: 100,
@@ -427,7 +428,12 @@
       },
       isMinMsgSize() {
         return this.createParamMessage.length > this.minLen
-      }
+      },
+      balanceSum() {
+        const fiatVal = getFiatByLocale(this.currentLang)
+        const fiatSymbol = fiatVal ? fiatVal.symbol : ''
+        return `${this.balanceSumFiat.toFixed(2)} ${fiatSymbol}`
+      },
     },
     // method
     methods: {
@@ -596,8 +602,8 @@
       },
       loadAdditionalInfo: async function () {
         this.bipToUSD = await getBipPrice()
+        this.fiat = await getFiatExchangeList()
         this.coins = getCoinExchangeList()
-        this.fiat = getFiatExchangeList()
       },
       startCreateSuccess: async function () {
         if (!this.isAddressFilling) {
@@ -630,6 +636,7 @@
         debugger
         try {
           this.balanceSumUSD = new Decimal(0)
+          this.balanceSumFiat = new Decimal(0)
           const balances = await getAddressBalance(this.addressForFilling)
           this.balances = balances
             .filter(({ amount }) => {
@@ -656,6 +663,16 @@
                 usdAmount
               }
             })
+
+          this.balanceSumFiat = this.balanceSumUSD
+          const fiatVal = getFiatByLocale(this.currentLang)
+          if (fiatVal) {
+            const fiatCur = this.fiat[fiatVal.name]
+            if (this.currentLang !== 'en' && fiatCur) {
+              this.balanceSumFiat = this.balanceSumUSD
+                .mul(fiatCur)
+            }
+          }
         } catch (error) {
           console.error(error)
           // this.errorMsg = error.message

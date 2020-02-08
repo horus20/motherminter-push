@@ -55,7 +55,7 @@
           <div class="main common-wrap">
             <h1>{{ $t('main.youBalance') }}:</h1>
             <p class="balance" v-for="balance in balances">{{ balance.amount }} {{ balance.coin }}</p>
-            <p class="currency">~{{ balanceSumUSD }} USD</p>
+            <p class="currency">~{{ balanceSum }}</p>
             <p class="transfer">{{ $t('main.transferSection') }}</p>
             <div class="transfer-items">
               <a class="transfer__item" v-on:click="showTransfer()">
@@ -95,8 +95,8 @@
       <!-- Content__Item-07 -->
       <div v-if="isNeedAction" class="container">
         <div class="feedback feedback-action common-wrap">
-          <p v-if="isFeedback">{{ $t('action.toReceive') }} <span>{{ balanceSumBIP }} BIP</span> (~ ${{ balanceSumUSD }}) {{ $t('action.afterReceive') }}:</p>
-          <p v-if="!isFeedback">{{ $t('action.toReceive') }} <span>{{ balanceSumBIP }} BIP</span> (~ ${{ balanceSumUSD }}) {{ $t('action.afterReceiveActive') }}:</p>
+          <p v-if="isFeedback">{{ $t('action.toReceive') }} <span>{{ balanceSumBIP }} BIP</span> (~ {{ balanceSum }}) {{ $t('action.afterReceive') }}:</p>
+          <p v-if="!isFeedback">{{ $t('action.toReceive') }} <span>{{ balanceSumBIP }} BIP</span> (~ {{ balanceSum }}) {{ $t('action.afterReceiveActive') }}:</p>
           <p class="explanation" v-if="companyMsg !== ''">{{ companyMsg }}</p>
           <div class="text-wrap">
             <textarea id="ta" v-model="replyMsg" maxlength="140" v-if="isFeedback" v-bind:placeholder="$t('action.placeholder')"></textarea>
@@ -118,7 +118,7 @@
         <div class="another-persone common-wrap">
           <h1>{{ $t('main.youBalance') }}:</h1>
           <p class="balance" v-for="balance in balances">{{ balance.amount }} {{ balance.coin }}</p>
-          <p class="currency">~{{ balanceSumUSD }} USD</p>
+          <p class="currency">~{{ balanceSum }}</p>
           <p class="transfer">{{ $t('main.transferSection') }}</p>
           <img class="icon" src="/assets/img/svg/person.svg" alt="">
           <p class="insert">{{ $t('main.haveWallet') }}?</p>
@@ -134,7 +134,7 @@
         <div class="another-persone another-persone__dont-wallet common-wrap">
           <h1>{{ $t('main.youBalance') }}:</h1>
           <p class="balance" v-for="balance in balances">{{ balance.amount }} {{ balance.coin }}</p>
-          <p class="currency">~{{ balanceSumUSD }} USD</p>
+          <p class="currency">~{{ balanceSum }}</p>
           <img class="icon" src="/assets/img/svg/person.svg" alt="">
           <p class="insert">{{ $t('main.createNewPush') }}</p>
           <a class="btn" v-on:click="showTransferPart32()">{{ $t('main.createSend') }}</a>
@@ -148,7 +148,7 @@
         <div class="another-persone__have-wallet common-wrap">
           <h1>{{ $t('main.youBalance') }}:</h1>
           <p class="balance" v-for="balance in balances">{{ balance.amount }} {{ balance.coin }}</p>
-          <p class="currency">~{{ balanceSumUSD }} USD</p>
+          <p class="currency">~{{ balanceSum }}</p>
           <img class="icon" src="/assets/img/svg/person.svg" alt="">
           <p class="insert" v-model="transfer.address">{{ $t('main.insertAddress') }}:</p>
           <input type="text" placeholder="Address">
@@ -164,7 +164,7 @@
           <p>{{ $t('create.willReceive') }}:</p>
           <div class="score">
             <p class="balance">{{ transfer.value }} {{ transfer.symbol }}</p>
-            <p class="currency">~{{ balanceSumUSD }} USD</p>
+            <p class="currency">~{{ balanceSum }}</p>
           </div>
           <p class="share">Share this link or QR:</p>
           <div class="copy_link">
@@ -185,7 +185,7 @@
         <div class="your-wallet common-wrap">
           <h1>{{ $t('main.youBalance') }}:</h1>
           <p class="balance" v-for="balance in balances">{{ balance.amount }} {{ balance.coin }}</p>
-          <p class="currency">~{{ balanceSumUSD }} USD</p>
+          <p class="currency">~{{ balanceSum }}</p>
           <img class="icon" src="/assets/img/svg/wallet.svg" alt="">
           <p class="insert" v-model="transfer.address">{{ $t('main.insertAddress') }}:</p>
           <input type="text" placeholder="Address">
@@ -200,12 +200,12 @@
         <div class="mobile-services common-wrap">
           <h1>{{ $t('main.youBalance') }}:</h1>
           <p class="balance" v-for="balance in balances">{{ balance.amount }} {{ balance.coin }}</p>
-          <p class="currency">~{{ balanceSumUSD }} USD</p>
+          <p class="currency">~{{ balanceSum }}</p>
           <img class="icon" src="/assets/img/svg/services.svg" alt="">
           <p class="insert">{{ $t('main.mobileTitle') }}:</p>
           <input id="phone" type="text" v-model="transfer.address" placeholder="+7 9...">
           <p class='recevie'>{{ $t('main.mobileRecv') }}:<br>
-            <span>~{{ balanceSumUSD }} USD</span>
+            <span>~{{ balanceSum }}</span>
             <!--<span>~0.01 KZT</span>
             <span>~0.01 UAH</span>
             <span>~0.01 BYN</span>-->
@@ -221,7 +221,7 @@
         <div class="games common-wrap">
           <h1>{{ $t('main.youBalance') }}:</h1>
           <p class="balance" v-for="balance in balances">{{ balance.amount }} {{ balance.coin }}</p>
-          <p class="currency">~{{ balanceSumUSD }} USD</p>
+          <p class="currency">~{{ balanceSum }}</p>
           <img class="icon" src="/assets/img/svg/games.svg" alt="">
           <p class="description">{{ $t('main.timeloop') }}</p>
           <button class="btn" v-on:click="showGamesRun()">{{ $t('main.timeloopBtn') }}</button>
@@ -235,7 +235,7 @@
         <div class="charity-fund common-wrap">
           <h1>{{ $t('main.youBalance') }}:</h1>
           <p class="balance" v-for="balance in balances">{{ balance.amount }} {{ balance.coin }}</p>
-          <p class="currency">~{{ balanceSumUSD }} USD</p>
+          <p class="currency">~{{ balanceSum }}</p>
           <img class="icon" src="/assets/img/svg/charity.svg" alt="">
           <p class="description">{{ $t('main.dobro') }}</p>
           <button class="btn" v-on:click="showFundRun()">{{ $t('Send') }}</button>
@@ -332,7 +332,7 @@
     BACKEND_BASE_URL, createCompany,
     createWallet, DEFAULT_SYMBOL, generateWalletUid,
     getAddressBalance, getBipPrice,
-    getCoinExchangeList,
+    getCoinExchangeList, getFiatByLocale,
     getFiatExchangeList,
     LINK, prettyFormat
   } from './core'
@@ -385,6 +385,7 @@
         fiat: [],
         balanceSumUSD: 0,
         balanceSumBIP: 0,
+        balanceSumFiat: 0,
         isBalanceUpdated: false,
 
         maxLen: 140,
@@ -416,6 +417,11 @@
       },
       isMinMsgSize() {
         return this.replyMsg.length > this.minLen
+      },
+      balanceSum() {
+        const fiatVal = getFiatByLocale(this.currentLang)
+        const fiatSymbol = fiatVal ? fiatVal.symbol : ''
+        return `${this.balanceSumFiat.toFixed(2)} ${fiatSymbol}`
       }
     },
     // method
@@ -482,7 +488,7 @@
                 this.companyMsg = this.activateParams.notice
               }
 
-              this.loadAdditionalInfo()
+              await this.loadAdditionalInfo()
               this.updateBalance()
             }
           }
@@ -546,6 +552,7 @@
         try {
           this.balanceSumUSD = new Decimal(0)
           this.balanceSumBIP = new Decimal(0)
+          this.balanceSumFiat = new Decimal(0)
           const balances = await getAddressBalance(this.address)
           this.balances = balances
             .filter(({ amount }) => {
@@ -578,6 +585,17 @@
                 usdAmount
               }
             })
+
+          this.balanceSumFiat = this.balanceSumUSD
+          const fiatVal = getFiatByLocale(this.currentLang)
+          if (fiatVal) {
+            const fiatCur = this.fiat[fiatVal.name]
+            if (this.currentLang !== 'en' && fiatCur) {
+              this.balanceSumFiat = this.balanceSumUSD
+                .mul(fiatCur)
+            }
+          }
+
         } catch (error) {
           console.error(error)
           // this.errorMsg = error.message
@@ -595,7 +613,7 @@
       loadAdditionalInfo: async function () {
         this.bipToUSD = await getBipPrice()
         if (this.fiat.length === 0) {
-          this.fiat = getFiatExchangeList()
+          this.fiat = await getFiatExchangeList()
         }
       },
       loadCoins: function () {
