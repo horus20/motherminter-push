@@ -175,7 +175,7 @@
           <transition name="fade">
           <div v-if="step === 4" class="content__item content__coins-address content__item-active">
             <h5>{{ $t('create.plzFill') }}</h5>
-            <div :class="{'active-copy' : isCopieded}" class="copy_link">
+            <div :class="{'active-copy' : isCopiededAdress}" class="copy_link">
               <p>{{ addressForFilling }}</p>
               <button class="btn btn-copy" v-on:click="copyToClipboard(addressForFilling, $event)">Copy<img src="/assets/img/svg/copy.svg" alt=""></button>
             </div>
@@ -198,10 +198,10 @@
               <p class="currency">~{{ balanceSumUSD }} USD</p>
             </div>
             <p class="share">{{ $t('create.shareLink') }}:</p>
-            <div class="copy_link">
+            <div :class="{'active-copy' : isCopiededSuccess}" class="copy_link">
               <p>{{ createdLink }}</p>
               <div class="buttons">
-                <button class="btn btn-copy" v-on:click="copyToClipboard(createdLink)">{{ $t('Link') }}<img src="/assets/img/svg/copy.svg" alt=""></button>
+                <button class="btn btn-copy btn-link-copy" v-on:click="copyToClipboard(createdLink, $event)">{{ $t('Link') }}<img src="/assets/img/svg/copy.svg" alt=""></button>
                 <button class="btn btn-copy btn-qr" v-on:click="toggleShowQR()">QR<img src="/assets/img/svg/qr_link_blue.svg" alt=""></button>
                 <button class="btn btn-copy btn-share">{{ $t('Share') }}<img src="/assets/img/svg/share.svg" alt=""></button>
                 <button class="btn btn-copy btn-more" v-on:click="toggleShowDir()">{{ $t('More') }}<span>...</span></button>
@@ -251,16 +251,18 @@
 
     <!-- Modal Activation Types-->
     <div class="modal-alert modal-activation-types" v-bind:class="{ 'modal-activation-types-active': isShowModalType }" v-if="isShowModalType">
-      <div class="close-modal-alert" v-on:click="toggleShowType()">
-        <span></span><span></span>
-      </div>
-      <h5>{{ $t('create.detailTypeTitle') }}</h5>
-      <p class="title"><img src="/assets/img/svg/wallet_dark.svg" alt="">{{ $t('create.simple') }}</p>
-      <p>{{ $t('create.detailSimple') }}</p>
-      <p class="title"><img src="/assets/img/svg/feedback_dark.svg" alt="">{{ $t('create.feedback') }}</p>
-      <p>{{ $t('create.detailFeedback') }}</p>
-      <p class="title"><img src="/assets/img/svg/action_dark.svg" alt="">{{ $t('create.action') }}</p>
-      <p>{{ $t('create.detailAction') }}</p>
+        <div class="container">
+            <div class="close-modal-alert" v-on:click="toggleShowType()">
+                <span></span><span></span>
+            </div>
+            <h5>{{ $t('create.detailTypeTitle') }}</h5>
+            <p class="title"><img src="/assets/img/svg/wallet_dark.svg" alt="">{{ $t('create.simple') }}</p>
+            <p>{{ $t('create.detailSimple') }}</p>
+            <p class="title"><img src="/assets/img/svg/feedback_dark.svg" alt="">{{ $t('create.feedback') }}</p>
+            <p>{{ $t('create.detailFeedback') }}</p>
+            <p class="title"><img src="/assets/img/svg/action_dark.svg" alt="">{{ $t('create.action') }}</p>
+            <p>{{ $t('create.detailAction') }}</p>
+        </div>
     </div>
     <!-- /Modal Activation Types -->
 
@@ -374,7 +376,8 @@
         isActiveTrigger02: false,
         isAddressFilling: false,
         IsActiveHamburgerClass: false,
-        isCopieded: false,
+        isCopiededAdress: false,
+        isCopiededSuccess: false,
 
         // create wallet params
         createParamMessage: '',
@@ -608,14 +611,18 @@
       },
       copyToClipboard: function (message, event) {
         this.$copyText(message).then( (e) => {
-          event.target.textContent = 'Copied to buffer'
-          this.isCopieded = true
+          if (event.target.classList.contains('btn-link-copy')) {
+            event.target.textContent = 'Copied'
+            this.isCopiededSuccess = true
+          }else {
+            event.target.textContent = 'Copied to buffer'
+            this.isCopiededAdress = true
+          }
         }, function (e) {
           console.log(message, e)
         })
       },
       checkFilledBalance: async function () {
-        debugger
         try {
           this.balanceSumUSD = new Decimal(0)
           const balances = await getAddressBalance(this.addressForFilling)
