@@ -96,7 +96,9 @@ export class WarehouseService {
     const password = this.configService.get<string>('WAREHOUSE_PASSWORD');
     const privateKey = AES.decrypt(from.seed, password)
       .toString(enc.Utf8);
-    // todo: check balance > amount
+    if (symbol === '') {
+      symbol = MINTER_DEFAULT_SYMBOL;
+    }
     let data;
     let type = TX_TYPE.SEND;
     let feeSymbol = symbol;
