@@ -135,7 +135,7 @@
                 <img v-show="isTextarea[1]" src="/assets/img/svg/action_grey.svg" alt="">
               </div>
             </div>
-            <input type="text" v-bind:placeholder="$t('create.actionEmail')">
+            <input type="text" v-bind:placeholder="$t('create.actionEmail')" v-model="createParamEmail">
             <button class="btn" v-on:click="startCreateWallet()">{{ $t('goToNext') }}</button>
             <a class="btn btn-more btn-back" v-on:click="goBack()"><img src="/assets/img/svg/back.svg" alt="">{{ $t('back') }}</a>
           </div>
@@ -575,7 +575,7 @@
           return false
         }
 
-        if ((this.step === 31 || this.step === 32) && this.createParamEmail.length === 0 && !this.validateEmail(this.createParamEmail)) {
+        if ((this.step === 31 || this.step === 32) && !this.validateEmail(this.createParamEmail)) {
           this.errorMsg = this.$t('errors.failEmail')
           this.isShowError = true
           return false
