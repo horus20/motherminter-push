@@ -194,6 +194,8 @@
             <h5 v-if="!this.isBalanceGreatThenZero">{{ $t('create.plzFill') }}</h5>
             <h5 v-if="this.isBalanceGreatThenZero">{{ $t('create.plzFillPart1') }} <span v-on:click="copyToClipboard(minNewBalance)">{{ minNewBalance }} {{ $t('create.minBalanceCoin')}}</span> {{ $t('create.plzFillPart2') }}</h5>
             <div :class="{'active-copy' : isCopieded}" class="copy_link">
+            <h5>{{ $t('create.plzFill') }}</h5>
+            <div :class="{'active-copy' : isCopiededAdress}" class="copy_link">
               <p>{{ addressForFilling }}</p>
               <button class="btn btn-copy" v-on:click="copyToClipboard(addressForFilling, $event)">Copy<img src="/assets/img/svg/copy.svg" alt=""></button>
             </div>
@@ -216,10 +218,10 @@
               <p class="currency">~{{ balanceSum }}</p>
             </div>
             <p class="share">{{ $t('create.shareLink') }}:</p>
-            <div class="copy_link">
+            <div :class="{'active-copy' : isCopiededSuccess}" class="copy_link">
               <p>{{ createdLink }}</p>
               <div class="buttons">
-                <button class="btn btn-copy" v-on:click="copyToClipboard(createdLink)">{{ $t('Link') }}<img src="/assets/img/svg/copy.svg" alt=""></button>
+                <button class="btn btn-copy btn-link-copy" v-on:click="copyToClipboard(createdLink, $event)">{{ $t('Link') }}<img src="/assets/img/svg/copy.svg" alt=""></button>
                 <button class="btn btn-copy btn-qr" v-on:click="toggleShowQR(createdLink)">QR<img src="/assets/img/svg/qr_link_blue.svg" alt=""></button>
                 <button class="btn btn-copy btn-share">{{ $t('Share') }}<img src="/assets/img/svg/share.svg" alt=""></button>
                 <button class="btn btn-copy btn-more" v-on:click="toggleShowDir()">{{ $t('More') }}<span>...</span></button>
@@ -269,16 +271,18 @@
 
     <!-- Modal Activation Types-->
     <div class="modal-alert modal-activation-types" v-bind:class="{ 'modal-activation-types-active': isShowModalType }" v-if="isShowModalType">
-      <div class="close-modal-alert" v-on:click="toggleShowType()">
-        <span></span><span></span>
-      </div>
-      <h5>{{ $t('create.detailTypeTitle') }}</h5>
-      <p class="title"><img src="/assets/img/svg/wallet_dark.svg" alt="">{{ $t('create.simple') }}</p>
-      <p>{{ $t('create.detailSimple') }}</p>
-      <p class="title"><img src="/assets/img/svg/feedback_dark.svg" alt="">{{ $t('create.feedback') }}</p>
-      <p>{{ $t('create.detailFeedback') }}</p>
-      <p class="title"><img src="/assets/img/svg/action_dark.svg" alt="">{{ $t('create.action') }}</p>
-      <p>{{ $t('create.detailAction') }}</p>
+        <div class="container">
+            <div class="close-modal-alert" v-on:click="toggleShowType()">
+                <span></span><span></span>
+            </div>
+            <h5>{{ $t('create.detailTypeTitle') }}</h5>
+            <p class="title"><img src="/assets/img/svg/wallet_dark.svg" alt="">{{ $t('create.simple') }}</p>
+            <p>{{ $t('create.detailSimple') }}</p>
+            <p class="title"><img src="/assets/img/svg/feedback_dark.svg" alt="">{{ $t('create.feedback') }}</p>
+            <p>{{ $t('create.detailFeedback') }}</p>
+            <p class="title"><img src="/assets/img/svg/action_dark.svg" alt="">{{ $t('create.action') }}</p>
+            <p>{{ $t('create.detailAction') }}</p>
+        </div>
     </div>
     <!-- /Modal Activation Types -->
 
@@ -393,7 +397,8 @@
         isActiveTrigger02: false,
         isAddressFilling: false,
         IsActiveHamburgerClass: false,
-        isCopieded: false,
+        isCopiededAdress: false,
+        isCopiededSuccess: false,
 
         qrLink: 'empty',
 
@@ -687,6 +692,7 @@
         this.bipToUSD = await getBipPrice()
         this.fiat = await getFiatExchangeList()
         this.coins = getCoinExchangeList()
+        this.fiat = getFiatExchangeList()
       },
       startCreateSuccess: async function () {
         if (!this.isAddressFilling) {
@@ -711,8 +717,13 @@
       },
       copyToClipboard: function (message, event) {
         this.$copyText(message).then( (e) => {
-          event.target.textContent = 'Copied to buffer'
-          this.isCopieded = true
+          if (event.target.classList.contains('btn-link-copy')) {
+            event.target.textContent = 'Copied'
+            this.isCopiededSuccess = true
+          }else {
+            event.target.textContent = 'Copied to buffer'
+            this.isCopiededAdress = true
+          }
         }, function (e) {
           console.log(message, e)
         })

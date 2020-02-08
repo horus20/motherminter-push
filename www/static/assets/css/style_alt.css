@@ -374,7 +374,7 @@ header {
   z-index: -1; }
 
 .nav {
-  width: 196px;
+  width: 200px;
   margin: 0 auto;
   padding-top: calc(50vh - 160px);
   text-align: left; }
@@ -523,6 +523,7 @@ header {
     -ms-flex-pack: justify;
     justify-content: space-between; }
   .content__choose-wallet .more-about {
+    cursor: pointer;
     margin-bottom: 18px; }
   .content__choose-wallet .btn-radio {
     font-size: 18px;
@@ -608,7 +609,7 @@ header {
     background: var(--blue); }
   .content__attach-messege p {
     font-size: 24px;
-    margin-bottom: 28px; }
+    margin-bottom: 28px !important; }
   .content__attach-messege .trigger {
     display: -webkit-box;
     display: -ms-flexbox;
@@ -659,15 +660,18 @@ header {
     font-size: 24px;
     margin-bottom: 16px;
     text-align: center; }
-  .content__coins-address .copy_link.active-copy .btn-copy {
+  .content__coins-address .copy_link.active-copy .btn-copy,
+  .content__success .copy_link.active-copy .btn-link-copy {
     transition: all .5s;
     border-color: #63d96e;
     color: #63d96e;
   }
-  .content__coins-address .copy_link.active-copy .btn-copy img {
+  .content__coins-address .copy_link.active-copy .btn-copy img ,
+  .content__success .copy_link.active-copy .btn-link-copy img {
     display: none;
   }
-  .content__coins-address .copy_link.active-copy {
+  .content__coins-address .copy_link.active-copy p,
+  .content__success .copy_link.active-copy p {
     transition: all .5s;
     color: #63d96e;
   }
