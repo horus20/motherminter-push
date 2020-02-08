@@ -66,7 +66,7 @@
             <h1>{{ $t('main.youBalance') }}:</h1>
             <p class="balance" v-for="balance in balances">{{ balance.amount }} {{ balance.coin }}</p>
             <p class="currency">~{{ balanceSum }}</p>
-            <p class="transfer">{{ $t('main.transferSection') }}</p>
+            <!--<p class="transfer">{{ $t('main.transferSection') }}</p>-->
             <div class="transfer-items">
               <a class="transfer__item" v-on:click="showTransfer()">
                 <img src="assets/img/svg/person.svg" alt="">
@@ -129,7 +129,7 @@
           <h1>{{ $t('main.youBalance') }}:</h1>
           <p class="balance" v-for="balance in balances">{{ balance.amount }} {{ balance.coin }}</p>
           <p class="currency">~{{ balanceSum }}</p>
-          <!--<p class="transfer">{{ $t('main.transferSection') }}</p>-->
+          <p class="transfer">{{ $t('main.transferSection') }}</p>
           <img class="icon" src="/assets/img/svg/person.svg" alt="">
           <p class="insert">{{ $t('main.haveWallet') }}?</p>
           <a class="btn btn-persone" v-on:click="showTransferPart21()">{{ $t('yes') }}</a>
