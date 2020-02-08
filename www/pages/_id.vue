@@ -17,7 +17,7 @@
         <li><a href="/">{{ $t('menu.home') }}.</a></li>
         <li><a href="#">{{ $t('menu.about') }}.</a></li>
         <li><a href="#">{{ $t('menu.account') }}.</a></li>
-        <li><a href="#" v-on:click="startCreateMenu()">{{ $t('menu.createWallet') }}.</a></li>
+        <li><a href="/" v-on:click="startCreateMenu()">{{ $t('menu.createWallet') }}.</a></li>
       </ul>
       <div class="lang-block">
         <button class="btn" v-bind:class="{ 'lang-active': currentLang === 'en' }"  v-on:click="changeLocale('en')"><img src="/assets/img/svg/en.svg" alt="">En</button>
@@ -184,7 +184,7 @@
 
       <!-- Your Wallet -->
       <div v-if="step === 3" class="container">
-        <div class="your-wallet common-wrap">
+        <div class="your-wallet another-persone__dont-wallet common-wrap">
           <h1>{{ $t('main.youBalance') }}:</h1>
           <p class="balance" v-for="balance in balances">{{ balance.amount }} {{ balance.coin }}</p>
           <p class="currency">~{{ balanceSum }}</p>
@@ -356,7 +356,7 @@
     data () {
       return {
         isShowLoader: false,
-        screenStart: true,
+        screenStart: false,
         screenPassword: false,
         isNeedAction: false,
         isFeedback: true,
@@ -503,8 +503,6 @@
               if (response.data.isProtected) {
                 // show password
                 this.openPasswordPage()
-              } else {
-                this.login()
               }
             }
           }
@@ -512,6 +510,7 @@
           this.isCreateNew = false
           console.error(error)
         }
+        this.login()
         this.isShowLoader = false
       },
       login: async function () {
@@ -812,6 +811,7 @@
 
       },
       sendTransfer: async function (to, value, symbol, payload = null) {
+        this.isShowLoader = true
         try {
           const txData = new TxDataSend({
             to: toBuffer(to),
@@ -843,12 +843,14 @@
           })
 
           this.nonce += 1
+          this.isShowLoader = false
           return true
         } catch (error) {
           console.error(error)
           this.errorMsg = this.$t('errors.sendError')
           this.isShowError = true
 
+          this.isShowLoader = false
           return false
         }
       },
