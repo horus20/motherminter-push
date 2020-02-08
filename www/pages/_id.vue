@@ -145,13 +145,13 @@
 
       <!-- Another Persone (Have Wallet) -->
       <div v-if="step === 21" class="container">
-        <div class="another-persone__have-wallet common-wrap">
+        <div class="another-persone another-persone__dont-wallet common-wrap">
           <h1>{{ $t('main.youBalance') }}:</h1>
           <p class="balance" v-for="balance in balances">{{ balance.amount }} {{ balance.coin }}</p>
           <p class="currency">~{{ balanceSum }}</p>
           <img class="icon" src="/assets/img/svg/person.svg" alt="">
-          <p class="insert" v-model="transfer.address">{{ $t('main.insertAddress') }}:</p>
-          <input type="text" placeholder="Address">
+          <p class="insert">{{ $t('main.insertAddress') }}:</p>
+          <input type="text" placeholder="Address" v-model="transfer.address">
           <a class="btn" v-on:click="showTransferPart31()">{{ $t('Send') }}</a>
           <a class="btn btn-more btn-back" v-on:click="goBack()"><img src="/assets/img/svg/back.svg" alt="">{{ $t('back') }}</a>
         </div>
@@ -187,8 +187,8 @@
           <p class="balance" v-for="balance in balances">{{ balance.amount }} {{ balance.coin }}</p>
           <p class="currency">~{{ balanceSum }}</p>
           <img class="icon" src="/assets/img/svg/wallet.svg" alt="">
-          <p class="insert" v-model="transfer.address">{{ $t('main.insertAddress') }}:</p>
-          <input type="text" placeholder="Address">
+          <p class="insert">{{ $t('main.insertAddress') }}:</p>
+          <input type="text" placeholder="Address" v-model="transfer.address">
           <a class="btn" v-on:click="showTransferPart31()">{{ $t('Send') }}</a>
           <a class="btn btn-more btn-back" v-on:click="goBack()"><img src="/assets/img/svg/back.svg" alt="">{{ $t('back') }}</a>
         </div>
@@ -330,11 +330,11 @@
 
   import {
     BACKEND_BASE_URL, createCompany,
-    createWallet, DEFAULT_SYMBOL, generateWalletUid,
+    createWallet, DEFAULT_SYMBOL, EXPLORER_GATE_API_URL, generateWalletUid,
     getAddressBalance, getBipPrice,
     getCoinExchangeList, getFiatByLocale,
     getFiatExchangeList,
-    LINK, prettyFormat
+    LINK, prettyFormat, toHex
   } from './core'
   import axios from 'axios'
   import { Decimal } from 'decimal.js'
@@ -374,6 +374,7 @@
         address: '',
         companyMsg: '',
         replyMsg: '',
+        nonce: 1,
 
         errorMsg: '',
         isShowError: false,
@@ -532,7 +533,7 @@
           //this.$bvModal.show('modalError')
         }
         this.errorMsg = this.$t('errors.authError')
-        // this.$bvModal.show('modalError')
+        this.isShowError = true
         this.isShowLoader = false
       },
       sendReply: async function () {
@@ -606,6 +607,11 @@
             }
           }
 
+          const response = await axios.get(`${EXPLORER_GATE_API_URL}/api/v1/nonce/${this.address}`)
+          if (response.data && response.data.data && response.data.data.nonce) {
+            this.nonce = Number(response.data.data.nonce) + 1
+          }
+
         } catch (error) {
           console.error(error)
           // this.errorMsg = error.message
@@ -652,8 +658,8 @@
         this.step = 22
       },
       showTransferPart31: async function () {
-        this.prevStep.push(this.step)
-        this.step = 31
+        // this.prevStep.push(this.step)
+        // this.step = 31
 
         if (this.transfer.address) {
           this.useMax(1)
@@ -661,11 +667,14 @@
           if (result) {
             this.step = 200
           }
+        } else {
+          this.errorMsg = this.$t('errors.params')
+          this.isShowError = true
         }
       },
       showTransferPart32: async function () {
-        this.prevStep.push(this.step)
-        this.step = 32
+        //this.prevStep.push(this.step)
+        //this.step = 32
 
         try {
           // generate wallet, start check balance
@@ -710,6 +719,9 @@
             this.successIcon = '/assets/img/svg/charity.svg'
             this.isDobro = true
           }
+        } else {
+          this.errorMsg = this.$t('errors.params')
+          this.isShowError = true
         }
       },
       showMobile: function () {
@@ -719,6 +731,8 @@
       showMobileRun: async function () {
         // send to bipToPhone
         if (this.transfer.address.length < 11) {
+          this.errorMsg = this.$t('errors.params')
+          this.isShowError = true
           return false;
         }
 
@@ -785,7 +799,7 @@
             value: `0x${convertToPip(value, 'hex')}`,
           })
           const txParams = {
-            nonce: String('0x' + this.toHex(this.nonce)),
+            nonce: String('0x' + toHex(this.nonce)),
             chainId: '0x01',
             gasPrice: '0x01',
             gasCoin: coinToBuffer(symbol),
@@ -808,10 +822,12 @@
             rawTx: serializedTx,
           })
 
+          this.nonce += 1
           return true
         } catch (error) {
           console.error(error)
-          this.errorMsg = 'Извините при отправке произошла ошибка'
+          this.errorMsg = this.$t('errors.sendError')
+          this.isShowError = true
 
           return false
         }
@@ -827,20 +843,21 @@
           }
         }
 
+        const coinToBip = this.coins[this.transfer.symbol] ?? 1
         if (type === 1) {// simple transfer
-          const fee = new Decimal(0.01).div(this.coins[this.transfer.symbol])
+          const fee = new Decimal(0.01).div(coinToBip)
           this.transfer.value = new Decimal(this.balances[index].amount).minus(fee).toString()
         }
         if (type === 2) {// pushwallet
-          const fee = new Decimal(0.01).div(this.coins[this.transfer.symbol])
+          const fee = new Decimal(0.01).div(coinToBip)
           this.transfer.value = new Decimal(this.balances[index].amount).minus(fee).toString()
         }
         if (type === 3) {// phone
-          const fee = new Decimal(0.01).div(this.coins[this.transfer.symbol])
+          const fee = new Decimal(0.01).div(coinToBip)
           this.transfer.value = new Decimal(this.balances[index].amount).minus(fee).toString()
         }
         if (type === 4) {// timeloop
-          const fee = new Decimal(0.138).div(this.coins[this.transfer.symbol])
+          const fee = new Decimal(0.138).div(coinToBip)
           this.transfer.value = new Decimal(this.balances[index].amount).minus(fee).toString()
         }
       },

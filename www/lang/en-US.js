@@ -116,5 +116,7 @@ export default {
     authError: 'Error auth. Check you link and password is exist',
     phoneError: 'Sorry. Invalid phone number',
     balanceError: 'Error. Balance is empty or less than the minimum',
+    sendError: 'Error on send transaction, try later',
+    params: 'Error on params',
   }
 }
