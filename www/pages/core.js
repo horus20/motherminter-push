@@ -12,7 +12,7 @@ export const LINK = 'https://p.motherminter.org/'
 export const COURCE_BIP_URL = 'https://api.bip.dev/api/price'
 export const COURCE_FIAT_URL = 'https://www.cbr-xml-daily.ru/daily_json.js'
 export const DEFAULT_SYMBOL = 'BIP'
-export const ACTIVATE_FEE = '0.1'    // todo: change this place
+export const ACTIVATE_FEE = '0.01'    // todo: change this place
 export const PUSH_WALLET_ID_LENGTH = 6
 
 /**

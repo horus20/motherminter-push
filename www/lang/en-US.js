@@ -41,6 +41,9 @@ export default {
     yourMessageHere: 'Your message here...',
     yourPasswordHere: 'Your password here...',
     plzFill: 'Please send any Minter coins to this address',
+    plzFillPart1: 'Please send',
+    plzFillPart2: 'Minter coins to this address',
+    minBalanceCoin: '',
     willReceive: 'Your recipient will receive',
     shareLink: 'Share this link or QR',
     feedbackTitle: 'Please describe the kind of feedback you want. The recipient will get this message.',
@@ -112,5 +115,6 @@ export default {
   errors: {
     authError: 'Error auth. Check you link and password is exist',
     phoneError: 'Sorry. Invalid phone number',
+    balanceError: 'Error. Balance is empty or less than the minimum',
   }
 }

@@ -155,7 +155,7 @@
           </transition>
           <!-- /Content Type Wallet -->
 
-          <!-- Content Form multiply single unlim  -->
+          <!-- Content Form multiply simple unlim  -->
           <transition name="fade">
           <div v-if="step === 7" class="content__item content__form content__item-active">
             <p class="unlimited" v-if="!createParamIsFixed">{{ $t('create.numberWalletUnlim') }}</p>
@@ -165,7 +165,7 @@
             <!--<input type="text" class="input" v-bind:placeholder="$t('create.numberWallet')" placeholder="Message (optional)">-->
             <input type="text" class="input" v-bind:placeholder="$t('create.yourEmail')" v-model="createParamEmail">
             <input type="text" class="input" v-bind:placeholder="$t('create.passToCompany')" v-model="createParamCompanyPass">
-            <button class="btn" v-on:click="startCreateWallet()">{{ $t('goToNext') }}</button>
+            <button class="btn" v-on:click="startCreateCompany()">{{ $t('goToNext') }}</button>
             <a class="btn btn-more btn-back" v-on:click="goBack()"><img src="/assets/img/svg/back.svg" alt="">{{ $t('back') }}</a>
           </div>
           </transition>
@@ -174,7 +174,8 @@
           <!-- Content Coins Address -->
           <transition name="fade">
           <div v-if="step === 4" class="content__item content__coins-address content__item-active">
-            <h5>{{ $t('create.plzFill') }}</h5>
+            <h5 v-if="!this.isBalanceGreatThenZero">{{ $t('create.plzFill') }}</h5>
+            <h5 v-if="this.isBalanceGreatThenZero">{{ $t('create.plzFillPart1') }} <span v-on:click="copyToClipboard(minNewBalance)">{{ minNewBalance }} {{ $t('create.minBalanceCoin')}}</span> {{ $t('create.plzFillPart2') }}</h5>
             <div :class="{'active-copy' : isCopieded}" class="copy_link">
               <p>{{ addressForFilling }}</p>
               <button class="btn btn-copy" v-on:click="copyToClipboard(addressForFilling, $event)">Copy<img src="/assets/img/svg/copy.svg" alt=""></button>
@@ -346,7 +347,7 @@
     getCoinExchangeList,
     getFiatExchangeList,
     getBipPrice,
-    prettyFormat, createCompany, DEFAULT_SYMBOL, getFiatByLocale
+    prettyFormat, createCompany, DEFAULT_SYMBOL, getFiatByLocale, ACTIVATE_FEE
   } from './core'
 
   if (process.client) {
@@ -364,6 +365,7 @@
         errorMsg: '',
         isShowError: false,
 
+        isShowLoader: false,
         isShowMenu: false,
         isShowModalType: false,
         isShowModalNType: false,
@@ -390,6 +392,8 @@
         createParamCompanyPass: '',
         company: null,
         companyLink: '',
+        minNewBalance: 0,
+        isBalanceGreatThenZero: false,
 
         balances: [],
         addressForFilling: 'empty',
@@ -480,6 +484,8 @@
         this.createParamMessage = ''
         this.createParamBalance = ''
         this.createParamUID = ''
+        this.minNewBalance = new Decimal(0)
+        this.isBalanceGreatThenZero = false
       },
       startCreateSimple: function () {
         this.prevStep.push(this.step)
@@ -587,6 +593,12 @@
             amount: this.createParamBalance,
           }
         })
+        this.minNewBalance = new Decimal(this.createParamBalance)
+          .plus(ACTIVATE_FEE)
+          .mul(this.createParamCount)
+        if (this.minNewBalance.gt(0)) {
+          this.isBalanceGreatThenZero = true
+        }
 
         if (company && company.warehouseWallet && company.warehouseWallet.mxaddress) {
           this.addressForFilling = company.warehouseWallet.mxaddress
@@ -614,6 +626,8 @@
         }
 
         if (!this.isAddressFilling) {
+          this.errorMsg = this.$t('errors.balanceError')
+          this.isShowError = true
           return false
         }
         clearInterval(this.checkInterval)
@@ -636,7 +650,6 @@
         })
       },
       checkFilledBalance: async function () {
-        debugger
         try {
           this.balanceSumUSD = new Decimal(0)
           this.balanceSumFiat = new Decimal(0)
@@ -647,7 +660,7 @@
             })
             .map(({ coin, amount }) => {
               let usdAmount = 0
-              if (new Decimal(amount).gt(0)) {
+              if (new Decimal(amount).gt(this.minNewBalance)) {
                 this.isAddressFilling = true
 
                 const coinToDef = this.coins[coin]
