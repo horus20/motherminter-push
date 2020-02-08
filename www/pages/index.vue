@@ -190,21 +190,19 @@
 
           <!-- Content Coins Address -->
           <transition name="fade">
-          <div v-if="step === 4" class="content__item content__coins-address content__item-active">
-            <h5 v-if="!this.isBalanceGreatThenZero">{{ $t('create.plzFill') }}</h5>
-            <h5 v-if="this.isBalanceGreatThenZero">{{ $t('create.plzFillPart1') }} <span v-on:click="copyToClipboard(minNewBalance)">{{ minNewBalance }} {{ $t('create.minBalanceCoin')}}</span> {{ $t('create.plzFillPart2') }}</h5>
-            <div :class="{'active-copy' : isCopieded}" class="copy_link">
-            <h5>{{ $t('create.plzFill') }}</h5>
-            <div :class="{'active-copy' : isCopiededAdress}" class="copy_link">
-              <p>{{ addressForFilling }}</p>
-              <button class="btn btn-copy" v-on:click="copyToClipboard(addressForFilling, $event)">Copy<img src="/assets/img/svg/copy.svg" alt=""></button>
+            <div v-if="step === 4" class="content__item content__coins-address content__item-active">
+              <h5 v-if="!this.isBalanceGreatThenZero">{{ $t('create.plzFill') }}</h5>
+              <h5 v-if="this.isBalanceGreatThenZero">{{ $t('create.plzFillPart1') }} <span v-on:click="copyToClipboard(minNewBalance)">{{ minNewBalance }} {{ $t('create.minBalanceCoin')}}</span> {{ $t('create.plzFillPart2') }}</h5>
+              <div :class="{'active-copy' : isCopiededAdress}" class="copy_link">
+                <p>{{ addressForFilling }}</p>
+                <button class="btn btn-copy" v-on:click="copyToClipboard(addressForFilling, $event)">Copy<img src="/assets/img/svg/copy.svg" alt=""></button>
+              </div>
+              <div class="qr-code" v-if="typeof addressForFilling !== 'undefined'">
+                <qrcode v-bind:value="addressForFilling" :options="{ width: 121 }" tag="img"></qrcode>
+              </div>
+              <button class="btn" v-on:click="startCreateSuccess()">{{ $t('goToNext') }}</button>
+              <a class="btn btn-more btn-back" v-on:click="goBack()"><img src="/assets/img/svg/back.svg" alt="">{{ $t('back') }}</a>
             </div>
-            <div class="qr-code" v-if="typeof addressForFilling !== 'undefined'">
-              <qrcode v-bind:value="addressForFilling" :options="{ width: 121 }" tag="img"></qrcode>
-            </div>
-            <button class="btn" v-bind:class="{ 'disabled': !isAddressFilling }"  v-on:click="startCreateSuccess()">{{ $t('goToNext') }}</button>
-            <a class="btn btn-more btn-back" v-on:click="goBack()"><img src="/assets/img/svg/back.svg" alt="">{{ $t('back') }}</a>
-          </div>
           </transition>
           <!-- /Content Coins Address -->
 
@@ -576,7 +574,7 @@
           return false
         }
 
-        if ((this.step === 31 || this.step === 32) && this.createParamEmail.length === 0) {
+        if ((this.step === 31 || this.step === 32) && this.createParamEmail.length === 0 && !this.validateEmail(this.createParamEmail)) {
           this.errorMsg = this.$t('errors.failEmail')
           this.isShowError = true
           return false
@@ -624,14 +622,20 @@
           return false
         }
 
-        if (!this.createParamCount) {
+        if (!this.createParamCount && this.createParamIsFixed) {
           this.errorMsg = this.$t('errors.countEmpty')
           this.isShowError = true
           return false
         }
 
-        if (!this.createParamEmail || this.createParamEmail && this.createParamEmail.length === 0) {
+        if (!this.validateEmail(this.createParamEmail)) {
           this.errorMsg = this.$t('errors.failEmail')
+          this.isShowError = true
+          return false
+        }
+
+        if (!this.createParamCompanyPass) {
+          this.errorMsg = this.$t('errors.passErrorEmpty')
           this.isShowError = true
           return false
         }
@@ -644,7 +648,7 @@
         }
       },
       startCreateCompany: async function () {
-        if ((this.createParamType === 'feedback' || this.createParamType === 'action') && this.createParamMessage.length === 0) {
+        if (this.createParamType === 'complex_feedback' && this.createParamMessage.length === 0) {
           this.errorMsg = this.$t('errors.emptyText')
           this.isShowError = true
           return false
@@ -790,6 +794,10 @@
       },
       copyUrlSuccess: function () {
         this.copyToClipboard(this.companyLink)
+      },
+      validateEmail(email) {
+        const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+        return re.test(String(email).toLowerCase())
       }
     },
     // html header section

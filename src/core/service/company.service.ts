@@ -35,10 +35,10 @@ export class CompanyService {
       if (companyData.type === 'complex') {
         company.status = CompanyStatus.COMPLEX;
       }
-      if (companyData.type === 'feedback') {
+      if (companyData.type === 'complex_feedback') {
         company.status = CompanyStatus.COMPLEX_FEEDBACK;
       }
-      if (companyData.type === 'action') {
+      if (companyData.type === 'complex_action') {
         company.status = CompanyStatus.COMPLEX_ACTION;
       }
       if (companyData.type === 'simple_feedback') {
