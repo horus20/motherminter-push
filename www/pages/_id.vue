@@ -3,6 +3,9 @@
     <!-- Header -->
     <header>
       <a href="/" class="logo">Push.</a>
+      <div class="messege" v-if="companyMsg" v-on:click="toggleMessage()" style="top:24px;">
+        <img src="assets/img/svg/icon_message.svg" alt="">
+      </div>
       <div :class="{'hamburger-active': IsActiveHamburgerClass}"  class="hamburger" v-on:click="toggleMenu()">
         <span></span>
         <span></span>
@@ -11,6 +14,7 @@
         <span></span>
       </div>
     </header>
+
     <transition name="fade">
     <div class="menu" v-bind:class="{ 'menu-visible': isShowMenu }" v-if="isShowMenu">
       <ul class="nav">
@@ -258,6 +262,14 @@
       </div>
       <p>{{ errorMsg }}</p>
     </div>
+
+    <div class="modal-alert" v-bind:class="{ 'modal-activation-error': isShowMessage }" v-if="isShowMessage">
+      <div class="close-modal-alert" v-on:click="closeMessage()">
+        <span></span><span></span>
+      </div>
+      <p class="title">Message:</p>
+      <p>{{ companyMsg }}</p>
+    </div>
     <!-- /Modal Alert -->
 
     <!-- Modal -->
@@ -378,13 +390,14 @@
         privateKey: '',
         address: '',
         companyMsg: '',
+        isShowMessage: false,
         replyMsg: '',
         nonce: 1,
 
         errorMsg: '',
         isShowError: false,
         isShowMenu: false,
-        IsActiveHamburgerClass,
+        IsActiveHamburgerClass: false,
 
         balances: [],
         coins: [],
@@ -448,6 +461,13 @@
         this.isShowMenu = !this.isShowMenu
         this.IsActiveHamburgerClass = !this.IsActiveHamburgerClass
       },
+      toggleMessage: function () {
+        this.isShowMessage = !this.isShowMessage
+      },
+      closeMessage: function () {
+        this.companyMsg = ''
+        this.isShowMessage = false
+      },
       openPasswordPage: function () {
         this.screenPassword = true
         this.screenStart = false
@@ -502,6 +522,14 @@
               await this.loadAdditionalInfo()
               this.updateBalance()
             } else {
+              const afterActivateResponse = await axios.post(`${BACKEND_BASE_URL}/api/${this.uid}/after`, {
+                mxaddress: this.address,
+              })
+
+              if (afterActivateResponse.status === 200 && afterActivateResponse.data && afterActivateResponse.data.notice) {
+                this.companyMsg = afterActivateResponse.data.notice
+              }
+
               if (response.data.isProtected) {
                 // show password
                 this.openPasswordPage()
