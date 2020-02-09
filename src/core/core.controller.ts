@@ -92,10 +92,10 @@ export class CoreController {
 
       await this.partnerService.sendEmail({
         to: company.email,
-        subject: `! Wallet list by multiple mode. Push #${company.uid}`, // Subject line
-        text: walletList + 'www',
+        subject: `Wallet list by multiple mode. Push #${company.uid}`, // Subject line
+        text: walletList,
       });
-      return true;
+      //return true;
     }
     throw new HttpException('Bad request', HttpStatus.BAD_REQUEST);
   }
