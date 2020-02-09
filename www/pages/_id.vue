@@ -59,7 +59,7 @@
         <!-- /Password -->
       </template>
 
-      <template v-if="step === 1">
+      <template v-show="step === 1">
         <!-- Main -->
         <div class="container">
           <div class="main common-wrap">
