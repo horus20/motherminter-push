@@ -434,6 +434,9 @@
         successLink: '',
       }
     },
+    components: {
+      qrcode: VueQrcode,
+    },
     created () {
       this.uid = this.$route.params.id
       this.startHash = this.$route.hash
