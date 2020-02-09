@@ -117,7 +117,11 @@ textarea {
   line-height: 30px;
   color: var(--blue);
   border: 1px solid var(--blue);
-  background: none; }
+  background: none;
+}
+.btn-copy:active {
+  opacity: .6;
+}
   .btn-copy img {
     margin: 0px 0 -6px 8px; }
 
@@ -666,10 +670,15 @@ header {
     margin-bottom: 16px;
     text-align: center; }
   .content__coins-address .copy_link.active-copy .btn-copy,
+  .active-copy,
   .content__success .copy_link.active-copy .btn-link-copy {
     transition: all .5s;
     border-color: #63d96e;
     color: #63d96e;
+  }
+  .active-copy path {
+    transition: fill .5s;
+    fill: #63d96e;
   }
   .content__coins-address .copy_link.active-copy .btn-copy img ,
   .content__success .copy_link.active-copy .btn-link-copy img {
@@ -947,18 +956,21 @@ header {
   margin-bottom: 16px; }
 
 .content__success-multiple .send_link .btn-copy {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
   width: 156px; }
   .content__success-multiple .send_link .btn-copy img {
-    margin: 0px -14px -4px 13px; }
+    margin: 0px 0 0 13px; }
 
 .content__success-multiple .send_link #copy img {
-  margin: 0px -12px -6px 19px; }
+  margin: 0px 0 0 19px; }
 
 .content__success-multiple .send_link #save img {
-  margin: 0px -15px -4px 24px; }
+  margin: 0px 0 0 24px; }
 
 .content__success-multiple .send_link #share img {
-  margin: 0px -12px -4px 18px; }
+  margin: 0px 0 0 18px; }
 
 .about {
   padding-top: calc(50vh - 190px); }
