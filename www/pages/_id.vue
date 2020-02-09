@@ -170,19 +170,19 @@
 
       <div v-if="step === 42" class="container">
         <div class="content__item content__success content__success-multiple">
-          <h5>{{ $t('success') }}!</h5>
+          <h1>{{ $t('success') }}!</h1>
           <p>{{ $t('create.willReceive') }}:</p>
           <div class="score">
             <p class="balance">{{ transfer.value }} {{ transfer.symbol }}</p>
             <p class="currency">~{{ balanceSum }}</p>
           </div>
           <p class="share">Share this link or QR:</p>
-          <div class="copy_link">
+          <div :class="{'active-copy' : isCopiededSuccess}"  class="copy_link">
             <p>{{ createdLink }}</p>
             <div class="buttons">
               <button id="#copy" class="btn btn-copy" v-on:click="copyToClipboard(createdLink)">{{ $t('Link') }}<img src="/assets/img/svg/copy.svg" alt=""></button>
               <button class="btn btn-copy btn-qr" v-on:click="toggleShowQR()">QR<img src="/assets/img/svg/qr_link_blue.svg" alt=""></button>
-              <button class="btn btn-copy btn-share disabled">{{ $t('Share') }}<img src="/assets/img/svg/share.svg" alt=""></button>
+              <!--<button class="btn btn-copy btn-share disabled">{{ $t('Share') }}<img src="/assets/img/svg/share.svg" alt=""></button>-->
               <button class="btn btn-copy btn-more" v-on:click="toggleShowDir()">{{ $t('More') }}<span>...</span></button>
             </div>
           </div>
@@ -400,6 +400,7 @@
         isShowError: false,
         isShowMenu: false,
         IsActiveHamburgerClass: false,
+        isCopiededSuccess: false,
 
         balances: [],
         coins: [],
