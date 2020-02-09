@@ -575,7 +575,6 @@
         return label.split('|').join('<br>')
       },
       startCreateWallet: async function () {
-        debugger
         if (this.isActiveTrigger02 && !this.createParamPassword) {
           this.errorMsg = this.$t('errors.passErrorEmpty')
           this.isShowError = true
@@ -799,7 +798,6 @@
         return prettyFormat(value)
       },
       sendListToEmail: async function () {
-        debugger
         try {
           const response = await axios.post(`${BACKEND_BASE_URL}/api/company/${this.company.uid}/email`)
 

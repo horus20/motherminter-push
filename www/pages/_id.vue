@@ -181,7 +181,7 @@
             <p>{{ createdLink }}</p>
             <div class="buttons">
               <button id="#copy" class="btn btn-copy btn-link-copy" v-on:click="copyToClipboard(createdLink)">{{ $t('Link') }}<img src="/assets/img/svg/copy.svg" alt=""></button>
-              <button class="btn btn-copy btn-qr" v-on:click="toggleShowQR()">QR<img src="/assets/img/svg/qr_link_blue.svg" alt=""></button>
+              <button class="btn btn-copy btn-qr" v-on:click="toggleShowQR(createdLink)">QR<img src="/assets/img/svg/qr_link_blue.svg" alt=""></button>
               <!--<button class="btn btn-copy btn-share disabled">{{ $t('Share') }}<img src="/assets/img/svg/share.svg" alt=""></button>-->
               <button class="btn btn-copy btn-more" v-on:click="toggleShowDir()">{{ $t('More') }}<span>...</span></button>
             </div>
@@ -339,12 +339,21 @@
     </footer>
     <!-- /Footer -->
     <!-- /Page -->
+    <!-- Modal QR -->
+    <div class="modal-alert modal-qr" v-bind:class="{ 'modal-activation-qr': isShowModalQR }" v-if="isShowModalQR">
+      <div class="close-modal-alert" v-on:click="toggleShowQR()">
+        <span></span><span></span>
+      </div>
+      <qrcode v-bind:value="qrLink" :options="{ width: 250 }" tag="img"></qrcode>
+    </div>
+    <!-- /Modal QR -->
   </div>
 </template>
 
 <script>
   import Vue from 'vue'
   import VueClipboard from 'vue-clipboard2'
+  import VueQrcode from '@chenfengyuan/vue-qrcode'
 
   import {
     BACKEND_BASE_URL, createCompany,
@@ -382,6 +391,8 @@
         isShowModalDir: false,
 
         isDobro: false,
+
+        qrLink: 'empty',
 
         prevStep: [],
         step: 0,
@@ -938,8 +949,9 @@
       toggleShowDir: function () {
         this.isShowModalDir = !this.isShowModalDir
       },
-      toggleShowQR: function () {
+      toggleShowQR: function (link = 'empty') {
         this.isShowModalQR = !this.isShowModalQR
+        this.qrLink = link
       },
     },
     // html header section
