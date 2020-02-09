@@ -40,7 +40,7 @@ export default {
     putPassword: 'Put password',
     yourMessageHere: 'Your message here...',
     yourPasswordHere: 'Your password here...',
-    plzFill: 'Please send any Minter coins to this address',
+    plzFill: 'Please send any Minter coins to',
     plzFillPart1: 'Please send',
     plzFillPart2: 'Minter coins to this address',
     minBalanceCoin: '',
