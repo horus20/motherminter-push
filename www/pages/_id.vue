@@ -182,7 +182,7 @@
             <div class="buttons">
               <button id="#copy" class="btn btn-copy btn-link-copy" v-on:click="copyToClipboard(createdLink, $event)">{{ $t('Link') }}<img src="/assets/img/svg/copy.svg" alt=""></button>
               <button class="btn btn-copy btn-qr" v-on:click="toggleShowQR(createdLink)">QR<img src="/assets/img/svg/qr_link_blue.svg" alt=""></button>
-              <!--<button class="btn btn-copy btn-share disabled">{{ $t('Share') }}<img src="/assets/img/svg/share.svg" alt=""></button>-->
+              <button class="btn btn-copy btn-share" v-on:click="startShare(createdLink)">{{ $t('Share') }}<img src="/assets/img/svg/share.svg" alt=""></button>
               <button class="btn btn-copy btn-more" v-on:click="toggleShowDir()">{{ $t('More') }}<span>...</span></button>
             </div>
           </div>
@@ -1004,6 +1004,24 @@
       toggleShowQR: function (link = 'empty') {
         this.isShowModalQR = !this.isShowModalQR
         this.qrLink = link
+      },
+      startShare: async function (link = '', title = '', text = '') {
+        if (navigator.share) {
+          navigator.share({
+            title,
+            text,
+            url: link
+          })
+            .then(function () {
+              console.log("Shareing successfull")
+            })
+            .catch(function () {
+              console.log("Sharing failed")
+            })
+        } else {
+          this.errorMsg = this.$t('errors.shareError')
+          this.isShowError = true
+        }
       },
     },
     // html header section
