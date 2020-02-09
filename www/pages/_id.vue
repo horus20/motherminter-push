@@ -261,7 +261,7 @@
           <p class="balance" v-for="balance in balances">{{ balance.amount }} {{ balance.coin }}</p>
           <p class="currency">~{{ balanceSum }}</p>
           <img class="icon" src="/assets/img/svg/fuel.svg" alt="">
-          <p class="description">{{ $t('main.dobro') }}</p>
+          <p class="description">{{ $t('main.gaz') }}</p>
           <a class="btn btn-more btn-back" v-on:click="goBack()"><img src="/assets/img/svg/back.svg" alt="">{{ $t('back') }}</a>
         </div>
       </div>
