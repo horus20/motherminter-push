@@ -441,6 +441,15 @@
       createdLink() {
         return `${LINK}${this.createParamUID}`
       },
+      createdLinkMobile() {
+        return `${LINK}${this.createParamUID}#mobile`
+      },
+      createdLinkGame() {
+        return `${LINK}${this.createParamUID}#game`
+      },
+      createdLinkFund() {
+        return `${LINK}${this.createParamUID}#fund`
+      },
       msgSize() {
         return this.maxLen - this.replyMsg.length
       },
