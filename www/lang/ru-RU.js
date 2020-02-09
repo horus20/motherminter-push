@@ -10,8 +10,8 @@ export default {
   Share: 'Шэр',
   More: 'Еще',
   modalMessage: 'Сообщение',
-  Fixed: 'Fixed',
-  Unlimited: 'Unlimited',
+  Fixed: 'Фикс',
+  Unlimited: 'Безлимит',
   Send: 'Отправить',
   index: {
     preTitle: 'Отправляй монеты с легкостью.',
