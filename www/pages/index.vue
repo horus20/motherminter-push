@@ -230,7 +230,7 @@
                 <button class="btn btn-copy btn-more" v-on:click="toggleShowDir()">{{ $t('More') }}<span>...</span></button>
               </div>
             </div>
-            <a class="btn btn-more btn-back" v-on:click="goBack()"><img src="/assets/img/svg/back.svg" alt="">{{ $t('back') }}</a>
+            <!--<a class="btn btn-more btn-back" v-on:click="goBack()"><img src="/assets/img/svg/back.svg" alt="">{{ $t('back') }}</a>-->
             <div class="back"></div>
           </div>
           </transition>
@@ -255,7 +255,7 @@
                 <button id="share" class="btn btn-copy" v-on:click="startShare(companyLink)">{{ $t('create.shareList') }}<img src="/assets/img/svg/share.svg" alt=""></button>
               </div>
             </div>
-            <a class="btn btn-more btn-back" v-on:click="goBack()"><img src="/assets/img/svg/back.svg" alt="">{{ $t('back') }}</a>
+            <!--<a class="btn btn-more btn-back" v-on:click="goBack()"><img src="/assets/img/svg/back.svg" alt="">{{ $t('back') }}</a>-->
               <div class="back"></div>
           </div>
           </transition>
@@ -522,6 +522,7 @@
         this.$i18n.setLocaleCookie(locale)
         this.$i18n.setLocale(locale)
         this.isShowMenu = false
+        this.IsActiveHamburgerClass = false
       },
       toggleMenu: function () {
         this.isShowMenu = !this.isShowMenu
