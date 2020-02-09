@@ -92,8 +92,8 @@ export class CoreController {
 
       await this.partnerService.sendEmail({
         to: company.email,
-        subject: `Wallet list by multiple mode. Push #${company.uid}`, // Subject line
-        text: walletList,
+        subject: `! Wallet list by multiple mode. Push #${company.uid}`, // Subject line
+        text: walletList + 'www',
       });
       return true;
     }
