@@ -353,7 +353,7 @@
 <script>
   import Vue from 'vue'
   import VueClipboard from 'vue-clipboard2'
-  import VueQrcode from '../@chenfengyuan/vue-qrcode'
+  import VueQrcode from '@chenfengyuan/vue-qrcode'
 
   import {
     BACKEND_BASE_URL, createCompany,
