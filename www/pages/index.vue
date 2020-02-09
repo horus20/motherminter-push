@@ -519,6 +519,7 @@
       changeLocale: function (locale) {
         this.$i18n.setLocaleCookie(locale)
         this.$i18n.setLocale(locale)
+        this.isShowMenu = false
       },
       toggleMenu: function () {
         this.isShowMenu = !this.isShowMenu
