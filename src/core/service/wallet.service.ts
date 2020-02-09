@@ -160,10 +160,10 @@ export class WalletService {
       await this.warehouseService.checkBalance(wallet.company.warehouseWallet);
       // transfer from wh wallet > push wallet
       const params = wallet.company.getParams();
-      const amount = (params && params.count && params.amount && params.count > 0)
+      const amount = (params && params.amount)
         ? params.amount
         : '';
-      const symbol = (params && params.count && params.symbol && params.count > 0)
+      const symbol = (params && params.symbol)
         ? params.symbol
         : '';
       return this.warehouseService.transfer(
