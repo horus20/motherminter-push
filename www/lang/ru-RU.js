@@ -111,6 +111,18 @@ export default {
   errors: {
     authError: 'Ошибка аутентификации.',
     phoneError: 'Сожалеем. Введен неправильный номер телефона.',
+    balanceError: 'Error. Balance is empty or less than the minimum',
+    sendError: 'Error on sending transaction, try later',
+    params: 'Error on params',
+    passErrorEmpty: 'Error. Password is empty',
+    emptyText: 'Error. Text is empty',
+    failEmail: ' Error. Fail email',
+    balanceEmpty: 'Error. Balance is empty',
+    countEmpty: 'Error. Count less than 1',
+    errorSend: 'Error on send to email',
+  },
+  successMsg: {
+    successSend: 'Success send to email',
   },
   about: {
     title: 'Инфо',
