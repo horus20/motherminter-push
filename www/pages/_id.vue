@@ -405,6 +405,9 @@
         IsActiveHamburgerClass: false,
         isCopiededSuccess: false,
 
+        createParamUID: '',
+
+
         balances: [],
         coins: [],
         bipToUSD: null,
