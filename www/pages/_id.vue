@@ -103,7 +103,7 @@
       </template>
 
       <!-- Content__Item-07 -->
-      <div v-if="isNeedAction" class="container">
+      <div v-show="isNeedAction" class="container">
         <div class="feedback feedback-action common-wrap">
           <p v-if="isFeedback">{{ $t('action.toReceive') }} <span>{{ balanceSumBIP }} BIP</span> (~ {{ balanceSum }}) {{ $t('action.afterReceive') }}:</p>
           <p v-if="!isFeedback">{{ $t('action.toReceive') }} <span>{{ balanceSumBIP }} BIP</span> (~ {{ balanceSum }}) {{ $t('action.afterReceiveActive') }}:</p>
@@ -124,7 +124,7 @@
       <!-- /Content__Item-07 -->
 
       <!-- Another Persone -->
-      <div v-if="step === 2" class="container">
+      <div v-show="step === 2" class="container">
         <div class="another-persone common-wrap">
           <h1>{{ $t('main.youBalance') }}:</h1>
           <p class="balance" v-for="balance in balances">{{ balance.amount }} {{ balance.coin }}</p>
@@ -140,7 +140,7 @@
       <!-- /Another Persone -->
 
       <!-- Another Persone (Dont Wallet) -->
-      <div v-if="step === 22" class="container">
+      <div v-show="step === 22" class="container">
         <div class="another-persone another-persone__dont-wallet common-wrap">
           <h1>{{ $t('main.youBalance') }}:</h1>
           <p class="balance" v-for="balance in balances">{{ balance.amount }} {{ balance.coin }}</p>
@@ -154,7 +154,7 @@
       <!-- /Another Persone (Dont Wallet) -->
 
       <!-- Another Persone (Have Wallet) -->
-      <div v-if="step === 21" class="container">
+      <div v-show="step === 21" class="container">
         <div class="another-persone another-persone__dont-wallet common-wrap">
           <h1>{{ $t('main.youBalance') }}:</h1>
           <p class="balance" v-for="balance in balances">{{ balance.amount }} {{ balance.coin }}</p>
@@ -168,7 +168,7 @@
       </div>
       <!-- /Another Persone (Have Wallet) -->
 
-      <div v-if="step === 42" class="container">
+      <div v-show="step === 42" class="container">
         <div class="content__item content__success content__success-multiple">
           <h1>{{ $t('success') }}!</h1>
           <p>{{ $t('create.willReceive') }}:</p>
@@ -191,7 +191,7 @@
       </div>
 
       <!-- Your Wallet -->
-      <div v-if="step === 3" class="container">
+      <div v-show="step === 3" class="container">
         <div class="your-wallet another-persone__dont-wallet common-wrap">
           <h1>{{ $t('main.youBalance') }}:</h1>
           <p class="balance" v-for="balance in balances">{{ balance.amount }} {{ balance.coin }}</p>
@@ -206,7 +206,7 @@
       <!-- /Your Wallet -->
 
       <!-- Mobile Services -->
-      <div v-if="step === 4" class="container">
+      <div v-show="step === 4" class="container">
         <div class="mobile-services common-wrap">
           <h1>{{ $t('main.youBalance') }}:</h1>
           <p class="balance" v-for="balance in balances">{{ balance.amount }} {{ balance.coin }}</p>
@@ -227,7 +227,7 @@
       <!-- /Mobile Services -->
 
       <!-- Games -->
-      <div v-if="step === 5" class="container">
+      <div v-show="step === 5" class="container">
         <div class="games common-wrap">
           <h1>{{ $t('main.youBalance') }}:</h1>
           <p class="balance" v-for="balance in balances">{{ balance.amount }} {{ balance.coin }}</p>
@@ -241,7 +241,7 @@
       <!-- /Games -->
 
       <!-- Charity Fund -->
-      <div v-if="step === 6" class="container">
+      <div v-show="step === 6" class="container">
         <div class="charity-fund common-wrap">
           <h1>{{ $t('main.youBalance') }}:</h1>
           <p class="balance" v-for="balance in balances">{{ balance.amount }} {{ balance.coin }}</p>
@@ -255,7 +255,7 @@
       <!-- /Charity Fund -->
 
       <!-- fuel Fund -->
-      <div v-if="step === 115" class="container">
+      <div v-show="step === 115" class="container">
         <div class="charity-fund common-wrap">
           <h1>{{ $t('main.youBalance') }}:</h1>
           <p class="balance" v-for="balance in balances">{{ balance.amount }} {{ balance.coin }}</p>
