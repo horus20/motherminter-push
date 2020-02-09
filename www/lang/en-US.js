@@ -125,6 +125,7 @@ export default {
     balanceEmpty: 'Error. Balance is empty.',
     countEmpty: 'Error. Count less than 1.',
     errorSend: 'Error on sending to email.',
+    shareError: 'Error. Your browser not support this interface',
   },
   successMsg: {
     successSend: 'Success of sending to email.',

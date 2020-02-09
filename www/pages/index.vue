@@ -226,7 +226,7 @@
               <div class="buttons">
                 <button class="btn btn-copy btn-link-copy" v-on:click="copyToClipboard(createdLink, $event)">{{ $t('Link') }}<img src="/assets/img/svg/copy.svg" alt=""></button>
                 <button class="btn btn-copy btn-qr" v-on:click="toggleShowQR(createdLink)">QR<img src="/assets/img/svg/qr_link_blue.svg" alt=""></button>
-                <!--<button class="btn btn-copy btn-share disabled">{{ $t('Share') }}<img src="/assets/img/svg/share.svg" alt=""></button>-->
+                <button class="btn btn-copy btn-share" v-on:click="startShare(createdLink)">{{ $t('Share') }}<img src="/assets/img/svg/share.svg" alt=""></button>
                 <button class="btn btn-copy btn-more" v-on:click="toggleShowDir()">{{ $t('More') }}<span>...</span></button>
               </div>
             </div>
@@ -252,7 +252,7 @@
                 <button id="send" class="btn btn-copy" v-on:click="sendListToEmail()">{{ $t('create.sendEmail') }}<img src="/assets/img/svg/email.svg" alt=""></button>
                 <button v-if="createParamIsFixed" id="save" class="btn btn-copy" v-on:click="copyList()">{{ $t('create.sendList') }}<img src="/assets/img/svg/download.svg" alt=""></button>
                 <button v-if="!createParamIsFixed" id="copy" class="btn btn-copy" v-on:click="copyUrlSuccess()">{{ $t('create.copyLink') }}<img src="/assets/img/svg/copy.svg" alt=""></button>
-                <!--<button id="share" class="btn btn-copy disabled">{{ $t('create.shareList') }}<img src="/assets/img/svg/share.svg" alt=""></button>-->
+                <button id="share" class="btn btn-copy" v-on:click="startShare(companyLink)">{{ $t('create.shareList') }}<img src="/assets/img/svg/share.svg" alt=""></button>
               </div>
             </div>
             <a class="btn btn-more btn-back" v-on:click="goBack()"><img src="/assets/img/svg/back.svg" alt="">{{ $t('back') }}</a>
@@ -792,6 +792,24 @@
         }, function (e) {
           console.log(message, e)
         })
+      },
+      startShare: async function (link = '', title = '', text = '') {
+        if (navigator.share) {
+          navigator.share({
+            title,
+            text,
+            url: link
+          })
+            .then(function () {
+              console.log("Shareing successfull")
+            })
+            .catch(function () {
+              console.log("Sharing failed")
+            })
+        } else {
+          this.errorMsg = this.$t('errors.shareError')
+          this.isShowError = true
+        }
       },
       checkFilledBalance: async function () {
         try {
