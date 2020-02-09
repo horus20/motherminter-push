@@ -314,6 +314,8 @@
         <span></span><span></span>
       </div>
       <qrcode v-bind:value="qrLink" :options="{ width: 250 }" tag="img"></qrcode>
+
+      <button style="width:150px;" id="share" class="btn btn-copy" v-on:click="startShare(qrLink)">{{ $t('Share') }}<img src="/assets/img/svg/share.svg" alt=""></button>
     </div>
     <!-- /Modal QR -->
 
@@ -944,7 +946,7 @@
   }
   .modal-activation-error {
     opacity: 1;
-    z-index: 5;
+    z-index: 50;
     margin-top: 0;
   }
   .lds-ripple {
