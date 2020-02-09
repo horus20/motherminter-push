@@ -516,7 +516,7 @@ header {
     font-size: 24px;
     margin-bottom: 24px; }
   .content__choose-wallet .btn {
-    display: inline-block;
+    display: inline-flex;
     background: var(--blue);
     margin-bottom: 8px; }
   .content__choose-wallet .buttons {
@@ -568,17 +568,14 @@ header {
       background: #000; }
   .content__choose-wallet .buttons-multiple {
     display: none; }
+  .content__choose-wallet img {
+      margin: 0 26px 0 40px;
+  }
   .content__choose-wallet #simple img {
-    margin-right: 18px;
-    margin-left: -36px;
     margin-bottom: -3px; }
   .content__choose-wallet #feedback img {
-    margin-right: 19px;
-    margin-left: -8px;
     margin-bottom: -7px; }
   .content__choose-wallet #action img {
-    margin-right: 18px;
-    margin-left: -38px;
     margin-bottom: -3px; }
 
 .content__describe-action {
