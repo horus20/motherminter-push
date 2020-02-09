@@ -76,7 +76,7 @@
                 <a class="btn" id="feedback" v-on:click="startCreateFeedback()"><img src="/assets/img/svg/feedback.svg" alt="">{{ $t('create.feedback') }}</a>
                 <a class="btn" id="action" v-on:click="startCreateAction()"><img src="/assets/img/svg/action.svg" alt="">{{ $t('create.action') }}</a>
               </div>
-              <div class="buttons-multiple" v-if="!isCreateOne" style="display: block;">
+              <div class="buttons-multiple" v-show="!isCreateOne" style="display: block;">
                 <a class="btn" id="simple" v-on:click="startCreateSimple()"><img src="/assets/img/svg/wallet_light.svg" alt="">{{ $t('create.simple') }}</a>
                 <!--<a class="btn" id="feedback" v-on:click="startCreateFeedback()"><img src="/assets/img/svg/feedback.svg" alt="">{{ $t('create.feedback') }}</a>-->
               </div>
