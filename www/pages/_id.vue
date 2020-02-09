@@ -60,48 +60,48 @@
       </template>
 
       <template v-show="step === 1">
-        <!-- Main -->
-        <div class="container">
-          <div class="main common-wrap">
-            <h1>{{ $t('main.youBalance') }}:</h1>
-            <p class="balance" v-for="balance in balances">{{ balance.amount }} {{ balance.coin }}</p>
-            <p class="currency">~{{ balanceSum }}</p>
-            <p class="transfer">{{ $t('main.transferSection') }}</p>
-            <div class="transfer-items">
-              <a class="transfer__item" v-on:click="showTransfer()">
-                <img src="assets/img/svg/person.svg" alt="">
-                <p v-html="newLineLabel($t('main.anotherPerson'))"></p>
-              </a>
-              <a class="transfer__item" v-on:click="showMyTransfer()">
-                <img src="assets/img/svg/wallet.svg" alt="">
-                <p v-html="newLineLabel($t('main.youWallet'))"></p>
-              </a>
-              <a class="transfer__item" v-on:click="showFund()">
-                <img src="assets/img/svg/charity.svg" alt="">
-                <p v-html="newLineLabel($t('main.charityFund'))"></p>
-              </a>
-            </div>
-            <p class="transfer">{{ $t('main.spendSection') }}</p>
-            <div class="transfer-items">
-              <a class="transfer__item" v-on:click="showMobile()">
-                <img src="assets/img/svg/services.svg" alt="">
-                <p v-html="newLineLabel($t('main.mobileService'))"></p>
-              </a>
-              <a class="transfer__item" v-on:click="showGames()">
-                <img src="assets/img/svg/games.svg" alt="">
-                <p v-html="newLineLabel($t('main.games'))"></p>
-              </a>
-              <span class="transfer__item" v-on:click="showFuel()">
+
+      </template>
+      <!-- Main -->
+      <div v-show="step === 1" class="container">
+        <div class="main common-wrap">
+          <h1>{{ $t('main.youBalance') }}:</h1>
+          <p class="balance" v-for="balance in balances">{{ balance.amount }} {{ balance.coin }}</p>
+          <p class="currency">~{{ balanceSum }}</p>
+          <p class="transfer">{{ $t('main.transferSection') }}</p>
+          <div class="transfer-items">
+            <a class="transfer__item" v-on:click="showTransfer()">
+              <img src="assets/img/svg/person.svg" alt="">
+              <p v-html="newLineLabel($t('main.anotherPerson'))"></p>
+            </a>
+            <a class="transfer__item" v-on:click="showMyTransfer()">
+              <img src="assets/img/svg/wallet.svg" alt="">
+              <p v-html="newLineLabel($t('main.youWallet'))"></p>
+            </a>
+            <a class="transfer__item" v-on:click="showFund()">
+              <img src="assets/img/svg/charity.svg" alt="">
+              <p v-html="newLineLabel($t('main.charityFund'))"></p>
+            </a>
+          </div>
+          <p class="transfer">{{ $t('main.spendSection') }}</p>
+          <div class="transfer-items">
+            <a class="transfer__item" v-on:click="showMobile()">
+              <img src="assets/img/svg/services.svg" alt="">
+              <p v-html="newLineLabel($t('main.mobileService'))"></p>
+            </a>
+            <a class="transfer__item" v-on:click="showGames()">
+              <img src="assets/img/svg/games.svg" alt="">
+              <p v-html="newLineLabel($t('main.games'))"></p>
+            </a>
+            <span class="transfer__item" v-on:click="showFuel()">
                 <img src="assets/img/svg/fuel.svg" alt="" v-on:click="showFood()">
                 <p v-html="newLineLabel($t('main.foodDelivery'))"></p>
               </span>
-            </div>
-            <!--                <button class="btn btn-more">More info</button>-->
           </div>
+          <!--                <button class="btn btn-more">More info</button>-->
         </div>
-        <!-- /Main -->
-      </template>
-
+      </div>
+      <!-- /Main -->
       <!-- Content__Item-07 -->
       <div v-show="isNeedAction" class="container">
         <div class="feedback feedback-action common-wrap">
