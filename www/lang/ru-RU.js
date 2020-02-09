@@ -64,6 +64,7 @@ export default {
     sendEmail: 'На email',
     sendList: 'Копировать',
     shareList: 'Поделиться',
+    copyLink: 'Копировать',
   },
   password: {
     havePassword: 'Вы ввели пароль?',
