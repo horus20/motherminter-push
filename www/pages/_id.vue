@@ -308,20 +308,20 @@
         <div class="links__item">
           <img src="/assets/img/svg/services.svg" alt="">
           <span>Mobile<br>services</span>
-          <img src="/assets/img/svg/copy.svg" alt="">
-          <img onclick="showModalQR()" class="qr" src="/assets/img/svg/qr_link_blue.svg" alt="">
+          <img v-on:click="copyToClipboard(createdLinkMobile)" src="/assets/img/svg/copy.svg" alt="">
+          <img v-on:click="toggleShowQR(createdLinkMobile)" class="qr" src="/assets/img/svg/qr_link_blue.svg" alt="">
         </div>
         <div class="links__item">
           <img src="/assets/img/svg/games.svg" alt="">
           <span>Games</span>
-          <img src="/assets/img/svg/copy.svg" alt="">
-          <img onclick="showModalQR()" class="qr" src="/assets/img/svg/qr_link_blue.svg" alt="">
+          <img v-on:click="copyToClipboard(createdLinkGame)" src="/assets/img/svg/copy.svg" alt="">
+          <img v-on:click="toggleShowQR(createdLinkGame)" class="qr" src="/assets/img/svg/qr_link_blue.svg" alt="">
         </div>
         <div class="links__item">
           <img src="/assets/img/svg/charity.svg" alt="">
           <span>Charity<br>fund</span>
-          <img src="/assets/img/svg/copy.svg" alt="">
-          <img onclick="showModalQR()" class="qr" src="/assets/img/svg/qr_link_blue.svg" alt="">
+          <img v-on:click="copyToClipboard(createdLinkFund)" src="/assets/img/svg/copy.svg" alt="">
+          <img v-on:click="toggleShowQR(createdLinkFund)" class="qr" src="/assets/img/svg/qr_link_blue.svg" alt="">
         </div>
         <div class="links__item">
           <img src="/assets/img/svg/fuel.svg" alt="">

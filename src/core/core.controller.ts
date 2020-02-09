@@ -95,7 +95,7 @@ export class CoreController {
         subject: `Wallet list by multiple mode. Push #${company.uid}`, // Subject line
         text: walletList,
       });
-      //return true;
+      return true;
     }
     throw new HttpException('Bad request', HttpStatus.BAD_REQUEST);
   }
