@@ -69,6 +69,8 @@ export default {
     sendList: 'Copy the list',
     shareList: 'Share the link',
     copyLink: 'Copy the link',
+    gaz: 'Проект DOBRO. Фонд помощи людям оказавшимся в трудных ситуациях.'
+
   },
   password: {
     havePassword: 'You enter password?',

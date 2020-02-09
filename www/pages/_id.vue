@@ -91,8 +91,8 @@
                 <img src="assets/img/svg/games.svg" alt="">
                 <p v-html="newLineLabel($t('main.games'))"></p>
               </a>
-              <span class="transfer__item">
-                <img src="assets/img/svg/food.svg" alt="" v-on:click="showFood()">
+              <span class="transfer__item" v-on:click="showFuel()">
+                <img src="assets/img/svg/fuel.svg" alt="" v-on:click="showFood()">
                 <p style="color: #989ba9" v-html="newLineLabel($t('main.foodDelivery'))"></p>
               </span>
             </div>
@@ -253,6 +253,19 @@
         </div>
       </div>
       <!-- /Charity Fund -->
+
+      <!-- fuel Fund -->
+      <div v-if="step === 115" class="container">
+        <div class="charity-fund common-wrap">
+          <h1>{{ $t('main.youBalance') }}:</h1>
+          <p class="balance" v-for="balance in balances">{{ balance.amount }} {{ balance.coin }}</p>
+          <p class="currency">~{{ balanceSum }}</p>
+          <img class="icon" src="/assets/img/svg/fuel.svg" alt="">
+          <p class="description">{{ $t('main.dobro') }}</p>
+          <a class="btn btn-more btn-back" v-on:click="goBack()"><img src="/assets/img/svg/back.svg" alt="">{{ $t('back') }}</a>
+        </div>
+      </div>
+      <!-- /fuel Fund -->
 
     </main>
     <!-- / -->
@@ -883,6 +896,10 @@
       showGames: function () {
         this.prevStep.push(this.step)
         this.step = 5
+      },
+      showFuel: function () {
+        this.prevStep.push(this.step)
+        this.step = 115
       },
       showGamesRun: async function () {
         this.isShowLoader = true
