@@ -984,6 +984,10 @@
     z-index: 12;
     margin-top: 0;
   }
+  .modal-activation-dir {
+    opacity: 1;
+    z-index: 11;
+  }
   .header-section {
     margin-bottom: 5px;
   }
