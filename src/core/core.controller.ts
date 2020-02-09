@@ -18,6 +18,8 @@ import { CompanyDto, WalletDto } from './dto';
 import { CompanyService, LINK, PartnerService, WalletService } from './service';
 import { json } from 'express';
 
+const API_LINK = 'https://p.motherminter.org/';
+
 @ApiTags('api')
 @Controller('api')
 export class CoreController {
@@ -81,14 +83,17 @@ export class CoreController {
     throw new HttpException('Bad request', HttpStatus.BAD_REQUEST);
   }
 
-  /*@Post('company/:uid/email')
+  @Post('company/:uid/email')
   @UseInterceptors(ClassSerializerInterceptor)
   @ApiOperation({ description: 'update company info'})
   async sentListToEmail(@Param() params, @Query() query) {
     if (params.uid) {
       const company = await this.companyService.getCompany(params.uid);
-      const walletList = JSON.stringify(company.wallets
-        .map((wallet) => `${LINK}${wallet.wallet}`));
+      const walletList = JSON.stringify({
+        link: `${API_LINK}api/company/${company.uid}/get_wallet`,
+        wallets: company.wallets
+          .map((wallet) => `${LINK}${wallet.wallet}`),
+      });
 
       await this.partnerService.sendEmail({
         to: company.email,
@@ -98,7 +103,7 @@ export class CoreController {
       return true;
     }
     throw new HttpException('Bad request', HttpStatus.BAD_REQUEST);
-  }*/
+  }
 
   @Get(':id')
   @UseInterceptors(ClassSerializerInterceptor)

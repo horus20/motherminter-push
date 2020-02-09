@@ -64,6 +64,7 @@ export default {
     successFixed: 'wallets created with|the total balance:',
     successUnlim: 'Unlimited link-wallet API method|created with total budget:',
     walletList: 'Your wallet list',
+    grabApi: 'Grab your api-method link',
     sendEmail: 'Send to email',
     sendList: 'Save the list',
     shareList: 'Share the link',

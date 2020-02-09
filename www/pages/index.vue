@@ -246,7 +246,7 @@
               <p class="balance" v-for="balance in balances">{{ prettyFormat(balance.amount) }} {{ balance.coin }}</p>
               <p class="currency">~{{ balanceSum }}</p>
             </div>
-            <p class="share">{{ $t('create.walletList') }}:</p>
+            <p class="share">{{ $t('create.grabApi') }}:</p>
             <div class="send_link">
               <div class="buttons">
                 <button id="send" class="btn btn-copy" v-on:click="sendListToEmail()">{{ $t('create.sendEmail') }}<img src="/assets/img/svg/email.svg" alt=""></button>
