@@ -93,7 +93,7 @@
               </a>
               <span class="transfer__item" v-on:click="showFuel()">
                 <img src="assets/img/svg/fuel.svg" alt="" v-on:click="showFood()">
-                <p style="color: #989ba9" v-html="newLineLabel($t('main.foodDelivery'))"></p>
+                <p v-html="newLineLabel($t('main.foodDelivery'))"></p>
               </span>
             </div>
             <!--                <button class="btn btn-more">More info</button>-->
