@@ -339,14 +339,6 @@
     </footer>
     <!-- /Footer -->
     <!-- /Page -->
-    <!-- Modal QR -->
-    <div class="modal-alert modal-qr" v-bind:class="{ 'modal-activation-qr': isShowModalQR }" v-if="isShowModalQR">
-      <div class="close-modal-alert" v-on:click="toggleShowQR()">
-        <span></span><span></span>
-      </div>
-      <qrcode v-bind:value="qrLink" :options="{ width: 250 }" tag="img"></qrcode>
-    </div>
-    <!-- /Modal QR -->
   </div>
 </template>
 
@@ -987,6 +979,11 @@
 </script>
 
 <style>
+  .modal-activation-qr {
+    opacity: 1;
+    z-index: 12;
+    margin-top: 0;
+  }
   .header-section {
     margin-bottom: 5px;
   }
