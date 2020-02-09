@@ -81,7 +81,7 @@ export class CoreController {
     throw new HttpException('Bad request', HttpStatus.BAD_REQUEST);
   }
 
-  @Post('company/:uid/email')
+  /*@Post('company/:uid/email')
   @UseInterceptors(ClassSerializerInterceptor)
   @ApiOperation({ description: 'update company info'})
   async sentListToEmail(@Param() params, @Query() query) {
@@ -98,7 +98,7 @@ export class CoreController {
       return true;
     }
     throw new HttpException('Bad request', HttpStatus.BAD_REQUEST);
-  }
+  }*/
 
   @Get(':id')
   @UseInterceptors(ClassSerializerInterceptor)
