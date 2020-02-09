@@ -71,7 +71,7 @@
             </div>
             <a class="more-about" v-on:click="toggleShowType()">{{ $t('create.learnMore') }}</a>
             <div>
-              <div class="buttons-one" v-if="isCreateOne">
+              <div class="buttons-one" v-show="isCreateOne">
                 <a class="btn" id="simple" v-on:click="startCreateSimple()"><img src="/assets/img/svg/wallet_light.svg" alt="">{{ $t('create.simple') }}</a>
                 <a class="btn" id="feedback" v-on:click="startCreateFeedback()"><img src="/assets/img/svg/feedback.svg" alt="">{{ $t('create.feedback') }}</a>
                 <a class="btn" id="action" v-on:click="startCreateAction()"><img src="/assets/img/svg/action.svg" alt="">{{ $t('create.action') }}</a>
@@ -310,7 +310,7 @@
 
     <!-- Modal Activation Types-->
       <transition name="fade">
-      <div class="modal-alert modal-activation-types" v-bind:class="{ 'modal-activation-types-active': isShowModalType }" v-if="isShowModalType">
+      <div class="modal-alert modal-activation-types" v-bind:class="{ 'modal-activation-types-active': isShowModalType }" v-show="isShowModalType">
         <div class="container">
             <div class="close-modal-alert" v-on:click="toggleShowType()">
                 <span></span><span></span>
@@ -329,7 +329,7 @@
 
     <!-- Modal Activation Types-->
     <transition name="fade">
-    <div class="modal-alert modal-activation-types modal-type2" v-bind:class="{ 'modal-activation-types-active': isShowModalNType }" v-if="isShowModalNType">
+    <div class="modal-alert modal-activation-types modal-type2" v-bind:class="{ 'modal-activation-types-active': isShowModalNType }" v-show="isShowModalNType">
         <div class="container">
             <div class="close-modal-alert" v-on:click="toggleShowNType()">
             <span></span><span></span>
