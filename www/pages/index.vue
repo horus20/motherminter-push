@@ -324,19 +324,58 @@
         <div class="links__item">
           <img src="/assets/img/svg/services.svg" alt="">
           <span>Mobile<br>services</span>
-          <img v-on:click="copyToClipboard(createdLinkMobile)" src="/assets/img/svg/copy.svg" alt="">
+          <!--<img v-on:click="copyToClipboard(createdLinkMobile)" src="/assets/img/svg/copy.svg" alt="">-->
+          <div class="qr-link" v-on:click="copyToClipboard(createdLinkMobile, $event)">
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="22" viewBox="0 0 18 22">
+              <defs>
+                <style>
+                  .cls-1 {
+                    fill: #4a40fd;
+                    fill-rule: evenodd;
+                  }
+                </style>
+              </defs>
+              <path id="Rounded_Rectangle_6" data-name="Rounded Rectangle 6" class="cls-1" d="M860,2138h-2v2a2,2,0,0,1-2,2H846a2,2,0,0,1-2-2v-14a2,2,0,0,1,2-2h2v-2a2,2,0,0,1,2-2h10a2,2,0,0,1,2,2v14A2,2,0,0,1,860,2138Zm-12-2v-10h-1a1,1,0,0,0-1,1v12a1,1,0,0,0,1,1h8a1,1,0,0,0,1-1v-1h-6A2,2,0,0,1,848,2136Zm12-13a1,1,0,0,0-1-1h-8a1,1,0,0,0-1,1v12a1,1,0,0,0,1,1h8a1,1,0,0,0,1-1v-12Z" transform="translate(-844 -2120)"/>
+            </svg>
+          </div>
           <img v-on:click="toggleShowQR(createdLinkMobile)" class="qr" src="/assets/img/svg/qr_link_blue.svg" alt="">
         </div>
         <div class="links__item">
           <img src="/assets/img/svg/games.svg" alt="">
           <span>Games</span>
-          <img v-on:click="copyToClipboard(createdLinkGame)" src="/assets/img/svg/copy.svg" alt="">
+          <!--<img v-on:click="copyToClipboard(createdLinkGame)" src="/assets/img/svg/copy.svg" alt="">-->
+          <div class="qr-link" v-on:click="copyToClipboard(createdLinkGame,$event)">
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="22" viewBox="0 0 18 22">
+              <defs>
+                <style>
+                  .cls-1 {
+                    fill: #4a40fd;
+                    fill-rule: evenodd;
+                  }
+                </style>
+              </defs>
+              <path id="Rounded_Rectangle_6" data-name="Rounded Rectangle 6" class="cls-1" d="M860,2138h-2v2a2,2,0,0,1-2,2H846a2,2,0,0,1-2-2v-14a2,2,0,0,1,2-2h2v-2a2,2,0,0,1,2-2h10a2,2,0,0,1,2,2v14A2,2,0,0,1,860,2138Zm-12-2v-10h-1a1,1,0,0,0-1,1v12a1,1,0,0,0,1,1h8a1,1,0,0,0,1-1v-1h-6A2,2,0,0,1,848,2136Zm12-13a1,1,0,0,0-1-1h-8a1,1,0,0,0-1,1v12a1,1,0,0,0,1,1h8a1,1,0,0,0,1-1v-12Z" transform="translate(-844 -2120)"/>
+            </svg>
+          </div>
           <img v-on:click="toggleShowQR(createdLinkGame)" class="qr" src="/assets/img/svg/qr_link_blue.svg" alt="">
         </div>
         <div class="links__item">
           <img src="/assets/img/svg/charity.svg" alt="">
           <span>Charity<br>fund</span>
-          <img v-on:click="copyToClipboard(createdLinkFund)" src="/assets/img/svg/copy.svg" alt="">
+          <!--<img v-on:click="copyToClipboard(createdLinkFund)" src="/assets/img/svg/copy.svg" alt="">-->
+          <div class="qr-link" v-on:click="copyToClipboard(createdLinkFund, $event)">
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="22" viewBox="0 0 18 22">
+              <defs>
+                <style>
+                  .cls-1 {
+                    fill: #4a40fd;
+                    fill-rule: evenodd;
+                  }
+                </style>
+              </defs>
+              <path id="Rounded_Rectangle_6" data-name="Rounded Rectangle 6" class="cls-1" d="M860,2138h-2v2a2,2,0,0,1-2,2H846a2,2,0,0,1-2-2v-14a2,2,0,0,1,2-2h2v-2a2,2,0,0,1,2-2h10a2,2,0,0,1,2,2v14A2,2,0,0,1,860,2138Zm-12-2v-10h-1a1,1,0,0,0-1,1v12a1,1,0,0,0,1,1h8a1,1,0,0,0,1-1v-1h-6A2,2,0,0,1,848,2136Zm12-13a1,1,0,0,0-1-1h-8a1,1,0,0,0-1,1v12a1,1,0,0,0,1,1h8a1,1,0,0,0,1-1v-12Z" transform="translate(-844 -2120)"/>
+            </svg>
+          </div>
           <img v-on:click="toggleShowQR(createdLinkFund)" class="qr" src="/assets/img/svg/qr_link_blue.svg" alt="">
         </div>
         <div class="links__item">
@@ -736,6 +775,11 @@
       copyToClipboard: function (message, event = null) {
         this.$copyText(message).then( (e) => {
           if (event) {
+            if (event.target.classList.contains('qr-link') || event.target.closest('.qr-link')) {
+              document.querySelectorAll('.active-gr').forEach(function(item) { item.classList.remove('active-gr')})
+              event.target.classList.add('active-gr')
+              return false
+            }
             if (event.target.classList.contains('btn-link-copy')) {
               event.target.textContent = 'Copied'
               this.isCopiededSuccess = true

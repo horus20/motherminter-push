@@ -657,6 +657,10 @@ header {
     .content__attach-messege .trigger-active .trigger_no {
       margin-left: -27px; }
 
+    .active-gr path {
+      fill: #63d96e;
+      transition: fill .3s;
+    }
 .content__coins-address {
   padding-top: calc(50% - 200px);
   padding-top: calc(50vh - 200px); }
