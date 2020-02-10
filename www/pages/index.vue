@@ -368,7 +368,7 @@
       <qrcode v-bind:value="qrLink" :options="{ width: 250 }" tag="img"></qrcode>
 
       <button style="width:150px;" id="share" class="btn btn-copy" v-on:click="startShare(qrLink, '', '', $event)">{{ $t('Share') }}
-        <img src="/assets/img/svg/share.svg" alt="">
+        <!--<img src="/assets/img/svg/share.svg" alt="">-->
       </button>
     </div>
     <!-- /Modal QR -->
