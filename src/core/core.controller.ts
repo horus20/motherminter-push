@@ -110,9 +110,7 @@ export class CoreController {
   async sentLinkToEmail(@Param() params, @Query() query) {
     if (params.uid) {
       const company = await this.companyService.getCompany(params.uid);
-      const emailData = JSON.stringify({
-        link: `${API_LINK}api/company/${company.uid}/get_wallet`,
-      });
+      const emailData = `${API_LINK}api/company/${company.uid}/get_wallet?count=1`;
 
       await this.partnerService.sendEmail({
         to: company.email,
@@ -153,12 +151,25 @@ export class CoreController {
     };
   }
 
+  @Post(':id/complex')
+  @HttpCode(HttpStatus.OK)
+  @UseInterceptors(ClassSerializerInterceptor)
+  @ApiOperation({ description: 'Get params after activate'})
+  async complexParams(@Param() params, @Body() walletData: WalletDto) {
+    const wallet = await this.walletService.get(params.id);
+    const companyParams = wallet.company.getParams();
+
+    return {
+      title: (companyParams && companyParams.title) ? companyParams.title : '',
+      notice: (companyParams && companyParams.notice) ? companyParams.notice : '',
+    };
+  }
+
   @Post(':id/reply')
   @HttpCode(HttpStatus.OK)
   @UseInterceptors(ClassSerializerInterceptor)
   @ApiOperation({ description: ''})
   async replyActivate(@Param() params, @Body() walletData: WalletDto) {
-    const wallet = await this.walletService.login(params.id, walletData);
     if (walletData.reply.length < 100) {
       return {
         status: 'error',
@@ -166,6 +177,7 @@ export class CoreController {
       };
     }
 
+    const wallet = await this.walletService.login(params.id, walletData);
     await this.walletService.storeReply(wallet, walletData);
     if (wallet.company && wallet.company.email) {
       const email = '';

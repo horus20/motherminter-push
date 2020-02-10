@@ -165,7 +165,7 @@ export function toHex (d) {
  * @return {string}
  */
 export function prettyFormat (value) {
-  return Number(value).toFixed(5)
+  return Number(value).toFixed(2)
 }
 
 export function getFiatByLocale (locale) {

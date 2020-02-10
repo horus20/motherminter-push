@@ -73,7 +73,8 @@ export class WalletService {
       { wallet: id },
       { relations: ['company'] },
       );
-    if (wallet && wallet.status === WalletStatus.NEW) {
+    if (wallet && (wallet.status === WalletStatus.NEW
+      || wallet.status === WalletStatus.WAIT_ACTION || wallet.status === WalletStatus.WAIT_FEEDBACK)) {
       return wallet;
     }
     if (wallet && !wallet.company.isProtected) {
@@ -89,7 +90,7 @@ export class WalletService {
         { wallet: id },
         { relations: ['company'] },
         );
-      if (wallet.status === WalletStatus.NEW) {
+      if (wallet.status === WalletStatus.NEW || wallet.status === WalletStatus.WAIT_ACTION || wallet.status === WalletStatus.WAIT_FEEDBACK) {
         if (!walletData.mxaddress) {
           throw new Error('mxaddress fail');
         }
@@ -153,7 +154,7 @@ export class WalletService {
 
   private async activateWallet(wallet: Wallet): Promise<boolean> {
     try {
-      if (wallet.status !== WalletStatus.NEW) {
+      if (wallet.status === WalletStatus.ACTIVE) {
         return false;
       }
       if (!wallet.mxaddress) {
