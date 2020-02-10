@@ -723,7 +723,7 @@ header {
   box-sizing: border-box;
   opacity: 0;
   z-index: -1;
-  webkit-transition: .2s;
+  -webkit-transition: .2s;
   -o-transition: .2s;
   transition: .2s; }
   .modal-alert p {
