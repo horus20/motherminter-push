@@ -66,8 +66,9 @@ export default {
     walletList: 'Your wallet list',
     grabApi: 'Grab your api-method link',
     sendEmail: 'Send to email',
-    sendList: 'Save the list',
-    shareList: 'Share the link',
+    saveList: 'Save the list',
+    shareApiLink: 'Share the link',
+    shareList: 'Share the list',
     copyLink: 'Copy the link',
   },
   password: {

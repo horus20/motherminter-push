@@ -62,8 +62,9 @@ export default {
     successUnlim: 'Ссылка на API метод|успешно создана с балансом:',
     walletList: 'Ваш список кошельков',
     sendEmail: 'На email',
-    sendList: 'Копировать',
-    shareList: 'Поделиться',
+    shareList: 'Поделиться списком',
+    saveList: 'Копировать',
+    shareApiLink: 'Поделиться',
   },
   password: {
     havePassword: 'Вы ввели пароль?',

@@ -78,7 +78,7 @@
               </div>
               <div class="buttons-multiple" v-if="!isCreateOne" style="display: block;">
                 <a class="btn" id="simple" v-on:click="startCreateSimple()"><img src="/assets/img/svg/wallet_light.svg" alt="">{{ $t('create.simple') }}</a>
-                <!--<a class="btn" id="feedback" v-on:click="startCreateFeedback()"><img src="/assets/img/svg/feedback.svg" alt="">{{ $t('create.feedback') }}</a>-->
+                <a class="btn" id="feedback" v-on:click="startCreateFeedback()"><img src="/assets/img/svg/feedback.svg" alt="">{{ $t('create.feedback') }}</a>
               </div>
             </div>
           </div>
@@ -236,28 +236,48 @@
           </transition>
           <!-- /Content Success -->
 
-          <!-- Content Success -->
+          <!-- Content Success Fixed -->
           <transition name="fade">
-          <div v-if="step === 51" class="content__item content__success content__success-multiple content__item-active">
+          <div v-if="step === 51 && createParamIsFixed" class="content__item content__success content__success-multiple content__item-active">
             <h1>{{ $t('success') }}!</h1>
-            <p v-if="!createParamIsFixed" v-html="newLineLabel($t('create.successUnlim'))">:</p>
             <p v-if="createParamIsFixed">{{ createParamCount }} <span v-html="newLineLabel($t('create.successFixed'))"></span></p>
             <div class="score">
               <p class="balance" v-for="balance in balances">{{ prettyFormat(balance.amount) }} {{ balance.coin }}</p>
               <p class="currency">~{{ balanceSum }}</p>
             </div>
-            <p class="share">{{ $t('create.grabApi') }}:</p>
+            <p class="share">{{ $t('create.walletList') }}:</p>
             <div class="send_link">
               <div class="buttons">
                 <button id="send" class="btn btn-copy" v-on:click="sendListToEmail()">{{ $t('create.sendEmail') }}<img src="/assets/img/svg/email.svg" alt=""></button>
-                <button v-if="createParamIsFixed" id="save" class="btn btn-copy" v-on:click="copyList()">{{ $t('create.sendList') }}<img src="/assets/img/svg/download.svg" alt=""></button>
-                <button v-if="!createParamIsFixed" id="copy" class="btn btn-copy" v-on:click="copyUrlSuccess()">{{ $t('create.copyLink') }}<img src="/assets/img/svg/copy.svg" alt=""></button>
-                <button id="share" class="btn btn-copy" v-on:click="startShare(companyLink)">{{ $t('create.shareList') }}<img src="/assets/img/svg/share.svg" alt=""></button>
+                <button v-if="createParamIsFixed" id="save" class="btn btn-copy" v-on:click="copyList()">{{ $t('create.saveList') }}<img src="/assets/img/svg/download.svg" alt=""></button>
+                <button id="share" class="btn btn-copy" v-on:click="startShareList()">{{ $t('create.shareList') }}<img src="/assets/img/svg/share.svg" alt=""></button>
               </div>
             </div>
             <a class="btn btn-more btn-back" v-on:click="goBack()"><img src="/assets/img/svg/back.svg" alt="">{{ $t('back') }}</a>
               <div class="back"></div>
           </div>
+          </transition>
+
+          <-- Content Success Unlim -->
+          <transition name="fade">
+            <div v-if="step === 51 && !createParamIsFixed" class="content__item content__success content__success-multiple content__item-active">
+              <h1>{{ $t('success') }}!</h1>
+              <p v-html="newLineLabel($t('create.successUnlim'))">:</p>
+              <div class="score">
+                <p class="balance" v-for="balance in balances">{{ prettyFormat(balance.amount) }} {{ balance.coin }}</p>
+                <p class="currency">~{{ balanceSum }}</p>
+              </div>
+              <p class="share">{{ $t('create.grabApi') }}:</p>
+              <div class="send_link">
+                <div class="buttons">
+                  <button id="send" class="btn btn-copy" v-on:click="sendLinkToEmail()">{{ $t('create.sendEmail') }}<img src="/assets/img/svg/email.svg" alt=""></button>
+                  <button id="copy" class="btn btn-copy" v-on:click="copyUrlSuccess()">{{ $t('create.copyLink') }}<img src="/assets/img/svg/copy.svg" alt=""></button>
+                  <button id="share" class="btn btn-copy" v-on:click="startShare(companyLink, 'Wallet api link')">{{ $t('create.shareApiLink') }}<img src="/assets/img/svg/share.svg" alt=""></button>
+                </div>
+              </div>
+              <a class="btn btn-more btn-back" v-on:click="goBack()"><img src="/assets/img/svg/back.svg" alt="">{{ $t('back') }}</a>
+              <div class="back"></div>
+            </div>
           </transition>
           <!-- /Content Success -->
 
@@ -875,12 +895,33 @@
           this.isShowError = true
         }
       },
+      sendLinkToEmail: async function () {
+        try {
+          const response = await axios.post(`${BACKEND_BASE_URL}/api/company/${this.company.uid}/email_link`)
+
+          if (response && response.status === 200) {
+            this.errorMsg = this.$t('successMsg.successSend')
+            this.isShowError = true
+          }
+        } catch (error) {
+          this.errorMsg = this.$t('error.errorSend')
+          this.isShowError = true
+        }
+      },
       copyList: function () {
         if (this.company && this.company.wallets) {
           const links = this.company.wallets
             .map(({ uid }) => `${LINK}${uid}`)
             .join(' ; ')
           this.copyToClipboard(links)
+        }
+      },
+      startShareList: function () {
+        if (this.company && this.company.wallets) {
+          const links = this.company.wallets
+            .map(({ uid }) => `${LINK}${uid}`)
+            .join(' ; ')
+          this.startShare('', 'Wallet list', links)
         }
       },
       copyUrlSuccess: function () {

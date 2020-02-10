@@ -89,8 +89,7 @@ export class CoreController {
   async sentListToEmail(@Param() params, @Query() query) {
     if (params.uid) {
       const company = await this.companyService.getCompany(params.uid);
-      const walletList = JSON.stringify({
-        link: `${API_LINK}api/company/${company.uid}/get_wallet`,
+      const emailData = JSON.stringify({
         wallets: company.wallets
           .map((wallet) => `${LINK}${wallet.wallet}`),
       });
@@ -98,7 +97,27 @@ export class CoreController {
       await this.partnerService.sendEmail({
         to: company.email,
         subject: `Wallet list by multiple mode. Push #${company.uid}`, // Subject line
-        text: walletList,
+        text: emailData,
+      });
+      return true;
+    }
+    throw new HttpException('Bad request', HttpStatus.BAD_REQUEST);
+  }
+
+  @Post('company/:uid/email_link')
+  @UseInterceptors(ClassSerializerInterceptor)
+  @ApiOperation({ description: 'update company info'})
+  async sentLinkToEmail(@Param() params, @Query() query) {
+    if (params.uid) {
+      const company = await this.companyService.getCompany(params.uid);
+      const emailData = JSON.stringify({
+        link: `${API_LINK}api/company/${company.uid}/get_wallet`,
+      });
+
+      await this.partnerService.sendEmail({
+        to: company.email,
+        subject: `Api link for generate wallets. Push #${company.uid}`, // Subject line
+        text: emailData,
       });
       return true;
     }

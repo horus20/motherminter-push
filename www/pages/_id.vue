@@ -3,7 +3,7 @@
     <!-- Header -->
     <header>
       <a href="/" class="logo">Push.</a>
-      <div class="messege" v-if="companyMsg" v-on:click="toggleMessage()" style="top:24px;">
+      <div class="messege" v-if="companyMsg && !isNeedAction" v-on:click="toggleMessage()" style="top:24px;">
         <img src="assets/img/svg/icon_message.svg" alt="">
       </div>
       <div :class="{'hamburger-active': IsActiveHamburgerClass}"  class="hamburger" v-on:click="toggleMenu()">
