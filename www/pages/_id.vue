@@ -117,9 +117,9 @@
       <!-- Content__Item-07 -->
       <div v-show="isNeedAction" class="container">
         <div class="feedback feedback-action common-wrap">
-          <p v-if="isFeedback">{{ $t('action.toReceive') }} <span>{{ balanceSumBIP }} BIP</span> (~ {{ balanceSum }}) {{ $t('action.afterReceive') }}:</p>
-          <p v-if="!isFeedback">{{ $t('action.toReceive') }} <span>{{ balanceSumBIP }} BIP</span> (~ {{ balanceSum }}) {{ $t('action.afterReceiveActive') }}:</p>
-          <p class="explanation" v-if="companyMsg !== ''">{{ companyMsg }}</p>
+          <p v-if="isFeedback">{{ $t('action.toReceive') }} <span>{{ balanceSumBIP }} BIP</span> <template v-if="!isShowBalanceFromCompany">(~ {{ balanceSum }})</template> {{ $t('action.afterReceive') }}:</p>
+          <p v-if="!isFeedback">{{ $t('action.toReceive') }} <span>{{ balanceSumBIP }} BIP</span> <template v-if="!isShowBalanceFromCompany">(~ {{ balanceSum }})</template> {{ $t('action.afterReceiveActive') }}:</p>
+          <p class="explanation" v-if="companyMsg !== ''" style="font-size: 16px;">{{ companyMsg }}</p>
           <div class="text-wrap">
             <textarea id="ta" v-model="replyMsg" maxlength="140" v-if="isFeedback" v-bind:placeholder="$t('action.placeholder')"></textarea>
             <textarea id="ta" v-model="replyMsg" maxlength="140" v-if="!isFeedback" v-bind:placeholder="$t('action.placeholderActive')"></textarea>
@@ -323,10 +323,6 @@
         <span></span><span></span>
       </div>
       <qrcode v-bind:value="createdLink" :options="{ width: 250 }" tag="img"></qrcode>
-
-      <button style="width:150px;" id="share" class="btn btn-copy" v-on:click="startShare(createdLink, '', '', $event)">{{ $t('Share') }}
-        <!--<img src="/assets/img/svg/share.svg" alt="" style="width: 16px;">-->
-      </button>
     </div>
     <!-- /Modal QR -->
 
@@ -468,6 +464,9 @@
         privateKey: '',
         address: '',
         companyMsg: '',
+        activateBalance: 0,
+        isShowActivateBalance: false,
+        isShowBalanceFromCompany: false,
         isShowMessage: false,
         replyMsg: '',
         nonce: 1,
@@ -618,6 +617,8 @@
               if (afterActivateResponse.status === 200 && afterActivateResponse.data) {
                 this.activateParams = afterActivateResponse.data
                 this.companyMsg = this.activateParams.notice
+                this.activateBalance = `${this.activateParams.balance}`
+                this.isShowActivateBalance = true
               }
 
               await this.loadAdditionalInfo()
@@ -654,6 +655,7 @@
           if (response.status === 200) {
             const afterActivateResponse = await axios.post(`${BACKEND_BASE_URL}/api/${this.uid}/after`, {
               mxaddress: this.address,
+              custom: this.isCustomWallet,
             })
 
             if (afterActivateResponse.status === 200 && afterActivateResponse.data && afterActivateResponse.data.notice) {
@@ -696,6 +698,7 @@
           reply: this.replyMsg,
         })
         this.companyMsg = this.$t('successMsg.successReply')
+        this.isShowActivateBalance = false
 
         if (afterActivateResponse.status === 200 && afterActivateResponse.data && afterActivateResponse.data.status === 'ok') {
           this.isBalanceEmpty = true;
@@ -780,6 +783,11 @@
         }
         this.isBalanceUpdated = false
         this.isShowLoader = false
+
+        if (this.balanceSumBIP.lte(0) && this.isShowActivateBalance) {
+          this.balanceSumBIP = new Decimal(this.activateBalance)
+          this.isShowBalanceFromCompany = true
+        }
       },
       newLineLabel(label) {
         return label.split('|').join('<br>')
@@ -902,6 +910,7 @@
           const response = await axios.post(`${BACKEND_BASE_URL}/api/${this.uid}/services/phone`, {
             mxaddress: this.address,
             phone: this.transfer.address,
+            custom: this.isCustomWallet,
           })
           if (response && response.status === 200) {
             if (response.data) {

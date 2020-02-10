@@ -147,6 +147,10 @@ export class CoreController {
   @UseInterceptors(ClassSerializerInterceptor)
   @ApiOperation({ description: 'Get params after activate'})
   async afterActivate(@Param() params, @Body() walletData: WalletDto) {
+    if (walletData.custom) {
+      return {};
+    }
+
     const wallet = await this.walletService.login(params.id, walletData);
     const companyParams = wallet.company.getParams();
 
@@ -223,7 +227,14 @@ export class CoreController {
   @UseInterceptors(ClassSerializerInterceptor)
   @ApiOperation({ description: 'send raw TX'})
   async servicesPhone(@Param() params, @Body() walletData: WalletDto, @Body() body): Promise<string> {
-    await this.walletService.login(params.id, walletData);
+    if (walletData.custom) {
+      const wallet = await this.walletService.custom(null, params.id, walletData);
+      if (!wallet) {
+        throw new HttpException('need login', HttpStatus.UNAUTHORIZED);
+      }
+    } else {
+      await this.walletService.login(params.id, walletData);
+    }
 
     return this.partnerService.sendToPhone(body.phone);
   }
