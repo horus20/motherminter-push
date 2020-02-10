@@ -71,7 +71,6 @@ export default {
     copyLink: 'Copy the link',
     shareList: 'Share the list',
     shareApiLink: 'Share the link',
-    gaz: 'We are waiting for the project launch from NUT - car industry loyalty programs.',
   },
   password: {
     havePassword: 'You enter password?',
@@ -111,6 +110,7 @@ export default {
     playNow: 'Play now',
     dobro: 'Project DOBRO. A reliable fund to help people in difficult situations.',
     dobroSuccess: 'Thank you for|your big heart!',
+    gaz: 'We are waiting for the project launch from NUT - car industry loyalty programs.',
   },
   directLinks: {
     title: 'Direct links',
@@ -132,7 +132,7 @@ export default {
   },
   successMsg: {
     successSend: 'Success of sending to email.',
-    successReply: 'Thank you very much',
+    successReply: 'Thank you very much!',
   },
   about: {
     title: 'About',
