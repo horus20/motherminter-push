@@ -59,51 +59,51 @@
         <!-- /Password -->
       </template>
 
-      <template v-if="step === 1">
-        <!-- Main -->
-        <div class="container">
-          <div class="main common-wrap">
-            <h1>{{ $t('main.youBalance') }}:</h1>
-            <p class="balance" v-for="balance in balances">{{ balance.amount }} {{ balance.coin }}</p>
-            <p class="currency">~{{ balanceSum }}</p>
-            <p class="transfer">{{ $t('main.transferSection') }}</p>
-            <div class="transfer-items">
-              <a class="transfer__item" v-on:click="showTransfer()">
-                <img src="assets/img/svg/person.svg" alt="">
-                <p v-html="newLineLabel($t('main.anotherPerson'))"></p>
-              </a>
-              <a class="transfer__item" v-on:click="showMyTransfer()">
-                <img src="assets/img/svg/wallet.svg" alt="">
-                <p v-html="newLineLabel($t('main.youWallet'))"></p>
-              </a>
-              <a class="transfer__item" v-on:click="showFund()">
-                <img src="assets/img/svg/charity.svg" alt="">
-                <p v-html="newLineLabel($t('main.charityFund'))"></p>
-              </a>
-            </div>
-            <p class="transfer">{{ $t('main.spendSection') }}</p>
-            <div class="transfer-items">
-              <a class="transfer__item" v-on:click="showMobile()">
-                <img src="assets/img/svg/services.svg" alt="">
-                <p v-html="newLineLabel($t('main.mobileService'))"></p>
-              </a>
-              <a class="transfer__item" v-on:click="showGames()">
-                <img src="assets/img/svg/games.svg" alt="">
-                <p v-html="newLineLabel($t('main.games'))"></p>
-              </a>
-              <span class="transfer__item">
-                <img src="assets/img/svg/food.svg" alt="" v-on:click="showFood()">
-                <p style="color: #989ba9" v-html="newLineLabel($t('main.foodDelivery'))"></p>
-              </span>
-            </div>
-            <!--                <button class="btn btn-more">More info</button>-->
-          </div>
-        </div>
-        <!-- /Main -->
-      </template>
+      <template v-show="step === 1">
 
+      </template>
+      <!-- Main -->
+      <div v-show="step === 1" class="container">
+        <div class="main common-wrap">
+          <h1>{{ $t('main.youBalance') }}:</h1>
+          <p class="balance" v-for="balance in balances">{{ balance.amount }} {{ balance.coin }}</p>
+          <p class="currency">~{{ balanceSum }}</p>
+          <p class="transfer">{{ $t('main.transferSection') }}</p>
+          <div class="transfer-items">
+            <a class="transfer__item" v-on:click="showTransfer()">
+              <img src="assets/img/svg/person.svg" alt="">
+              <p v-html="newLineLabel($t('main.anotherPerson'))"></p>
+            </a>
+            <a class="transfer__item" v-on:click="showMyTransfer()">
+              <img src="assets/img/svg/wallet.svg" alt="">
+              <p v-html="newLineLabel($t('main.youWallet'))"></p>
+            </a>
+            <a class="transfer__item" v-on:click="showFund()">
+              <img src="assets/img/svg/charity.svg" alt="">
+              <p v-html="newLineLabel($t('main.charityFund'))"></p>
+            </a>
+          </div>
+          <p class="transfer">{{ $t('main.spendSection') }}</p>
+          <div class="transfer-items">
+            <a class="transfer__item" v-on:click="showMobile()">
+              <img src="assets/img/svg/services.svg" alt="">
+              <p v-html="newLineLabel($t('main.mobileService'))"></p>
+            </a>
+            <a class="transfer__item" v-on:click="showGames()">
+              <img src="assets/img/svg/games.svg" alt="">
+              <p v-html="newLineLabel($t('main.games'))"></p>
+            </a>
+            <span class="transfer__item" v-on:click="showFuel()">
+                <img src="assets/img/svg/fuel.svg" alt="" v-on:click="showFood()">
+                <p v-html="newLineLabel($t('main.foodDelivery'))"></p>
+              </span>
+          </div>
+          <!--                <button class="btn btn-more">More info</button>-->
+        </div>
+      </div>
+      <!-- /Main -->
       <!-- Content__Item-07 -->
-      <div v-if="isNeedAction" class="container">
+      <div v-show="isNeedAction" class="container">
         <div class="feedback feedback-action common-wrap">
           <p v-if="isFeedback">{{ $t('action.toReceive') }} <span>{{ balanceSumBIP }} BIP</span> (~ {{ balanceSum }}) {{ $t('action.afterReceive') }}:</p>
           <p v-if="!isFeedback">{{ $t('action.toReceive') }} <span>{{ balanceSumBIP }} BIP</span> (~ {{ balanceSum }}) {{ $t('action.afterReceiveActive') }}:</p>
@@ -124,7 +124,7 @@
       <!-- /Content__Item-07 -->
 
       <!-- Another Persone -->
-      <div v-if="step === 2" class="container">
+      <div v-show="step === 2" class="container">
         <div class="another-persone common-wrap">
           <h1>{{ $t('main.youBalance') }}:</h1>
           <p class="balance" v-for="balance in balances">{{ balance.amount }} {{ balance.coin }}</p>
@@ -140,7 +140,7 @@
       <!-- /Another Persone -->
 
       <!-- Another Persone (Dont Wallet) -->
-      <div v-if="step === 22" class="container">
+      <div v-show="step === 22" class="container">
         <div class="another-persone another-persone__dont-wallet common-wrap">
           <h1>{{ $t('main.youBalance') }}:</h1>
           <p class="balance" v-for="balance in balances">{{ balance.amount }} {{ balance.coin }}</p>
@@ -154,7 +154,7 @@
       <!-- /Another Persone (Dont Wallet) -->
 
       <!-- Another Persone (Have Wallet) -->
-      <div v-if="step === 21" class="container">
+      <div v-show="step === 21" class="container">
         <div class="another-persone another-persone__dont-wallet common-wrap">
           <h1>{{ $t('main.youBalance') }}:</h1>
           <p class="balance" v-for="balance in balances">{{ balance.amount }} {{ balance.coin }}</p>
@@ -168,7 +168,7 @@
       </div>
       <!-- /Another Persone (Have Wallet) -->
 
-      <div v-if="step === 42" class="container">
+      <div v-show="step === 42" class="container">
         <div class="content__item content__success content__success-multiple">
           <h1>{{ $t('success') }}!</h1>
           <p>{{ $t('create.willReceive') }}:</p>
@@ -191,7 +191,7 @@
       </div>
 
       <!-- Your Wallet -->
-      <div v-if="step === 3" class="container">
+      <div v-show="step === 3" class="container">
         <div class="your-wallet another-persone__dont-wallet common-wrap">
           <h1>{{ $t('main.youBalance') }}:</h1>
           <p class="balance" v-for="balance in balances">{{ balance.amount }} {{ balance.coin }}</p>
@@ -206,7 +206,7 @@
       <!-- /Your Wallet -->
 
       <!-- Mobile Services -->
-      <div v-if="step === 4" class="container">
+      <div v-show="step === 4" class="container">
         <div class="mobile-services common-wrap">
           <h1>{{ $t('main.youBalance') }}:</h1>
           <p class="balance" v-for="balance in balances">{{ balance.amount }} {{ balance.coin }}</p>
@@ -227,7 +227,7 @@
       <!-- /Mobile Services -->
 
       <!-- Games -->
-      <div v-if="step === 5" class="container">
+      <div v-show="step === 5" class="container">
         <div class="games common-wrap">
           <h1>{{ $t('main.youBalance') }}:</h1>
           <p class="balance" v-for="balance in balances">{{ balance.amount }} {{ balance.coin }}</p>
@@ -241,7 +241,7 @@
       <!-- /Games -->
 
       <!-- Charity Fund -->
-      <div v-if="step === 6" class="container">
+      <div v-show="step === 6" class="container">
         <div class="charity-fund common-wrap">
           <h1>{{ $t('main.youBalance') }}:</h1>
           <p class="balance" v-for="balance in balances">{{ balance.amount }} {{ balance.coin }}</p>
@@ -253,6 +253,19 @@
         </div>
       </div>
       <!-- /Charity Fund -->
+
+      <!-- fuel Fund -->
+      <div v-show="step === 115" class="container">
+        <div class="charity-fund common-wrap">
+          <h1>{{ $t('main.youBalance') }}:</h1>
+          <p class="balance" v-for="balance in balances">{{ balance.amount }} {{ balance.coin }}</p>
+          <p class="currency">~{{ balanceSum }}</p>
+          <img class="icon" src="/assets/img/svg/fuel.svg" alt="">
+          <p class="description">{{ $t('main.gaz') }}</p>
+          <a class="btn btn-more btn-back" v-on:click="goBack()"><img src="/assets/img/svg/back.svg" alt="">{{ $t('back') }}</a>
+        </div>
+      </div>
+      <!-- /fuel Fund -->
 
     </main>
     <!-- / -->
@@ -883,6 +896,10 @@
       showGames: function () {
         this.prevStep.push(this.step)
         this.step = 5
+      },
+      showFuel: function () {
+        this.prevStep.push(this.step)
+        this.step = 115
       },
       showGamesRun: async function () {
         this.isShowLoader = true

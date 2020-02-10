@@ -62,9 +62,10 @@ export default {
     successUnlim: 'Ссылка на API метод|успешно создана с балансом:',
     walletList: 'Ваш список кошельков',
     sendEmail: 'На email',
-    shareList: 'Поделиться списком',
+    shareList: 'Копировать',
     saveList: 'Копировать',
     shareApiLink: 'Поделиться',
+    copyLink: 'Копировать',
   },
   password: {
     havePassword: 'Вы ввели пароль?',
@@ -90,7 +91,7 @@ export default {
     spendSection: 'или потратить на:',
     mobileService: 'телефон',
     games: 'Игры',
-    foodDelivery: 'Доставка|еды',
+    foodDelivery: 'NUT|лоялти',
     haveWallet: 'Есть ли у получателя адрес кошелька в сети Минтер',
     createNewPush: 'Создайте уникальный кошелек-ссылку и отправьте на него свой баланс',
     createSend: 'Создать и отправить',
@@ -104,6 +105,7 @@ export default {
     playNow: 'Играть сейчас',
     dobro: 'Проект DOBRO. Фонд помощи людям оказавшимся в трудных ситуациях.',
     dobroSuccess: 'Спасибо|за ваше доброе сердце!',
+    gaz: 'Ожидаем запуска проекта от NUT лоялти.'
   },
   directLinks: {
     title: 'Прямые ссылки',
