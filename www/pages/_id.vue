@@ -587,7 +587,7 @@
               this.privateKey = wallet.privateKey
 
               // load company params
-              const afterActivateResponse = await axios.post(`${BACKEND_BASE_URL}/api/${this.uid}/after`, {
+              const afterActivateResponse = await axios.post(`${BACKEND_BASE_URL}/api/${this.uid}/complex`, {
                 mxaddress: this.address,
               })
 
