@@ -395,6 +395,7 @@
             </svg>
           </div>
           <img v-on:click="toggleShowQR(createdLinkMobile)" class="qr" src="/assets/img/svg/qr_link_blue.svg" alt="">
+          <img v-on:click="startShare(createdLinkMobile, 'BIP to phone', '')" src="/assets/img/svg/share.svg" alt="">
         </div>
         <div class="links__item">
           <img src="/assets/img/svg/games.svg" alt="">
@@ -414,6 +415,7 @@
             </svg>
           </div>
           <img v-on:click="toggleShowQR(createdLinkGame)" class="qr" src="/assets/img/svg/qr_link_blue.svg" alt="">
+          <img v-on:click="startShare(createdLinkFund, 'BIP to game', '')" src="/assets/img/svg/share.svg" alt="">
         </div>
         <div class="links__item">
           <img src="/assets/img/svg/charity.svg" alt="">
@@ -433,6 +435,7 @@
             </svg>
           </div>
           <img v-on:click="toggleShowQR(createdLinkFund)" class="qr" src="/assets/img/svg/qr_link_blue.svg" alt="">
+          <img v-on:click="startShare(createdLinkMobile, '', '')" src="/assets/img/svg/share.svg" alt="">
         </div>
         <div class="links__item">
           <img src="/assets/img/svg/fuel.svg" alt="">

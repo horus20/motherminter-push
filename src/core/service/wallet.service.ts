@@ -160,7 +160,7 @@ export class WalletService {
       if (!wallet.mxaddress) {
         return false;
       }
-      if (!wallet.company.warehouseWallet && wallet.company.status === CompanyStatus.ACTIVE) {
+      if (!wallet.company.warehouseWallet) {
         // if simple wallet -> no need activation
         return true;
       }

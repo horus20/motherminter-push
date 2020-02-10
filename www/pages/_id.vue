@@ -312,7 +312,9 @@
       </div>
       <qrcode v-bind:value="createdLink" :options="{ width: 250 }" tag="img"></qrcode>
 
-      <button style="width:150px;" id="share" class="btn btn-copy" v-on:click="startShare(createdLink, '', '', $event)">{{ $t('Share') }}<img src="/assets/img/svg/share.svg" alt=""></button>
+      <button style="width:150px;" id="share" class="btn btn-copy" v-on:click="startShare(createdLink, '', '', $event)">{{ $t('Share') }}
+        <img src="/assets/img/svg/share.svg" alt="" style="width: 16px;">
+      </button>
     </div>
     <!-- /Modal QR -->
 
@@ -338,6 +340,7 @@
             </svg>
           </div>
           <img v-on:click="toggleShowQR(createdLinkMobile)" class="qr" src="/assets/img/svg/qr_link_blue.svg" alt="">
+          <img v-on:click="startShare(createdLinkMobile, 'BIP to phone', '')" src="/assets/img/svg/share.svg" alt="">
         </div>
         <div class="links__item">
           <img src="/assets/img/svg/games.svg" alt="">
@@ -357,6 +360,7 @@
             </svg>
           </div>
           <img v-on:click="toggleShowQR(createdLinkGame)" class="qr" src="/assets/img/svg/qr_link_blue.svg" alt="">
+          <img v-on:click="startShare(createdLinkGame, 'BIP to game', '')" src="/assets/img/svg/share.svg" alt="">
         </div>
         <div class="links__item">
           <img src="/assets/img/svg/charity.svg" alt="">
@@ -376,6 +380,7 @@
             </svg>
           </div>
           <img v-on:click="toggleShowQR(createdLinkFund)" class="qr" src="/assets/img/svg/qr_link_blue.svg" alt="">
+          <img v-on:click="startShare(createdLinkFund, '', '')" src="/assets/img/svg/share.svg" alt="">
         </div>
         <div class="links__item">
           <img src="/assets/img/svg/fuel.svg" alt="">
