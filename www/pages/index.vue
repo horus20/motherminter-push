@@ -353,7 +353,6 @@
           </div>
           <p class="title"><img src="/assets/img/svg/fixed_1.svg" alt="">{{ $t('Fixed') }}</p>
           <p v-html="$t('create.fixedDetail')"></p>
-          <p v-html="$t('create.fixedDetail')"></p>
           <p class="title"><img src="/assets/img/svg/unlimited_1.svg" alt="">{{ $t('Unlimited') }}</p>
           <p v-html="$t('create.unlimDetail')"></p>
         </div>
