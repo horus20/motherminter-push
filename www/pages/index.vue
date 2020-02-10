@@ -238,17 +238,19 @@
 
           <!-- Content Success Fixed -->
           <transition name="fade">
-          <div v-if="step === 51 && createParamIsFixed" class="content__item content__success content__success-multiple content__item-active">
+          <div v-if="step === 51" class="content__item content__success content__success-multiple content__item-active">
             <h1>{{ $t('success') }}!</h1>
             <p v-if="createParamIsFixed">{{ createParamCount }} <span v-html="newLineLabel($t('create.successFixed'))"></span></p>
+            <p v-if="!createParamIsFixed" v-html="newLineLabel($t('create.successUnlim'))">:</p>
             <div class="score">
               <p class="balance" v-for="balance in balances">{{ prettyFormat(balance.amount) }} {{ balance.coin }}</p>
               <p class="currency">~{{ balanceSum }}</p>
             </div>
-            <p class="share">{{ $t('create.grabApi') }}:</p>
+            <p v-if="createParamIsFixed" class="share">{{ $t('create.walletList') }}:</p>
+            <p v-if="!createParamIsFixed" class="share">{{ $t('create.grabApi') }}:</p>
             <div class="send_link">
               <div class="buttons">
-                <button id="send" class="btn btn-copy" v-on:click="sendListToEmail($event)">{{ $t('create.sendEmail') }}
+                <button v-if="createParamIsFixed" id="send" class="btn btn-copy" v-on:click="sendListToEmail($event)">{{ $t('create.sendEmail') }}
                   <svg xmlns="http://www.w3.org/2000/svg" width="20" height="16" viewBox="0 0 20 16">
                   <defs>
                     <style>
@@ -260,6 +262,19 @@
                   </defs>
                   <path id="Forma_1" data-name="Forma 1" class="cls-1" d="M1894.63,3187h-15.26a2.313,2.313,0,0,0-2.37,2.25v11.5a2.313,2.313,0,0,0,2.37,2.25h15.26a2.32,2.32,0,0,0,2.37-2.25v-11.5A2.32,2.32,0,0,0,1894.63,3187Zm0,14.01h-15.26a0.331,0.331,0,0,1-.36-0.26v-10.11l6.9,5.75a0.775,0.775,0,0,0,.51.18h1.16a0.775,0.775,0,0,0,.51-0.18l6.9-5.75v10.11A0.331,0.331,0,0,1,1894.63,3201.01Zm-7.63-6.41-6.71-5.61h13.42Z" transform="translate(-1877 -3187)"/>
                 </svg></button>
+                <button v-if="!createParamIsFixed" id="send" class="btn btn-copy" v-on:click="sendLinkToEmail($event)">{{ $t('create.sendApiEmail') }}
+                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="16" viewBox="0 0 20 16">
+                    <defs>
+                      <style>
+                        .cls-1 {
+                          fill: #4a40fd;
+                          fill-rule: evenodd;
+                        }
+                      </style>
+                    </defs>
+                    <path id="Forma_1" data-name="Forma 1" class="cls-1" d="M1894.63,3187h-15.26a2.313,2.313,0,0,0-2.37,2.25v11.5a2.313,2.313,0,0,0,2.37,2.25h15.26a2.32,2.32,0,0,0,2.37-2.25v-11.5A2.32,2.32,0,0,0,1894.63,3187Zm0,14.01h-15.26a0.331,0.331,0,0,1-.36-0.26v-10.11l6.9,5.75a0.775,0.775,0,0,0,.51.18h1.16a0.775,0.775,0,0,0,.51-0.18l6.9-5.75v10.11A0.331,0.331,0,0,1,1894.63,3201.01Zm-7.63-6.41-6.71-5.61h13.42Z" transform="translate(-1877 -3187)"/>
+                  </svg></button>
+
                 <button v-if="createParamIsFixed" id="save" class="btn btn-copy" v-on:click="copyList($event)">{{ $t('create.copyLink') }}
                   <svg xmlns="http://www.w3.org/2000/svg" width="18" height="22" viewBox="0 0 18 22">
                     <defs>
@@ -286,36 +301,39 @@
                     <path id="Rounded_Rectangle_6" data-name="Rounded Rectangle 6" class="cls-1" d="M860,2138h-2v2a2,2,0,0,1-2,2H846a2,2,0,0,1-2-2v-14a2,2,0,0,1,2-2h2v-2a2,2,0,0,1,2-2h10a2,2,0,0,1,2,2v14A2,2,0,0,1,860,2138Zm-12-2v-10h-1a1,1,0,0,0-1,1v12a1,1,0,0,0,1,1h8a1,1,0,0,0,1-1v-1h-6A2,2,0,0,1,848,2136Zm12-13a1,1,0,0,0-1-1h-8a1,1,0,0,0-1,1v12a1,1,0,0,0,1,1h8a1,1,0,0,0,1-1v-12Z" transform="translate(-844 -2120)"/>
                   </svg>
                 </button>
-                <button id="share" class="btn btn-copy" v-on:click="startShare(companyLink)">{{ $t('create.shareList') }}<img src="/assets/img/svg/share.svg" alt=""></button>
+
+                <button v-if="createParamIsFixed" id="share" class="btn btn-copy" v-on:click="startShareList($event)">{{ $t('create.shareList') }}<img src="/assets/img/svg/share.svg" alt="">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="18" height="22" viewBox="0 0 18 22">
+                    <defs>
+                      <style>
+                        .cls-1 {
+                          fill: #4a40fd;
+                          fill-rule: evenodd;
+                        }
+                      </style>
+                    </defs>
+                    <path id="Rounded_Rectangle_6" data-name="Rounded Rectangle 6" class="cls-1" d="M860,2138h-2v2a2,2,0,0,1-2,2H846a2,2,0,0,1-2-2v-14a2,2,0,0,1,2-2h2v-2a2,2,0,0,1,2-2h10a2,2,0,0,1,2,2v14A2,2,0,0,1,860,2138Zm-12-2v-10h-1a1,1,0,0,0-1,1v12a1,1,0,0,0,1,1h8a1,1,0,0,0,1-1v-1h-6A2,2,0,0,1,848,2136Zm12-13a1,1,0,0,0-1-1h-8a1,1,0,0,0-1,1v12a1,1,0,0,0,1,1h8a1,1,0,0,0,1-1v-12Z" transform="translate(-844 -2120)"/>
+                  </svg>
+                </button>
+                <button v-if="!createParamIsFixed" id="share" class="btn btn-copy" v-on:click="startShare(companyLink, 'Wallet api link', '', $event)">{{ $t('create.shareApiLink') }}<img src="/assets/img/svg/share.svg" alt="">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="18" height="22" viewBox="0 0 18 22">
+                    <defs>
+                      <style>
+                        .cls-1 {
+                          fill: #4a40fd;
+                          fill-rule: evenodd;
+                        }
+                      </style>
+                    </defs>
+                    <path id="Rounded_Rectangle_6" data-name="Rounded Rectangle 6" class="cls-1" d="M860,2138h-2v2a2,2,0,0,1-2,2H846a2,2,0,0,1-2-2v-14a2,2,0,0,1,2-2h2v-2a2,2,0,0,1,2-2h10a2,2,0,0,1,2,2v14A2,2,0,0,1,860,2138Zm-12-2v-10h-1a1,1,0,0,0-1,1v12a1,1,0,0,0,1,1h8a1,1,0,0,0,1-1v-1h-6A2,2,0,0,1,848,2136Zm12-13a1,1,0,0,0-1-1h-8a1,1,0,0,0-1,1v12a1,1,0,0,0,1,1h8a1,1,0,0,0,1-1v-12Z" transform="translate(-844 -2120)"/>
+                  </svg>
+                </button>
               </div>
             </div>
             <!--<a class="btn btn-more btn-back" v-on:click="goBack()"><img src="/assets/img/svg/back.svg" alt="">{{ $t('back') }}</a>-->
               <div class="back"></div>
           </div>
           </transition>
-
-          <-- Content Success Unlim -->
-          <transition name="fade">
-            <div v-if="step === 51 && !createParamIsFixed" class="content__item content__success content__success-multiple content__item-active">
-              <h1>{{ $t('success') }}!</h1>
-              <p v-html="newLineLabel($t('create.successUnlim'))">:</p>
-              <div class="score">
-                <p class="balance" v-for="balance in balances">{{ prettyFormat(balance.amount) }} {{ balance.coin }}</p>
-                <p class="currency">~{{ balanceSum }}</p>
-              </div>
-              <p class="share">{{ $t('create.grabApi') }}:</p>
-              <div class="send_link">
-                <div class="buttons">
-                  <button id="send" class="btn btn-copy" v-on:click="sendLinkToEmail()">{{ $t('create.sendEmail') }}<img src="/assets/img/svg/email.svg" alt=""></button>
-                  <button id="copy" class="btn btn-copy" v-on:click="copyUrlSuccess()">{{ $t('create.copyLink') }}<img src="/assets/img/svg/copy.svg" alt=""></button>
-                  <button id="share" class="btn btn-copy" v-on:click="startShare(companyLink, 'Wallet api link')">{{ $t('create.shareApiLink') }}<img src="/assets/img/svg/share.svg" alt=""></button>
-                </div>
-              </div>
-              <a class="btn btn-more btn-back" v-on:click="goBack()"><img src="/assets/img/svg/back.svg" alt="">{{ $t('back') }}</a>
-              <div class="back"></div>
-            </div>
-          </transition>
-          <!-- /Content Success -->
 
         </div>
       </div>
@@ -852,7 +870,7 @@
           console.log(message, e)
         })
       },
-      startShare: async function (link = '', title = '', text = '') {
+      startShare: async function (link = '', title = '', text = '', $event = null) {
         if (navigator.share) {
           navigator.share({
             title,
@@ -963,12 +981,12 @@
           }
         }
       },
-      startShareList: function () {
+      startShareList: function ($event = null) {
         if (this.company && this.company.wallets) {
           const links = this.company.wallets
             .map(({ uid }) => `${LINK}${uid}`)
             .join(' ; ')
-          this.startShare('', 'Wallet list', links)
+          this.startShare('', 'Wallet list', links, $event)
         }
       },
       copyUrlSuccess: function ($event = null) {
