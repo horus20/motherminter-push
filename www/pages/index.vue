@@ -200,7 +200,7 @@
               <h5 v-if="this.isBalanceGreatThenZero">{{ $t('create.plzFillPart1') }} <span v-on:click="copyToClipboard(minNewBalance)">{{ minNewBalance }} {{ $t('create.minBalanceCoin')}}</span> {{ $t('create.plzFillPart2') }}</h5>
               <div :class="{'active-copy' : isCopiededAdress}" class="copy_link">
                 <p>{{ addressForFilling }}</p>
-                <button class="btn btn-copy" v-on:click="copyToClipboard(addressForFilling, $event)">Copy<img src="/assets/img/svg/copy.svg" alt=""></button>
+                <button class="btn btn-copy btn-copy-address" v-on:click="copyToClipboard(addressForFilling, $event)">Copy<img src="/assets/img/svg/copy.svg" alt=""></button>
               </div>
               <div class="qr-code" v-if="typeof addressForFilling !== 'undefined'">
                 <qrcode v-bind:value="addressForFilling" :options="{ width: 121 }" tag="img"></qrcode>
@@ -352,6 +352,7 @@
             <span></span><span></span>
           </div>
           <p class="title"><img src="/assets/img/svg/fixed_1.svg" alt="">{{ $t('Fixed') }}</p>
+          <p v-html="$t('create.fixedDetail')"></p>
           <p v-html="$t('create.fixedDetail')"></p>
           <p class="title"><img src="/assets/img/svg/unlimited_1.svg" alt="">{{ $t('Unlimited') }}</p>
           <p v-html="$t('create.unlimDetail')"></p>
@@ -830,24 +831,35 @@
         return false
       },
       copyToClipboard: function (message, $event = null) {
+        //debugger
         this.$copyText(message).then( (e) => {
           if ($event) {
-            if($event) {
-              $event.target.classList.add('active-copy')
-            }
             if ($event.target.classList.contains('qr-link') || $event.target.closest('.qr-link')) {
               console.log('fff')
               document.querySelectorAll('.active-gr').forEach(function(item) { item.classList.remove('active-gr')})
               $event.target.classList.add('active-gr')
               return false
             }
-            if ($event.target.classList.contains('btn-link-copy')) {
-              $event.target.textContent = 'Copied'
+            else if ($event.target.classList.contains('btn-link-copy')) {
+              //debugger
+              $event.target.innerText = 'Copied'
               this.isCopiededSuccess = true
+              return false
             } else {
-              $event.target.textContent = 'Copied to buffer'
+              $event.target.innerText = 'Copied to buffer'
+              //debugger
               this.isCopiededAdress = true
+              return false
             }
+            if ($event.target.classList.contains('btn-copy-address')) {
+              //debugger
+              $event.target.innerText = 'Copied to buffer'
+                //this.isCopiededSuccess = true
+                return false
+            }
+            /*if($event) {
+              $event.target.classList.add('active-copy')
+            }*/
           }
         }, function (e) {
           console.log(message, e)

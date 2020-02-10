@@ -123,6 +123,7 @@ textarea {
   opacity: .6;
 }
   .btn-copy img {
+    pointer-events: none;
     margin: 0px 0 -6px 8px; }
 
 .btn-more {
