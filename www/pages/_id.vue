@@ -68,6 +68,7 @@
           <h1>{{ $t('main.youBalance') }}:</h1>
           <p class="balance" v-for="balance in balances">{{ balance.amount }} {{ balance.coin }}</p>
           <p class="currency">~{{ balanceSum }}</p>
+
           <p class="transfer">{{ $t('main.transferSection') }}</p>
           <div class="transfer-items">
             <a class="transfer__item" v-on:click="showTransfer()">
@@ -99,6 +100,17 @@
               </span>
           </div>
           <!--                <button class="btn btn-more">More info</button>-->
+
+          <template v-if="isCustomWallet">
+            <p>Your wallet for fill:</p>
+            <div class="copy_link">
+              <p>{{ address }}</p>
+              <button class="btn btn-copy" v-on:click="copyToClipboard(address, $event)">Copy<img src="/assets/img/svg/copy.svg" alt=""></button>
+            </div>
+            <div class="qr-code" v-if="address">
+              <qrcode v-bind:value="address" :options="{ width: 121 }" tag="img"></qrcode>
+            </div>
+          </template>
         </div>
       </div>
       <!-- /Main -->
@@ -496,7 +508,7 @@
     created () {
       this.uid = this.$route.params.id
       this.startHash = this.$route.hash
-      if (this.uid && this.uid.length > PUSH_WALLET_ID_LENGTH && this.uid < MAX_UID_LENGTH) {
+      if (this.uid && this.uid.length > PUSH_WALLET_ID_LENGTH && this.uid.length < MAX_UID_LENGTH) {
         this.isCustomWallet = true
         this.openPasswordPage()
         return
