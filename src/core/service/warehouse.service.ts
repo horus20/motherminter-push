@@ -18,6 +18,7 @@ export class WarehouseService {
   private minter;
   private minterApi;
   private explorerURL;
+  private nodeUrl;
   private coins;
 
   constructor(
@@ -25,10 +26,10 @@ export class WarehouseService {
     private readonly warehouseRepository: Repository<Warehouse>,
     private readonly configService: ConfigService,
   ) {
-    const baseURL = this.configService.get<string>('MINTER_NODE_URL');
+    this.nodeUrl = this.configService.get<string>('MINTER_NODE_URL');
     const options = {
       apiType: 'node',
-      baseURL,
+      baseURL: this.nodeUrl,
     };
     this.minter = new Minter(options);
     this.minterApi = new MinterApi(options);
@@ -160,9 +161,11 @@ export class WarehouseService {
       return false;
     }
 
+    const nonce = await this.minter.getNonce(from.mxaddress);
     const txParams = {
       privateKey,
       chainId: 1,
+      nonce,
       type,
       data,
       gasCoin: feeSymbol,

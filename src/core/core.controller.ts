@@ -162,6 +162,7 @@ export class CoreController {
     return {
       title: (companyParams && companyParams.title) ? companyParams.title : '',
       notice: (companyParams && companyParams.notice) ? companyParams.notice : '',
+      balance: (companyParams && companyParams.amount) ? companyParams.amount : '',
     };
   }
 
