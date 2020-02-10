@@ -933,14 +933,12 @@
       sendListToEmail: async function ($event = null) {
         try {
           const response = await axios.post(`${BACKEND_BASE_URL}/api/company/${this.company.uid}/email`)
-
           if (response && response.status === 200) {
             this.errorMsg = this.$t('successMsg.successSend')
             this.isShowError = true
-
-            if($event) {
-              $event.target.classList.add('active-copy')
-            }
+          }
+          if($event) {
+            $event.target.classList.add('active-copy')
           }
         } catch (error) {
           this.errorMsg = this.$t('error.errorSend')
@@ -954,10 +952,9 @@
           if (response && response.status === 200) {
             this.errorMsg = this.$t('successMsg.successSend')
             this.isShowError = true
-
-            if($event) {
-              $event.target.classList.add('active-copy')
-            }
+          }
+          if($event) {
+            $event.target.classList.add('active-copy')
           }
         } catch (error) {
           this.errorMsg = this.$t('error.errorSend')

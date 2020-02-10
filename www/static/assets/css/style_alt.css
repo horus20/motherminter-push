@@ -681,6 +681,10 @@ header {
     transition: fill .5s;
     fill: #63d96e;
   }
+  .btn-copy path,
+  .btn-copy svg {
+    pointer-events: none;
+  }
   .content__coins-address .copy_link.active-copy .btn-copy img ,
   .content__success .copy_link.active-copy .btn-link-copy img {
     display: none;
