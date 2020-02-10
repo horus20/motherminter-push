@@ -132,6 +132,7 @@ export default {
   },
   successMsg: {
     successSend: 'Success of sending to email.',
+    successReply: 'Thank you very much',
   },
   about: {
     title: 'About',

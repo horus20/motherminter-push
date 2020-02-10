@@ -670,9 +670,16 @@
           mxaddress: this.address,
           reply: this.replyMsg,
         })
+        this.companyMsg = this.$t('successMsg.successReply')
 
         if (afterActivateResponse.status === 200 && afterActivateResponse.data && afterActivateResponse.data.status === 'ok') {
+          this.isBalanceEmpty = true;
           this.openMainPage()
+
+          const self = this
+          setTimeout(() => {
+            self.updateBalance()
+          }, 7*1000)
         }
         return false
       },
