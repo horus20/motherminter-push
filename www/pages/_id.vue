@@ -182,7 +182,7 @@
             <div class="buttons">
               <button id="#copy" class="btn btn-copy btn-link-copy" v-on:click="copyToClipboard(createdLink, $event)">{{ $t('Link') }}<img src="/assets/img/svg/copy.svg" alt=""></button>
               <button class="btn btn-copy btn-qr" v-on:click="toggleShowQR(createdLink)">QR<img src="/assets/img/svg/qr_link_blue.svg" alt=""></button>
-              <button class="btn btn-copy btn-share" v-on:click="startShare(createdLink)">{{ $t('Share') }}<img src="/assets/img/svg/share.svg" alt=""></button>
+              <button class="btn btn-copy btn-share" v-on:click="startShare(createdLink, '', '', $event)">{{ $t('Share') }}<img src="/assets/img/svg/share.svg" alt=""></button>
               <button class="btn btn-copy btn-more" v-on:click="toggleShowDir()">{{ $t('More') }}<span>...</span></button>
             </div>
           </div>
@@ -312,7 +312,7 @@
       </div>
       <qrcode v-bind:value="createdLink" :options="{ width: 250 }" tag="img"></qrcode>
 
-      <button style="width:150px;" id="share" class="btn btn-copy" v-on:click="startShare(createdLink)">{{ $t('Share') }}<img src="/assets/img/svg/share.svg" alt=""></button>
+      <button style="width:150px;" id="share" class="btn btn-copy" v-on:click="startShare(createdLink, '', '', $event)">{{ $t('Share') }}<img src="/assets/img/svg/share.svg" alt=""></button>
     </div>
     <!-- /Modal QR -->
 
@@ -1024,7 +1024,7 @@
         this.isShowModalQR = !this.isShowModalQR
         this.qrLink = link
       },
-      startShare: async function (link = '', title = '', text = '') {
+      startShare: async function (link = '', title = '', text = '', $event) {
         if (navigator.share) {
           navigator.share({
             title,
@@ -1032,7 +1032,10 @@
             url: link
           })
             .then(function () {
-              console.log("Shareing successfull")
+              // console.log("Shareing successfull")
+              if($event) {
+                $event.target.classList.add('active-copy')
+              }
             })
             .catch(function () {
               console.log("Sharing failed")
