@@ -104,11 +104,11 @@
           <template v-if="isCustomWallet">
             <p>Your wallet for fill:</p>
             <div class="copy_link">
-              <p>{{ address }}</p>
-              <button class="btn btn-copy" v-on:click="copyToClipboard(address, $event)">Copy<img src="/assets/img/svg/copy.svg" alt=""></button>
-            </div>
-            <div class="qr-code" v-if="address">
-              <qrcode v-bind:value="address" :options="{ width: 121 }" tag="img"></qrcode>
+              <p style="font-size: 12px;">{{ address }}</p>
+              <div class="buttons">
+                <button class="btn btn-copy" v-on:click="copyToClipboard(address, $event)">Copy<img src="/assets/img/svg/copy.svg" alt=""></button>
+                <button class="btn btn-copy" v-on:click="toggleShowQR(address)">Show QR<img src="/assets/img/svg/qr_link_blue.svg" alt=""></button>
+              </div>
             </div>
           </template>
         </div>
