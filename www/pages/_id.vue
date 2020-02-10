@@ -6,7 +6,7 @@
       <div class="messege" v-if="companyMsg && !isNeedAction" v-on:click="toggleMessage()" style="top:24px;">
         <img src="assets/img/svg/icon_message.svg" alt="">
       </div>
-      <div :class="{'hamburger-active': IsActiveHamburgerClass}"  class="hamburger" v-on:click="toggleMenu()">
+      <div :class="{'hamburger-active': IsActiveHamburgerClass}" class="hamburger" v-on:click="toggleMenu()">
         <span></span>
         <span></span>
         <span></span>
@@ -555,6 +555,7 @@
         this.$i18n.setLocaleCookie(locale)
         this.$i18n.setLocale(locale)
         this.isShowMenu = false
+        this.IsActiveHamburgerClass = false
       },
       toggleMenu: function () {
         this.isShowMenu = !this.isShowMenu

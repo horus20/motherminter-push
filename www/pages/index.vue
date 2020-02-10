@@ -829,19 +829,23 @@
 
         return false
       },
-      copyToClipboard: function (message, event = null) {
+      copyToClipboard: function (message, $event = null) {
         this.$copyText(message).then( (e) => {
-          if (event) {
-            if (event.target.classList.contains('qr-link') || event.target.closest('.qr-link')) {
+          if ($event) {
+            if($event) {
+              $event.target.classList.add('active-copy')
+            }
+            if ($event.target.classList.contains('qr-link') || $event.target.closest('.qr-link')) {
+              console.log('fff')
               document.querySelectorAll('.active-gr').forEach(function(item) { item.classList.remove('active-gr')})
-              event.target.classList.add('active-gr')
+              $event.target.classList.add('active-gr')
               return false
             }
-            if (event.target.classList.contains('btn-link-copy')) {
-              event.target.textContent = 'Copied'
+            if ($event.target.classList.contains('btn-link-copy')) {
+              $event.target.textContent = 'Copied'
               this.isCopiededSuccess = true
             } else {
-              event.target.textContent = 'Copied to buffer'
+              $event.target.textContent = 'Copied to buffer'
               this.isCopiededAdress = true
             }
           }
