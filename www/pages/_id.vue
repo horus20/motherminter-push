@@ -327,7 +327,7 @@
     <!-- /Modal QR -->
 
     <!-- Direct Links -->
-    <div class="modal-alert modal-dir-links" v-bind:class="{ 'modal-activation-dir': isShowModalDir }" v-if="isShowModalDir">
+    <div class="modal-alert modal-dir-links" v-bind:class="{ 'modal-activation-dir': isShowModalDir }" v-show="isShowModalDir">
       <h5>{{ $t('directLinks.title') }}:</h5>
       <div class="links-items">
         <div class="links__item">
