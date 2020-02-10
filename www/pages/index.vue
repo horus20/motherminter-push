@@ -831,35 +831,30 @@
         return false
       },
       copyToClipboard: function (message, $event = null) {
-        //debugger
         this.$copyText(message).then( (e) => {
           if ($event) {
             if ($event.target.classList.contains('qr-link') || $event.target.closest('.qr-link')) {
-              console.log('fff')
               document.querySelectorAll('.active-gr').forEach(function(item) { item.classList.remove('active-gr')})
               $event.target.classList.add('active-gr')
               return false
             }
             else if ($event.target.classList.contains('btn-link-copy')) {
-              //debugger
               $event.target.innerText = 'Copied'
               this.isCopiededSuccess = true
               return false
             } else {
               $event.target.innerText = 'Copied to buffer'
-              //debugger
               this.isCopiededAdress = true
               return false
             }
             if ($event.target.classList.contains('btn-copy-address')) {
-              //debugger
               $event.target.innerText = 'Copied to buffer'
                 //this.isCopiededSuccess = true
                 return false
             }
-            /*if($event) {
+            if($event) {
               $event.target.classList.add('active-copy')
-            }*/
+            }
           }
         }, function (e) {
           console.log(message, e)
