@@ -25,6 +25,13 @@ export class WalletService {
       wallet.company = company;
       wallet.wallet = this.generateUniqWalletId();
       wallet.status = WalletStatus.NEW;
+
+      if (company.status === CompanyStatus.FEEDBACK || company.status === CompanyStatus.COMPLEX_FEEDBACK) {
+        wallet.status = WalletStatus.WAIT_FEEDBACK;
+      }
+      if (company.status === CompanyStatus.ACTION || company.status === CompanyStatus.COMPLEX_ACTION) {
+        wallet.status = WalletStatus.WAIT_ACTION;
+      }
       company.wallets.push(wallet);
 
       await this.walletRepository.save(wallet);
