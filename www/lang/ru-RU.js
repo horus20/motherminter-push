@@ -128,6 +128,7 @@ export default {
   },
   successMsg: {
     successSend: 'Успех. Отправлено на электронную почту.',
+    successReply: 'Большое спасибо!',
   },
   about: {
     title: 'Инфо',
