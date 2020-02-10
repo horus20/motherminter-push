@@ -1090,7 +1090,7 @@
     }
   }
   .fade-enter-active {
-    transition: opacity .4s;
+    transition: opacity .7s;
   }
   .fade-leave-active {
     transition: opacity .3s;
