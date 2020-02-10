@@ -69,7 +69,7 @@ export default {
     sendList: 'Copy the list',
     shareList: 'Share the link',
     copyLink: 'Copy the link',
-    gaz: 'We are waiting for the project launch from NUT - car industry loyalty programs.'
+    gaz: 'We are waiting for the project launch from NUT - car industry loyalty programs.',
 
   },
   password: {
