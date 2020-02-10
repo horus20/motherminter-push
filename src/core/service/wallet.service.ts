@@ -120,6 +120,22 @@ export class WalletService {
     throw new HttpException('need login', HttpStatus.UNAUTHORIZED);
   }
 
+  async custom(company: Company, id: string, walletData: WalletDto): Promise<Wallet> {
+    if (!walletData.mxaddress) {
+      throw new HttpException('need login', HttpStatus.UNAUTHORIZED);
+    }
+
+    const wallet = await this.walletRepository.findOne(
+      { wallet: id, mxaddress: walletData.mxaddress },
+    );
+
+    if (typeof wallet === 'undefined') {
+      return this.add(company, id, walletData.mxaddress);
+    }
+
+    return wallet;
+  }
+
   async setBalance(id: string, walletData: WalletDto): Promise<Wallet> {
     const wallet = await this.login(id, walletData);
 

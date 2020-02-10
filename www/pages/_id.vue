@@ -49,11 +49,11 @@
         <!-- Password -->
         <div class="container">
           <div class="main common-wrap">
-          <div class="password">
-            <h1>{{ $t('password.enterPassword') }}:</h1>
-            <input type="password" v-bind:placeholder="$t('password.passwordPlaceholder')" v-model="password"/>
-            <a class="btn" v-on:click="login()">{{ $t('password.accessWallet') }}</a>
-          </div>
+            <div class="password">
+              <h1>{{ $t('password.enterPassword') }}:</h1>
+              <input type="password" v-bind:placeholder="$t('password.passwordPlaceholder')" v-model="password"/>
+              <a class="btn" v-on:click="login()">{{ $t('password.accessWallet') }}</a>
+            </div>
           </div>
         </div>
         <!-- /Password -->
@@ -412,7 +412,7 @@
     getAddressBalance, getBipPrice,
     getCoinExchangeList, getFiatByLocale,
     getFiatExchangeList,
-    LINK, prettyFormat, toHex
+    LINK, prettyFormat, PUSH_WALLET_ID_LENGTH, toHex
   } from './core'
   import axios from 'axios'
   import { Decimal } from 'decimal.js'
@@ -428,6 +428,8 @@
     Vue.use(VueClipboard)
   }
 
+  const MAX_UID_LENGTH = 64
+
   export default {
     data () {
       return {
@@ -437,10 +439,10 @@
         isNeedAction: false,
         isFeedback: true,
         isBalanceEmpty: false,
+        isCustomWallet: false,
 
         isShowModalQR: false,
         isShowModalDir: false,
-
         isDobro: false,
 
         qrLink: 'empty',
@@ -494,6 +496,11 @@
     created () {
       this.uid = this.$route.params.id
       this.startHash = this.$route.hash
+      if (this.uid && this.uid.length > PUSH_WALLET_ID_LENGTH && this.uid < MAX_UID_LENGTH) {
+        this.isCustomWallet = true
+        this.openPasswordPage()
+        return
+      }
       this.checkAuth()
     },
     computed: {
@@ -630,6 +637,7 @@
           // try activate
           const response = await axios.post(`${BACKEND_BASE_URL}/api/${this.uid}`, {
             mxaddress: this.address,
+            custom: this.isCustomWallet,
           })
           if (response.status === 200) {
             const afterActivateResponse = await axios.post(`${BACKEND_BASE_URL}/api/${this.uid}/after`, {

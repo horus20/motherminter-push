@@ -15,4 +15,7 @@ export class WalletDto {
 
   @ApiProperty()
   readonly reply: string;
+
+  @ApiProperty()
+  readonly custom: boolean;
 }

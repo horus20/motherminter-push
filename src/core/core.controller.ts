@@ -134,6 +134,11 @@ export class CoreController {
   @UseInterceptors(ClassSerializerInterceptor)
   @ApiOperation({ description: 'login or activate wallet'})
   async activateWallet(@Param() params, @Body() walletData: WalletDto): Promise<Wallet> {
+    if (walletData.custom) {
+      const company = await this.companyService.getCustomCompany();
+
+      return this.walletService.custom(company, params.id, walletData);
+    }
     return this.walletService.login(params.id, walletData);
   }
 
