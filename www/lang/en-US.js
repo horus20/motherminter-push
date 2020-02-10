@@ -65,12 +65,12 @@ export default {
     successUnlim: 'Unlimited link-wallet API method|created with total budget:',
     walletList: 'Your wallet list',
     grabApi: 'Grab your api-method link',
-    sendEmail: 'Send to email',
-    sendList: 'Copy the list',
-    shareList: 'Share the link',
+    sendEmail: 'Send the list',
+    sendApiEmail: 'Send the link',
+    copyList: 'Copy the list',
     copyLink: 'Copy the link',
-    gaz: 'We are waiting for the project launch from NUT - car industry loyalty programs.'
-
+    shareList: 'Share the list',
+    shareApiLink: 'Share the link',
   },
   password: {
     havePassword: 'You enter password?',
@@ -95,7 +95,7 @@ export default {
     charityFund: 'Charity|fund',
     spendSection: 'or spend them on',
     mobileService: 'Top-up|mobile',
-    games: 'Games',
+    games: 'Fun&|Games',
     foodDelivery: 'NUT|loyalty',
     haveWallet: 'Does the person you send coins have a wallet address',
     createNewPush: 'Create a unique link-wallet and transfer your balance to it',
@@ -110,6 +110,7 @@ export default {
     playNow: 'Play now',
     dobro: 'Project DOBRO. A reliable fund to help people in difficult situations.',
     dobroSuccess: 'Thank you for|your big heart!',
+    gaz: 'We are waiting for the project launch from NUT - car industry loyalty programs.',
   },
   directLinks: {
     title: 'Direct links',
@@ -131,6 +132,7 @@ export default {
   },
   successMsg: {
     successSend: 'Success of sending to email.',
+    successReply: 'Thank you very much!',
   },
   about: {
     title: 'About',

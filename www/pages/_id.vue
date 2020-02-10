@@ -3,10 +3,10 @@
     <!-- Header -->
     <header>
       <a href="/" class="logo">Push.</a>
-      <div class="messege" v-if="companyMsg" v-on:click="toggleMessage()" style="top:24px;">
+      <div class="messege" v-if="companyMsg && !isNeedAction" v-on:click="toggleMessage()" style="top:24px;">
         <img src="assets/img/svg/icon_message.svg" alt="">
       </div>
-      <div :class="{'hamburger-active': IsActiveHamburgerClass}"  class="hamburger" v-on:click="toggleMenu()">
+      <div :class="{'hamburger-active': IsActiveHamburgerClass}" class="hamburger" v-on:click="toggleMenu()">
         <span></span>
         <span></span>
         <span></span>
@@ -49,11 +49,11 @@
         <!-- Password -->
         <div class="container">
           <div class="main common-wrap">
-          <div class="password">
-            <h1>{{ $t('password.enterPassword') }}:</h1>
-            <input type="password" v-bind:placeholder="$t('password.passwordPlaceholder')" v-model="password"/>
-            <a class="btn" v-on:click="login()">{{ $t('password.accessWallet') }}</a>
-          </div>
+            <div class="password">
+              <h1>{{ $t('password.enterPassword') }}:</h1>
+              <input type="password" v-bind:placeholder="$t('password.passwordPlaceholder')" v-model="password"/>
+              <a class="btn" v-on:click="login()">{{ $t('password.accessWallet') }}</a>
+            </div>
           </div>
         </div>
         <!-- /Password -->
@@ -68,6 +68,7 @@
           <h1>{{ $t('main.youBalance') }}:</h1>
           <p class="balance" v-for="balance in balances">{{ balance.amount }} {{ balance.coin }}</p>
           <p class="currency">~{{ balanceSum }}</p>
+
           <p class="transfer">{{ $t('main.transferSection') }}</p>
           <div class="transfer-items">
             <a class="transfer__item" v-on:click="showTransfer()">
@@ -99,15 +100,26 @@
               </span>
           </div>
           <!--                <button class="btn btn-more">More info</button>-->
+
+          <template v-if="isCustomWallet">
+            <p>Your wallet for fill:</p>
+            <div class="copy_link">
+              <p style="font-size: 12px;">{{ address }}</p>
+              <div class="buttons">
+                <button class="btn btn-copy" v-on:click="copyToClipboard(address, $event)">Copy<img src="/assets/img/svg/copy.svg" alt=""></button>
+                <button class="btn btn-copy" v-on:click="toggleShowQR(address)">Show QR<img src="/assets/img/svg/qr_link_blue.svg" alt=""></button>
+              </div>
+            </div>
+          </template>
         </div>
       </div>
       <!-- /Main -->
       <!-- Content__Item-07 -->
       <div v-show="isNeedAction" class="container">
         <div class="feedback feedback-action common-wrap">
-          <p v-if="isFeedback">{{ $t('action.toReceive') }} <span>{{ balanceSumBIP }} BIP</span> (~ {{ balanceSum }}) {{ $t('action.afterReceive') }}:</p>
-          <p v-if="!isFeedback">{{ $t('action.toReceive') }} <span>{{ balanceSumBIP }} BIP</span> (~ {{ balanceSum }}) {{ $t('action.afterReceiveActive') }}:</p>
-          <p class="explanation" v-if="companyMsg !== ''">{{ companyMsg }}</p>
+          <p v-if="isFeedback">{{ $t('action.toReceive') }} <span>{{ balanceSumBIP }} BIP</span> <template v-if="!isShowBalanceFromCompany">(~ {{ balanceSum }})</template> {{ $t('action.afterReceive') }}:</p>
+          <p v-if="!isFeedback">{{ $t('action.toReceive') }} <span>{{ balanceSumBIP }} BIP</span> <template v-if="!isShowBalanceFromCompany">(~ {{ balanceSum }})</template> {{ $t('action.afterReceiveActive') }}:</p>
+          <p class="explanation" v-if="companyMsg !== ''" style="font-size: 16px;">{{ companyMsg }}</p>
           <div class="text-wrap">
             <textarea id="ta" v-model="replyMsg" maxlength="140" v-if="isFeedback" v-bind:placeholder="$t('action.placeholder')"></textarea>
             <textarea id="ta" v-model="replyMsg" maxlength="140" v-if="!isFeedback" v-bind:placeholder="$t('action.placeholderActive')"></textarea>
@@ -182,7 +194,7 @@
             <div class="buttons">
               <button id="#copy" class="btn btn-copy btn-link-copy" v-on:click="copyToClipboard(createdLink, $event)">{{ $t('Link') }}<img src="/assets/img/svg/copy.svg" alt=""></button>
               <button class="btn btn-copy btn-qr" v-on:click="toggleShowQR(createdLink)">QR<img src="/assets/img/svg/qr_link_blue.svg" alt=""></button>
-              <button class="btn btn-copy btn-share" v-on:click="startShare(createdLink)">{{ $t('Share') }}<img src="/assets/img/svg/share.svg" alt=""></button>
+              <button class="btn btn-copy btn-share" v-on:click="startShare(createdLink, '', '', $event)">{{ $t('Share') }}<img src="/assets/img/svg/share.svg" alt=""></button>
               <button class="btn btn-copy btn-more" v-on:click="toggleShowDir()">{{ $t('More') }}<span>...</span></button>
             </div>
           </div>
@@ -311,8 +323,6 @@
         <span></span><span></span>
       </div>
       <qrcode v-bind:value="createdLink" :options="{ width: 250 }" tag="img"></qrcode>
-
-      <button style="width:150px;" id="share" class="btn btn-copy" v-on:click="startShare(createdLink)">{{ $t('Share') }}<img src="/assets/img/svg/share.svg" alt=""></button>
     </div>
     <!-- /Modal QR -->
 
@@ -338,6 +348,7 @@
             </svg>
           </div>
           <img v-on:click="toggleShowQR(createdLinkMobile)" class="qr" src="/assets/img/svg/qr_link_blue.svg" alt="">
+          <img v-on:click="startShare(createdLinkMobile, 'BIP to phone', '')" src="/assets/img/svg/share.svg" alt="">
         </div>
         <div class="links__item">
           <img src="/assets/img/svg/games.svg" alt="">
@@ -357,6 +368,7 @@
             </svg>
           </div>
           <img v-on:click="toggleShowQR(createdLinkGame)" class="qr" src="/assets/img/svg/qr_link_blue.svg" alt="">
+          <img v-on:click="startShare(createdLinkGame, 'BIP to game', '')" src="/assets/img/svg/share.svg" alt="">
         </div>
         <div class="links__item">
           <img src="/assets/img/svg/charity.svg" alt="">
@@ -376,6 +388,7 @@
             </svg>
           </div>
           <img v-on:click="toggleShowQR(createdLinkFund)" class="qr" src="/assets/img/svg/qr_link_blue.svg" alt="">
+          <img v-on:click="startShare(createdLinkFund, '', '')" src="/assets/img/svg/share.svg" alt="">
         </div>
         <div class="links__item">
           <img src="/assets/img/svg/fuel.svg" alt="">
@@ -407,7 +420,7 @@
     getAddressBalance, getBipPrice,
     getCoinExchangeList, getFiatByLocale,
     getFiatExchangeList,
-    LINK, prettyFormat, toHex
+    LINK, prettyFormat, PUSH_WALLET_ID_LENGTH, toHex
   } from './core'
   import axios from 'axios'
   import { Decimal } from 'decimal.js'
@@ -423,6 +436,8 @@
     Vue.use(VueClipboard)
   }
 
+  const MAX_UID_LENGTH = 64
+
   export default {
     data () {
       return {
@@ -432,10 +447,10 @@
         isNeedAction: false,
         isFeedback: true,
         isBalanceEmpty: false,
+        isCustomWallet: false,
 
         isShowModalQR: false,
         isShowModalDir: false,
-
         isDobro: false,
 
         qrLink: 'empty',
@@ -449,6 +464,9 @@
         privateKey: '',
         address: '',
         companyMsg: '',
+        activateBalance: 0,
+        isShowActivateBalance: false,
+        isShowBalanceFromCompany: false,
         isShowMessage: false,
         replyMsg: '',
         nonce: 1,
@@ -489,6 +507,11 @@
     created () {
       this.uid = this.$route.params.id
       this.startHash = this.$route.hash
+      if (this.uid && this.uid.length > PUSH_WALLET_ID_LENGTH && this.uid.length < MAX_UID_LENGTH) {
+        this.isCustomWallet = true
+        this.openPasswordPage()
+        return
+      }
       this.checkAuth()
     },
     computed: {
@@ -517,7 +540,7 @@
         const fiatVal = getFiatByLocale(this.currentLang)
         const fiatSymbol = fiatVal ? fiatVal.symbol : ''
         if (this.currentLang === 'en') {
-          return `${this.balanceSumUSD.toFixed(4)} $`
+          return `${this.balanceSumUSD.toFixed(2)} $`
         }
         return `${this.balanceSumFiat.toFixed(2)} ${fiatSymbol}`
       }
@@ -532,6 +555,7 @@
         this.$i18n.setLocaleCookie(locale)
         this.$i18n.setLocale(locale)
         this.isShowMenu = false
+        this.IsActiveHamburgerClass = false
       },
       toggleMenu: function () {
         this.isShowMenu = !this.isShowMenu
@@ -587,13 +611,15 @@
               this.privateKey = wallet.privateKey
 
               // load company params
-              const afterActivateResponse = await axios.post(`${BACKEND_BASE_URL}/api/${this.uid}/after`, {
+              const afterActivateResponse = await axios.post(`${BACKEND_BASE_URL}/api/${this.uid}/complex`, {
                 mxaddress: this.address,
               })
 
               if (afterActivateResponse.status === 200 && afterActivateResponse.data) {
                 this.activateParams = afterActivateResponse.data
                 this.companyMsg = this.activateParams.notice
+                this.activateBalance = `${this.activateParams.balance}`
+                this.isShowActivateBalance = true
               }
 
               await this.loadAdditionalInfo()
@@ -625,10 +651,12 @@
           // try activate
           const response = await axios.post(`${BACKEND_BASE_URL}/api/${this.uid}`, {
             mxaddress: this.address,
+            custom: this.isCustomWallet,
           })
           if (response.status === 200) {
             const afterActivateResponse = await axios.post(`${BACKEND_BASE_URL}/api/${this.uid}/after`, {
               mxaddress: this.address,
+              custom: this.isCustomWallet,
             })
 
             if (afterActivateResponse.status === 200 && afterActivateResponse.data && afterActivateResponse.data.notice) {
@@ -670,9 +698,17 @@
           mxaddress: this.address,
           reply: this.replyMsg,
         })
+        this.companyMsg = this.$t('successMsg.successReply')
+        this.isShowActivateBalance = false
 
         if (afterActivateResponse.status === 200 && afterActivateResponse.data && afterActivateResponse.data.status === 'ok') {
+          this.isBalanceEmpty = true;
           this.openMainPage()
+
+          const self = this
+          setTimeout(() => {
+            self.updateBalance()
+          }, 7*1000)
         }
         return false
       },
@@ -748,6 +784,11 @@
         }
         this.isBalanceUpdated = false
         this.isShowLoader = false
+
+        if (this.balanceSumBIP.lte(0) && this.isShowActivateBalance) {
+          this.balanceSumBIP = new Decimal(this.activateBalance)
+          this.isShowBalanceFromCompany = true
+        }
       },
       newLineLabel(label) {
         return label.split('|').join('<br>')
@@ -870,6 +911,7 @@
           const response = await axios.post(`${BACKEND_BASE_URL}/api/${this.uid}/services/phone`, {
             mxaddress: this.address,
             phone: this.transfer.address,
+            custom: this.isCustomWallet,
           })
           if (response && response.status === 200) {
             if (response.data) {
@@ -1024,7 +1066,7 @@
         this.isShowModalQR = !this.isShowModalQR
         this.qrLink = link
       },
-      startShare: async function (link = '', title = '', text = '') {
+      startShare: async function (link = '', title = '', text = '', $event) {
         if (navigator.share) {
           navigator.share({
             title,
@@ -1032,7 +1074,10 @@
             url: link
           })
             .then(function () {
-              console.log("Shareing successfull")
+              // console.log("Shareing successfull")
+              if($event) {
+                $event.target.classList.add('active-copy')
+              }
             })
             .catch(function () {
               console.log("Sharing failed")

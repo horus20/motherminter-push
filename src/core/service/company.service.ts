@@ -82,6 +82,23 @@ export class CompanyService {
     }
   }
 
+  async getCustomCompany(): Promise<Company> {
+    let company = await this.companyRepository.findOne({uid: 'custom'});
+
+    if (typeof company === 'undefined') {
+      company = new Company();
+      company.uid = 'custom';
+      company.status = CompanyStatus.ACTIVE;
+      company.isProtected = true;
+      company.wallets = [];
+      company.warehouseWallet = null;
+
+      await this.companyRepository.save(company);
+    }
+
+    return company;
+  }
+
   async get(id: string, passwordHash: string): Promise<Company> {
     let company;
     try {

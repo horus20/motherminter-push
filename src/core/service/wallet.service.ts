@@ -25,6 +25,13 @@ export class WalletService {
       wallet.company = company;
       wallet.wallet = this.generateUniqWalletId();
       wallet.status = WalletStatus.NEW;
+
+      if (company.status === CompanyStatus.FEEDBACK || company.status === CompanyStatus.COMPLEX_FEEDBACK) {
+        wallet.status = WalletStatus.WAIT_FEEDBACK;
+      }
+      if (company.status === CompanyStatus.ACTION || company.status === CompanyStatus.COMPLEX_ACTION) {
+        wallet.status = WalletStatus.WAIT_ACTION;
+      }
       company.wallets.push(wallet);
 
       await this.walletRepository.save(wallet);
@@ -66,7 +73,8 @@ export class WalletService {
       { wallet: id },
       { relations: ['company'] },
       );
-    if (wallet && wallet.status === WalletStatus.NEW) {
+    if (wallet && (wallet.status === WalletStatus.NEW
+      || wallet.status === WalletStatus.WAIT_ACTION || wallet.status === WalletStatus.WAIT_FEEDBACK)) {
       return wallet;
     }
     if (wallet && !wallet.company.isProtected) {
@@ -82,7 +90,7 @@ export class WalletService {
         { wallet: id },
         { relations: ['company'] },
         );
-      if (wallet.status === WalletStatus.NEW) {
+      if (wallet.status === WalletStatus.NEW || wallet.status === WalletStatus.WAIT_ACTION || wallet.status === WalletStatus.WAIT_FEEDBACK) {
         if (!walletData.mxaddress) {
           throw new Error('mxaddress fail');
         }
@@ -110,6 +118,22 @@ export class WalletService {
     }
 
     throw new HttpException('need login', HttpStatus.UNAUTHORIZED);
+  }
+
+  async custom(company: Company = null, id: string, walletData: WalletDto): Promise<Wallet> {
+    if (!walletData.mxaddress) {
+      throw new HttpException('need login', HttpStatus.UNAUTHORIZED);
+    }
+
+    const wallet = await this.walletRepository.findOne(
+      { wallet: id, mxaddress: walletData.mxaddress },
+    );
+
+    if (company && typeof wallet === 'undefined') {
+      return this.add(company, id, walletData.mxaddress);
+    }
+
+    return wallet;
   }
 
   async setBalance(id: string, walletData: WalletDto): Promise<Wallet> {
@@ -146,13 +170,13 @@ export class WalletService {
 
   private async activateWallet(wallet: Wallet): Promise<boolean> {
     try {
-      if (wallet.status !== WalletStatus.NEW) {
+      if (wallet.status === WalletStatus.ACTIVE) {
         return false;
       }
       if (!wallet.mxaddress) {
         return false;
       }
-      if (!wallet.company.warehouseWallet && wallet.company.status === CompanyStatus.ACTIVE) {
+      if (!wallet.company.warehouseWallet) {
         // if simple wallet -> no need activation
         return true;
       }

@@ -61,10 +61,13 @@ export default {
     successFixed: '- создано кошельков|с общим балансом:',
     successUnlim: 'Ссылка на API метод|успешно создана с балансом:',
     walletList: 'Ваш список кошельков',
+    grabApi: 'Ваша ссылка на api-метод',
     sendEmail: 'На email',
-    sendList: 'Копировать',
-    shareList: 'Поделиться',
+    sendApiEmail: 'На email',
+    copyList: 'Копировать',
     copyLink: 'Копировать',
+    shareList: 'Поделиться',
+    shareApiLink: 'Поделиться',
   },
   password: {
     havePassword: 'Вы ввели пароль?',
@@ -90,7 +93,7 @@ export default {
     spendSection: 'или потратить на:',
     mobileService: 'телефон',
     games: 'Игры',
-    foodDelivery: 'NUT|лоялти',
+    foodDelivery: 'NUT',
     haveWallet: 'Есть ли у получателя адрес кошелька в сети Минтер',
     createNewPush: 'Создайте уникальный кошелек-ссылку и отправьте на него свой баланс',
     createSend: 'Создать и отправить',
@@ -104,7 +107,7 @@ export default {
     playNow: 'Играть сейчас',
     dobro: 'Проект DOBRO. Фонд помощи людям оказавшимся в трудных ситуациях.',
     dobroSuccess: 'Спасибо|за ваше доброе сердце!',
-    gaz: 'Ожидаем запуска проекта от NUT лоялти.'
+    gaz: 'Ожидаем запуска проекта от проекта NUT. Программы лояльности в авто-промышленности для клиентов и компаний.',
   },
   directLinks: {
     title: 'Прямые ссылки',
@@ -125,6 +128,7 @@ export default {
   },
   successMsg: {
     successSend: 'Успех. Отправлено на электронную почту.',
+    successReply: 'Большое спасибо!',
   },
   about: {
     title: 'Инфо',

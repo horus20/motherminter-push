@@ -89,8 +89,7 @@ export class CoreController {
   async sentListToEmail(@Param() params, @Query() query) {
     if (params.uid) {
       const company = await this.companyService.getCompany(params.uid);
-      const walletList = JSON.stringify({
-        link: `${API_LINK}api/company/${company.uid}/get_wallet`,
+      const emailData = JSON.stringify({
         wallets: company.wallets
           .map((wallet) => `${LINK}${wallet.wallet}`),
       });
@@ -98,7 +97,25 @@ export class CoreController {
       await this.partnerService.sendEmail({
         to: company.email,
         subject: `Wallet list by multiple mode. Push #${company.uid}`, // Subject line
-        text: walletList,
+        text: emailData,
+      });
+      return true;
+    }
+    throw new HttpException('Bad request', HttpStatus.BAD_REQUEST);
+  }
+
+  @Post('company/:uid/email_link')
+  @UseInterceptors(ClassSerializerInterceptor)
+  @ApiOperation({ description: 'update company info'})
+  async sentLinkToEmail(@Param() params, @Query() query) {
+    if (params.uid) {
+      const company = await this.companyService.getCompany(params.uid);
+      const emailData = `${API_LINK}api/company/${company.uid}/get_wallet?count=1`;
+
+      await this.partnerService.sendEmail({
+        to: company.email,
+        subject: `Api link for generate wallets. Push #${company.uid}`, // Subject line
+        text: emailData,
       });
       return true;
     }
@@ -117,6 +134,11 @@ export class CoreController {
   @UseInterceptors(ClassSerializerInterceptor)
   @ApiOperation({ description: 'login or activate wallet'})
   async activateWallet(@Param() params, @Body() walletData: WalletDto): Promise<Wallet> {
+    if (walletData.custom) {
+      const company = await this.companyService.getCustomCompany();
+
+      return this.walletService.custom(company, params.id, walletData);
+    }
     return this.walletService.login(params.id, walletData);
   }
 
@@ -125,6 +147,10 @@ export class CoreController {
   @UseInterceptors(ClassSerializerInterceptor)
   @ApiOperation({ description: 'Get params after activate'})
   async afterActivate(@Param() params, @Body() walletData: WalletDto) {
+    if (walletData.custom) {
+      return {};
+    }
+
     const wallet = await this.walletService.login(params.id, walletData);
     const companyParams = wallet.company.getParams();
 
@@ -134,12 +160,26 @@ export class CoreController {
     };
   }
 
+  @Post(':id/complex')
+  @HttpCode(HttpStatus.OK)
+  @UseInterceptors(ClassSerializerInterceptor)
+  @ApiOperation({ description: 'Get params after activate'})
+  async complexParams(@Param() params, @Body() walletData: WalletDto) {
+    const wallet = await this.walletService.get(params.id);
+    const companyParams = wallet.company.getParams();
+
+    return {
+      title: (companyParams && companyParams.title) ? companyParams.title : '',
+      notice: (companyParams && companyParams.notice) ? companyParams.notice : '',
+      balance: (companyParams && companyParams.amount) ? companyParams.amount : '',
+    };
+  }
+
   @Post(':id/reply')
   @HttpCode(HttpStatus.OK)
   @UseInterceptors(ClassSerializerInterceptor)
   @ApiOperation({ description: ''})
   async replyActivate(@Param() params, @Body() walletData: WalletDto) {
-    const wallet = await this.walletService.login(params.id, walletData);
     if (walletData.reply.length < 100) {
       return {
         status: 'error',
@@ -147,6 +187,7 @@ export class CoreController {
       };
     }
 
+    const wallet = await this.walletService.login(params.id, walletData);
     await this.walletService.storeReply(wallet, walletData);
     if (wallet.company && wallet.company.email) {
       const email = '';
@@ -186,7 +227,14 @@ export class CoreController {
   @UseInterceptors(ClassSerializerInterceptor)
   @ApiOperation({ description: 'send raw TX'})
   async servicesPhone(@Param() params, @Body() walletData: WalletDto, @Body() body): Promise<string> {
-    await this.walletService.login(params.id, walletData);
+    if (walletData.custom) {
+      const wallet = await this.walletService.custom(null, params.id, walletData);
+      if (!wallet) {
+        throw new HttpException('need login', HttpStatus.UNAUTHORIZED);
+      }
+    } else {
+      await this.walletService.login(params.id, walletData);
+    }
 
     return this.partnerService.sendToPhone(body.phone);
   }
