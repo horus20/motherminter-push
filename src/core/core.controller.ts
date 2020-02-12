@@ -30,22 +30,16 @@ export class CoreController {
   ) {
   }
 
-  @Get()
-  @ApiOperation({ description: 'say core' })
-  test(): string {
-    return 'say core';
-  }
-
   @Post('company')
   @UseInterceptors(ClassSerializerInterceptor)
-  @ApiOperation({ description: 'create company simple/complex'})
+  @ApiOperation({ description: 'Create company simple/complex'})
   async createCompany(@Body() company: CompanyDto): Promise<Company> {
     return this.companyService.create(company);
   }
 
   @Get('company/:id')
   @UseInterceptors(ClassSerializerInterceptor)
-  @ApiOperation({ description: 'get information by company'})
+  @ApiOperation({ description: 'Get information by company'})
   async getCompany(@Param() params, @Body() body): Promise<Company> {
     if (body && body.password) {
       return this.companyService.get(params.id, body.password);
@@ -55,7 +49,7 @@ export class CoreController {
 
   @Post('company/:id')
   @UseInterceptors(ClassSerializerInterceptor)
-  @ApiOperation({ description: 'update company info'})
+  @ApiOperation({ description: 'Update company info'})
   async updateCompany(@Param() params, @Body() body): Promise<Company> {
     if (body && body.password) {
       return this.companyService.update(params.id, body.password, body);
@@ -65,7 +59,7 @@ export class CoreController {
 
   @Get('company/:id/wallets')
   @UseInterceptors(ClassSerializerInterceptor)
-  @ApiOperation({ description: 'get company wallet list'})
+  @ApiOperation({ description: 'Get company wallet list'})
   async getCompanyWallets(@Param() params, @Body() body): Promise<Wallet[]> {
     if (body && body.password) {
       return this.companyService.walletList(params.id, body.password);
@@ -75,7 +69,7 @@ export class CoreController {
 
   @Get('company/:uid/get_wallet')
   @UseInterceptors(ClassSerializerInterceptor)
-  @ApiOperation({ description: 'get company wallet list'})
+  @ApiOperation({ description: 'Get new wallet by company'})
   async getCompanyNewWallets(@Param() params, @Query() query): Promise<string[]> {
     if (params.uid && query.count) {
       return this.companyService.getWalletList(params.uid, query.count);
@@ -85,7 +79,7 @@ export class CoreController {
 
   @Post('company/:uid/email')
   @UseInterceptors(ClassSerializerInterceptor)
-  @ApiOperation({ description: 'update company info'})
+  @ApiOperation({ description: 'Send wallet list to company email'})
   async sentListToEmail(@Param() params, @Query() query) {
     if (params.uid) {
       const company = await this.companyService.getCompany(params.uid);
@@ -106,7 +100,7 @@ export class CoreController {
 
   @Post('company/:uid/email_link')
   @UseInterceptors(ClassSerializerInterceptor)
-  @ApiOperation({ description: 'update company info'})
+  @ApiOperation({ description: 'Send "one more wallet" link to compnany email'})
   async sentLinkToEmail(@Param() params, @Query() query) {
     if (params.uid) {
       const company = await this.companyService.getCompany(params.uid);
@@ -124,7 +118,7 @@ export class CoreController {
 
   @Get(':id')
   @UseInterceptors(ClassSerializerInterceptor)
-  @ApiOperation({ description: 'get wallet information by uid'})
+  @ApiOperation({ description: 'Get wallet information by UID'})
   async getWallet(@Param() params): Promise<Wallet> {
     return this.walletService.get(params.id);
   }
@@ -132,7 +126,7 @@ export class CoreController {
   @Post(':id')
   @HttpCode(HttpStatus.OK)
   @UseInterceptors(ClassSerializerInterceptor)
-  @ApiOperation({ description: 'login or activate wallet'})
+  @ApiOperation({ description: 'Check login or activate wallet'})
   async activateWallet(@Param() params, @Body() walletData: WalletDto): Promise<Wallet> {
     if (walletData.custom) {
       const company = await this.companyService.getCustomCompany();
@@ -142,10 +136,24 @@ export class CoreController {
     return this.walletService.login(params.id, walletData);
   }
 
+  @Post(':id/complex')
+  @HttpCode(HttpStatus.OK)
+  @UseInterceptors(ClassSerializerInterceptor)
+  @ApiOperation({ description: 'Get wallet information before activation'})
+  async complexParams(@Param() params, @Body() walletData: WalletDto) {
+    const wallet = await this.walletService.get(params.id);
+    const companyParams = wallet.company.getParams();
+
+    return {
+      notice: (companyParams && companyParams.notice) ? companyParams.notice : '',
+      balance: (companyParams && companyParams.amount) ? companyParams.amount : '',
+    };
+  }
+
   @Post(':id/after')
   @HttpCode(HttpStatus.OK)
   @UseInterceptors(ClassSerializerInterceptor)
-  @ApiOperation({ description: 'Get params after activate'})
+  @ApiOperation({ description: 'Get wallet information after activation'})
   async afterActivate(@Param() params, @Body() walletData: WalletDto) {
     if (walletData.custom) {
       return {};
@@ -155,30 +163,14 @@ export class CoreController {
     const companyParams = wallet.company.getParams();
 
     return {
-      title: (companyParams && companyParams.title) ? companyParams.title : '',
-      notice: (companyParams && companyParams.notice) ? companyParams.notice : '',
-    };
-  }
-
-  @Post(':id/complex')
-  @HttpCode(HttpStatus.OK)
-  @UseInterceptors(ClassSerializerInterceptor)
-  @ApiOperation({ description: 'Get params after activate'})
-  async complexParams(@Param() params, @Body() walletData: WalletDto) {
-    const wallet = await this.walletService.get(params.id);
-    const companyParams = wallet.company.getParams();
-
-    return {
-      title: (companyParams && companyParams.title) ? companyParams.title : '',
-      notice: (companyParams && companyParams.notice) ? companyParams.notice : '',
-      balance: (companyParams && companyParams.amount) ? companyParams.amount : '',
+      msg: (companyParams && companyParams.title) ? companyParams.title : '',
     };
   }
 
   @Post(':id/reply')
   @HttpCode(HttpStatus.OK)
   @UseInterceptors(ClassSerializerInterceptor)
-  @ApiOperation({ description: ''})
+  @ApiOperation({ description: 'Send reply/activation info'})
   async replyActivate(@Param() params, @Body() walletData: WalletDto) {
     if (walletData.reply.length < 100) {
       return {
@@ -203,18 +195,18 @@ export class CoreController {
     };
   }
 
-  @Post(':id/balance')
+  /*@Post(':id/balance')
   @HttpCode(HttpStatus.OK)
   @UseInterceptors(ClassSerializerInterceptor)
-  @ApiOperation({ description: 'update wallet balance'})
+  @ApiOperation({ description: 'Update wallet balance'})
   async updateWalletBalance(@Param() params, @Body() walletData: WalletDto): Promise<Wallet> {
     return this.walletService.setBalance(params.id, walletData);
-  }
+  }*/
 
   @Post(':id/send')
   @HttpCode(HttpStatus.OK)
   @UseInterceptors(ClassSerializerInterceptor)
-  @ApiOperation({ description: 'send raw TX'})
+  @ApiOperation({ description: 'Send raw signed transaction to network'})
   async send(@Param() params, @Body() walletData: WalletDto, @Body() body): Promise<string> {
     return this.walletService.send(params.id, walletData, body.rawTx);
   }
@@ -225,7 +217,7 @@ export class CoreController {
   @Post(':id/services/phone')
   @HttpCode(HttpStatus.OK)
   @UseInterceptors(ClassSerializerInterceptor)
-  @ApiOperation({ description: 'send raw TX'})
+  @ApiOperation({ description: 'Send information to bipToPhone service'})
   async servicesPhone(@Param() params, @Body() walletData: WalletDto, @Body() body): Promise<string> {
     if (walletData.custom) {
       const wallet = await this.walletService.custom(null, params.id, walletData);

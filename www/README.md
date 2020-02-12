@@ -1,22 +1,14 @@
-# minter-push-client
 
-> Minter push client side
+### Installation and running
 
-## Build Setup
+```bash
+# build app 
+cd www
+yarn install && yarn build 
 
-``` bash
-# install dependencies
-$ yarn install
+# run 
+yarn start
 
-# serve with hot reload at localhost:3000
-$ yarn dev
-
-# build for production and launch server
-$ yarn build
-$ yarn start
-
-# generate static project
-$ yarn generate
+# or use pm2
+pm2 start npm --name "nuxt" -- start
 ```
-
-For detailed explanation on how things work, check out [Nuxt.js docs](https://nuxtjs.org).
