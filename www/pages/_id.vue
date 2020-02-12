@@ -556,6 +556,7 @@
         this.$i18n.setLocale(locale)
         this.isShowMenu = false
         this.IsActiveHamburgerClass = false
+        this.recalculateBalance()
       },
       toggleMenu: function () {
         this.isShowMenu = !this.isShowMenu
@@ -788,6 +789,17 @@
         if (this.balanceSumBIP.lte(0) && this.isShowActivateBalance) {
           this.balanceSumBIP = new Decimal(this.activateBalance)
           this.isShowBalanceFromCompany = true
+        }
+      },
+      recalculateBalance() {
+        this.balanceSumFiat = this.balanceSumUSD
+        const fiatVal = getFiatByLocale(this.currentLang)
+        if (fiatVal) {
+          const fiatCur = this.fiat[fiatVal.name]
+          if (this.currentLang !== 'en' && fiatCur) {
+            this.balanceSumFiat = new Decimal(this.balanceSumUSD)
+              .mul(fiatCur)
+          }
         }
       },
       newLineLabel(label) {

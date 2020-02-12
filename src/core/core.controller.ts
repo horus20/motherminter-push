@@ -12,6 +12,7 @@ import {
   HttpException, HttpStatus, HttpCode,
 } from '@nestjs/common';
 import { ApiBearerAuth, ApiResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
+import axios from 'axios';
 
 import { Company, Wallet } from './entity';
 import { CompanyDto, WalletDto } from './dto';
@@ -190,9 +191,32 @@ export class CoreController {
       });
     }
 
-    return {
+    const globalResult = {
       status: 'ok',
     };
+    const companyParams = wallet.company.getParams();
+    if (wallet.company && companyParams && companyParams.callback_link) {
+      const info = {
+        waller_uid: wallet.wallet,
+        company_uid: wallet.company.uid,
+        reply: walletData.reply,
+      };
+      try {
+        const response = await axios.post(companyParams.callback_link, info);
+
+        globalResult.status = 'error';
+        if (response.status === HttpStatus.OK && response.data) {
+          if (response.data.status === 'ok') {
+            // todo: set wallet active only here!
+            globalResult.status = 'ok';
+          }
+        }
+      } catch (error) {
+        global.console.warn('error on send info', info);
+      }
+    }
+
+    return globalResult;
   }
 
   /*@Post(':id/balance')

@@ -116,7 +116,7 @@
           <div v-if="step === 31" class="content__item content__describe-action content__item-active content__item-active">
             <p>{{ $t('create.feedbackTitle') }}</p>
             <div class="text-wrap">
-              <textarea id="ta" name="" maxlength="140" v-bind:placeholder="$t('create.feedbackPlaceholder')" @input="inputValue(0, $event)" v-model="createParamMessage"></textarea>
+              <textarea id="ta" name="" maxlength="140" v-bind:placeholder="$t('create.feedbackPlaceholder')" @input="inputValue(0, $event)" v-model="createParamTask"></textarea>
               <div class="max-lenght">
                 <span id="max_lenght">{{ msgSize }}</span>
                 <img v-show="isTextarea[0]" src="/assets/img/svg/feedback_grey.svg" alt="">
@@ -134,7 +134,7 @@
           <div v-if="step === 32" class="content__item content__describe-action content__item-active content__item-active">
             <p>{{ $t('create.actionTitle') }}</p>
             <div class="text-wrap">
-              <textarea id="ta" name="" maxlength="140" v-bind:placeholder="$t('create.actionPlaceholder')" @input="inputValue(1, $event)" v-model="createParamMessage"></textarea>
+              <textarea id="ta" name="" maxlength="140" v-bind:placeholder="$t('create.actionPlaceholder')" @input="inputValue(1, $event)" v-model="createParamTask"></textarea>
               <div class="max-lenght">
                 <span id="max_lenght">{{ msgSize }}</span>
                 <img v-show="isTextarea[1]" src="/assets/img/svg/action_grey.svg" alt="">
@@ -181,7 +181,7 @@
             <div v-if="step === 71" class="content__item content__describe-action content__item-active content__item-active">
               <p>{{ $t('create.feedbackTitle') }}</p>
               <div class="text-wrap">
-                <textarea id="ta" name="" maxlength="140" v-bind:placeholder="$t('create.feedbackPlaceholder')" v-model="createParamMessage"></textarea>
+                <textarea id="ta" name="" maxlength="140" v-bind:placeholder="$t('create.feedbackPlaceholder')" v-model="createParamTask"></textarea>
                 <div class="max-lenght">
                   <span id="max_lenght">{{ msgSize }}</span>
                   <img src="/assets/img/svg/feedback_grey.svg" alt="">
@@ -508,6 +508,7 @@
         qrLink: 'empty',
 
         // create wallet params
+        createParamTask: '',
         createParamMessage: '',
         createParamPassword: '',
         createParamEmail: '',
@@ -576,6 +577,7 @@
         this.$i18n.setLocale(locale)
         this.isShowMenu = false
         this.IsActiveHamburgerClass = false
+        this.recalculateBalance()
       },
       toggleMenu: function () {
         this.isShowMenu = !this.isShowMenu
@@ -611,6 +613,7 @@
         this.createParamCompanyPass = ''
         this.createParamEmail = ''
         this.createParamMessage = ''
+        this.createParamTask = ''
         this.createParamBalance = ''
         this.createParamUID = ''
         this.minNewBalance = new Decimal(0)
@@ -677,7 +680,7 @@
           return false
         }
 
-        if ((this.step === 31 || this.step === 32) && this.createParamMessage.length === 0) {
+        if ((this.step === 31 || this.step === 32) && this.createParamTask.length === 0) {
           this.errorMsg = this.$t('errors.emptyText')
           this.isShowError = true
           return false
@@ -709,7 +712,8 @@
           email: this.createParamEmail,
           protected: (this.createParamPassword && this.createParamPassword.length > 0),
           params: {
-            notice: this.createParamMessage,
+            title: this.createParamMessage,
+            notice: this.createParamTask,
           }
         })
         this.companyLink = `${BACKEND_BASE_URL}/api/company/${this.company.uid}/get_wallet?count=1`
@@ -757,7 +761,7 @@
         }
       },
       startCreateCompany: async function () {
-        if (this.createParamType === 'complex_feedback' && this.createParamMessage.length === 0) {
+        if (this.createParamType === 'complex_feedback' && this.createParamTask.length === 0) {
           this.errorMsg = this.$t('errors.emptyText')
           this.isShowError = true
           return false
@@ -774,7 +778,8 @@
           email: this.createParamEmail,
           password: this.createParamCompanyPass,
           params: {
-            notice: this.createParamMessage,
+            title: this.createParamMessage,
+            notice: this.createParamTask,
             count: this.createParamCount,
             amount: this.createParamBalance,
           }
@@ -795,10 +800,12 @@
         this.companyLink = `${BACKEND_BASE_URL}/api/company/${this.company.uid}/get_wallet?count=1`
         this.loadAdditionalInfo()
         // start update balance
-        /*const self = this
+        // todo: show loader
+        const self = this
         this.checkInterval = setInterval(function(){
           self.checkFilledBalance()
-        }, 7 * 1000)*/
+          self.startCreateSuccess(false)
+        }, 3 * 1000)
 
         return false
       },
@@ -808,16 +815,20 @@
         this.coins = getCoinExchangeList()
         this.fiat = getFiatExchangeList()
       },
-      startCreateSuccess: async function () {
+      startCreateSuccess: async function (showError = true) {
         if (!this.isAddressFilling) {
           await this.checkFilledBalance()
         }
 
         if (!this.isAddressFilling) {
-          this.errorMsg = this.$t('errors.balanceError')
-          this.isShowError = true
+          if (showError) {
+            this.errorMsg = this.$t('errors.balanceError')
+            this.isShowError = true
+          }
           return false
         }
+        // todo: hide loader
+
         clearInterval(this.checkInterval)
         this.prevStep.push(this.step)
 
@@ -924,6 +935,17 @@
           console.error(error)
           // this.errorMsg = error.message
           this.isShowError = true
+        }
+      },
+      recalculateBalance() {
+        this.balanceSumFiat = this.balanceSumUSD
+        const fiatVal = getFiatByLocale(this.currentLang)
+        if (fiatVal) {
+          const fiatCur = this.fiat[fiatVal.name]
+          if (this.currentLang !== 'en' && fiatCur) {
+            this.balanceSumFiat = new Decimal(this.balanceSumUSD)
+              .mul(fiatCur)
+          }
         }
       },
       prettyFormat: function (value) {
