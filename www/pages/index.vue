@@ -352,7 +352,7 @@
     <!--  -->
     <!-- / -->
     <!-- Footer -->
-    <footer>
+    <footer v-bind:class="{ 'fixed-footer': step === 1 }">
       <a href="https://www.minter.network/" target="_blank" class="copy">Powered by <span>Minter</span></a>
     </footer>
     <!-- /Footer -->
