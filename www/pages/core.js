@@ -5,7 +5,7 @@ import { walletFromPrivateKey } from 'minterjs-wallet'
 import { Decimal } from 'decimal.js'
 
 //export const BACKEND_BASE_URL = 'https://p.motherminter.org'
-export const BACKEND_BASE_URL = 'https://pushminter.ru'
+export const BACKEND_BASE_URL = 'https://minterpush.ru'
 //export const BACKEND_BASE_URL = 'http://localhost:3048'
 export const EXPLORER_BASE_URL = 'https://explorer-api.minter.network'
 export const EXPLORER_GATE_API_URL = 'https://gate-api.minter.network'

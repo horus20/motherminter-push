@@ -1818,3 +1818,42 @@ footer {
     opacity: 0;
   }
 }
+.content__coins-address {
+  padding-top: calc(50% - 200px);
+  padding-top: calc(50vh - 200px); }
+.content__coins-address h5 {
+  font-size: 24px;
+  margin-bottom: 16px;
+  text-align: center; }
+.content__coins-address .copy_link {
+  font: 12px/1 "SegoeUIBold", sans-serif;
+  color: var(--blue); }
+.content__coins-address .copy_link p {
+  margin-left: -16px;
+  margin-bottom: 16px; }
+.content__coins-address .qr-code {
+  text-align: center;
+  margin: 12px 0; }
+.content__coins-address .qr-code img {
+  width: 121px;
+  height: 121px; }
+.content__coins-address .btn:not(.btn-copy):not(.btn-back) {
+  background: var(--blue); }
+.content__coins-address .btn-back {
+  margin-top: 18px; }
+.content__coins-address .buttons {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+  -ms-flex-wrap: wrap;
+  flex-wrap: wrap;
+  margin: -6px 16px; }
+.content__coins-address .buttons .btn-copy {
+  width: 96px;
+  margin-top: 6px;
+  margin-bottom: 6px;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box; }

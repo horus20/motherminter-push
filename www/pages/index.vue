@@ -222,15 +222,24 @@
             <div v-if="step === 4" class="content__item content__coins-address content__item-active">
               <h5 v-if="!this.isBalanceGreatThenZero">{{ $t('create.plzFill') }}</h5>
               <h5 v-if="this.isBalanceGreatThenZero">{{ $t('create.plzFillPart1') }} <span v-on:click="copyToClipboard(minNewBalance)">{{ minNewBalance }} {{ $t('create.minBalanceCoin')}}</span> {{ $t('create.plzFillPart2') }}</h5>
-              <div :class="{'active-copy' : isCopiededAdress}" class="copy_link">
-                <p>{{ addressForFilling }}</p>
-                <button class="btn btn-copy btn-copy-address" v-on:click="copyToClipboard(addressForFilling, $event)">Copy<img src="/assets/img/svg/copy.svg" alt=""></button>
+              <div class="copy_link">
+                <p :class="{'active-copy' : isCopiededSuccess}">{{ addressForFilling }}</p>
+                <div class="buttons">
+                  <button :class="{'active-copy' : isCopiededSuccess}" class="btn btn-copy btn-link-copy" v-on:click="copyToClipboard(addressForFilling, $event)">Copy<img src="/assets/img/svg/copy.svg" alt=""></button>
+                  <button class="btn btn-copy">DeepLink</button>
+                </div>
               </div>
               <div class="qr-code" v-if="typeof addressForFilling !== 'undefined'">
                 <qrcode v-bind:value="addressForFilling" :options="{ width: 121 }" tag="img"></qrcode>
               </div>
-              <button class="btn" v-on:click="startCreateSuccess()">{{ $t('goToNext') }}</button>
-              <a class="btn btn-more btn-back" v-on:click="goBack()"><img src="/assets/img/svg/back.svg" alt="">{{ $t('back') }}</a>
+              <!-- <button class="btn" v-on:click="startCreateSuccess()">{{ $t('goToNext') }}</button>-->
+              <!-- <a class="btn btn-more btn-back" v-on:click="goBack()"><img src="/assets/img/svg/back.svg" alt="">{{ $t('back') }}</a>-->
+              <div class="loader-02">
+                <div class="inner one"></div>
+                <div class="inner two"></div>
+                <div class="inner three"></div>
+              </div>
+              <p id="waiting">{{ $t('create.waitingForPayment') }} ...</p>
             </div>
           </transition>
           <!-- /Content Coins Address -->
@@ -796,12 +805,22 @@
         this.companyLink = `${BACKEND_BASE_URL}/api/company/${this.company.uid}/get_wallet?count=1`
         console.log(this.company)
 
+        if (this.createParamBalance) {
+          this.minNewBalance = new Decimal(this.createParamBalance)
+            .plus(ACTIVATE_FEE)
+            .mul(this.createParamCount)
+          if (this.minNewBalance.gt(0)) {
+            this.isBalanceGreatThenZero = true
+          }
+        }
+
         this.loadAdditionalInfo()
         // start update balance
-        /*const self = this
+        const self = this
         this.checkInterval = setInterval(function(){
           self.checkFilledBalance()
-        }, 7 * 1000)*/
+          self.startCreateSuccess(false)
+        }, 3 * 1000)
 
         return false
       },
@@ -862,11 +881,13 @@
             skin: this.createParamSkin,
           }
         })
-        this.minNewBalance = new Decimal(this.createParamBalance)
-          .plus(ACTIVATE_FEE)
-          .mul(this.createParamCount)
-        if (this.minNewBalance.gt(0)) {
-          this.isBalanceGreatThenZero = true
+        if (this.createParamBalance) {
+          this.minNewBalance = new Decimal(this.createParamBalance)
+            .plus(ACTIVATE_FEE)
+            .mul(this.createParamCount)
+          if (this.minNewBalance.gt(0)) {
+            this.isBalanceGreatThenZero = true
+          }
         }
 
         if (company && company.warehouseWallet && company.warehouseWallet.mxaddress) {
@@ -876,9 +897,9 @@
         }
         this.company = company
         this.companyLink = `${BACKEND_BASE_URL}/api/company/${this.company.uid}/get_wallet?count=1`
+
         this.loadAdditionalInfo()
         // start update balance
-        // todo: show loader
         const self = this
         this.checkInterval = setInterval(function(){
           self.checkFilledBalance()
@@ -916,6 +937,7 @@
           this.step = 51
         }
 
+        this.isCopiededSuccess = false
         return false
       },
       copyToClipboard: function (message, $event = null) {
@@ -931,14 +953,16 @@
               this.isCopiededSuccess = true
               return false
             } else {
-              $event.target.innerText = 'Copied to buffer'
+              // $event.target.innerText = 'Copied to buffer'
+              $event.target.innerText = 'Copied'
               this.isCopiededAdress = true
               return false
             }
             if ($event.target.classList.contains('btn-copy-address')) {
-              $event.target.innerText = 'Copied to buffer'
-                //this.isCopiededSuccess = true
-                return false
+              //$event.target.innerText = 'Copied to buffer'
+              $event.target.innerText = 'Copied'
+              //this.isCopiededSuccess = true
+              return false
             }
             if($event) {
               $event.target.classList.add('active-copy')
