@@ -226,7 +226,7 @@
                 <p :class="{'active-copy' : isCopiededSuccess}">{{ addressForFilling }}</p>
                 <div class="buttons">
                   <button :class="{'active-copy' : isCopiededSuccess}" class="btn btn-copy btn-link-copy" v-on:click="copyToClipboard(addressForFilling, $event)">Copy<img src="/assets/img/svg/copy.svg" alt=""></button>
-                  <button class="btn btn-copy">DeepLink</button>
+                  <a v-if="this.isBalanceGreatThenZero" class="btn btn-copy" target="_blank" v-bind:href="deepLink">DeepLink</a>
                 </div>
               </div>
               <div class="qr-code" v-if="typeof addressForFilling !== 'undefined'">
@@ -505,7 +505,7 @@
     getCoinExchangeList,
     getFiatExchangeList,
     getBipPrice,
-    prettyFormat, createCompany, DEFAULT_SYMBOL, getFiatByLocale, ACTIVATE_FEE
+    prettyFormat, createCompany, DEFAULT_SYMBOL, getFiatByLocale, ACTIVATE_FEE, createDeepLink
   } from './core'
 
   if (process.client) {
@@ -627,6 +627,12 @@
         }
         return `${this.balanceSumFiat.toFixed(2)} ${fiatSymbol}`
       },
+      deepLink() {
+        if (this.minNewBalance) {
+          return createDeepLink(this.addressForFilling, this.minNewBalance)
+        }
+        return ''
+      }
     },
     // method
     methods: {
@@ -787,6 +793,7 @@
           this.addressForFilling = 'empty'
         }
 
+        this.createParamCount = 1
         // send info to server
         this.company = await createCompany({
           type: this.createParamType,
@@ -799,14 +806,14 @@
             notice: this.createParamTask,
             skin: this.createParamSkin,
             amount: this.createParamBalance,
-            count: 1,
+            count: this.createParamCount,
           }
         })
         this.companyLink = `${BACKEND_BASE_URL}/api/company/${this.company.uid}/get_wallet?count=1`
         console.log(this.company)
 
         if (this.createParamBalance) {
-          this.minNewBalance = new Decimal(this.createParamBalance)
+          this.minNewBalance = new Decimal(Number(this.createParamBalance))
             .plus(ACTIVATE_FEE)
             .mul(this.createParamCount)
           if (this.minNewBalance.gt(0)) {

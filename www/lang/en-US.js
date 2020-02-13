@@ -46,7 +46,7 @@ export default {
     yourPasswordHere: 'Your password here...',
     plzFill: 'Please send any Minter coins to this address',
     plzFillPart1: 'Please send',
-    plzFillPart2: 'Minter coins to this address',
+    plzFillPart2: 'BIP to this address',
     minBalanceCoin: '',
     willReceive: 'Your recipient will receive',
     shareLink: 'Share this link or QR',
