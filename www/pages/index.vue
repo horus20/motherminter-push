@@ -35,12 +35,13 @@
       <div class="container">
         <div class="conten-items">
 
-          <!-- Content__Item-01 -->
+          <!-- Content Start -->
           <transition name="fade">
           <div v-if="step === 1" class="content__item content__start content__item-active">
             <p>{{ $t('index.preTitle') }}</p>
             <h1>{{ $t('index.title') }}</h1>
-            <a class="btn" v-on:click="startCreate()">{{ $t('index.btnStartSending') }}</a>
+            <a class="btn" v-on:click="startCreateSimple()">{{ $t('index.btnStartSending') }}</a>
+            <a class="advanced" v-on:click="startCreate()">Advanced mode</a>
             <div class="back">
               <div class="group">
                 <img src="/assets/img/svg/back/f.svg" alt="" class="img-01">
@@ -55,7 +56,7 @@
             </div>
           </div>
           </transition>
-          <!-- /Content__Item-01 -->
+          <!-- /Content Start -->
 
           <!-- Content Choose Wallet -->
           <transition name="fade">
@@ -90,20 +91,43 @@
           <div v-if="step === 3" class="content__item content__attach-messege content__item-active">
             <form>
 
-              <p style="margin-bottom: 0">{{ $t('create.attachMessage') }}?</p>
+
+              <p>{{ $t('create.putMoney') }}?</p>
               <div class="trigger trigger-01" v-bind:class="{ 'trigger-active': isActiveTrigger01 }" v-on:click="isActiveTrigger01 = !isActiveTrigger01">
                 <span class="trigger_no">{{ $t('NO') }}</span><span class="trigger_circle"></span><span class="trigger_yes">{{ $t('YES') }}</span>
               </div>
-                <transition name="fadeDown">
-                    <input id="input-01" v-if="isActiveTrigger01" type="text" v-bind:placeholder="$t('create.yourMessageHere')" v-model="createParamMessage" style="display: block">
-                </transition>
-              <p style="margin-bottom: 0">{{ $t('create.putPassword') }}?</p>
+              <transition name="fadeDown">
+                <input id="input-01" v-if="isActiveTrigger01" type="text" v-bind:placeholder="$t('create.yourMoneyCountHere')" v-model="createParamBalance" style="display: block">
+              </transition>
+
+              <p>{{ $t('create.attachMessage') }}?</p>
               <div class="trigger trigger-02" v-bind:class="{ 'trigger-active': isActiveTrigger02 }" v-on:click="isActiveTrigger02 = !isActiveTrigger02">
                 <span class="trigger_no">{{ $t('NO') }}</span><span class="trigger_circle"></span><span class="trigger_yes">{{ $t('YES') }}</span>
               </div>
-                <transition name="fadeDown">
-                    <input id="input-02" v-if="isActiveTrigger02" type="password" v-bind:placeholder="$t('create.yourPasswordHere')" v-model="createParamPassword" style="display: block">
-                </transition>
+              <transition name="fadeDown">
+                <input id="input-02" v-if="isActiveTrigger02" type="text" v-bind:placeholder="$t('create.yourMessageHere')" v-model="createParamMessage" style="display: block">
+              </transition>
+
+
+              <p>{{ $t('create.putPassword') }}?</p>
+              <div class="trigger trigger-03" v-bind:class="{ 'trigger-active': isActiveTrigger03 }" v-on:click="isActiveTrigger03 = !isActiveTrigger03">
+                <span class="trigger_no">{{ $t('NO') }}</span><span class="trigger_circle"></span><span class="trigger_yes">{{ $t('YES') }}</span>
+              </div>
+              <transition name="fadeDown">
+                <input id="input-03" v-if="isActiveTrigger03" type="password" v-bind:placeholder="$t('create.yourPasswordHere')" v-model="createParamPassword" style="display: block">
+              </transition>
+
+              <p>{{ $t('create.Skins') }}?</p>
+              <div class="trigger trigger-04" v-bind:class="{ 'trigger-active': isActiveTrigger04 }" v-on:click="isActiveTrigger04 = !isActiveTrigger04">
+                <span class="trigger_no">{{ $t('NO') }}</span><span class="trigger_circle"></span><span class="trigger_yes">{{ $t('YES') }}</span>
+              </div>
+              <transition name="fadeDown">
+                <div class="skins-items" id="skins" v-if="isActiveTrigger04"  style="display: block">
+                  <div v-for="skin in skins" class="skins__item">
+                    <span v-on:click="createParamSkin = skin.id">{{ skin.label }}</span><a v-on:click="showSkinPreviewModal(skin)">{{ $t('Prev') }}</a>
+                  </div>
+                </div>
+              </transition>
             </form>
             <button class="btn" v-on:click="startCreateWallet()">{{ $t('goToNext') }}</button>
             <a class="btn btn-more btn-back" v-on:click="goBack()"><img src="/assets/img/svg/back.svg" alt="">{{ $t('back') }}</a>
@@ -499,6 +523,8 @@
         isCreateOne: true,
         isActiveTrigger01: false,
         isActiveTrigger02: false,
+        isActiveTrigger03: false,
+        isActiveTrigger04: false,
         isAddressFilling: false,
         IsActiveHamburgerClass: false,
         isCopiededAdress: false,
@@ -518,6 +544,7 @@
         createParamIsFixed: true,
         createParamBalance: '',
         createParamCompanyPass: '',
+        createParamSkin: '',
         company: null,
         companyLink: '',
         minNewBalance: 0,
@@ -535,6 +562,28 @@
         maxLen: 140,
         minLen: 100,
 
+        skins: [
+          {
+            id: 'bday',
+            label: 'HAPPY BIRTHDAY',
+            image: '',
+          },
+          {
+            id: 'mday',
+            label: 'VALENTINE\'S DAY',
+            image: '',
+          },
+          {
+            id: 'march8',
+            label: 'MARCH 8',
+            image: '',
+          },
+          {
+            id: 'feb23',
+            label: 'FEBRUARY 23',
+            image: '',
+          },
+        ],
       }
     },
     created () {
@@ -616,6 +665,7 @@
         this.createParamTask = ''
         this.createParamBalance = ''
         this.createParamUID = ''
+        this.createParamSkin = ''
         this.minNewBalance = new Decimal(0)
         this.isBalanceGreatThenZero = false
       },
@@ -674,10 +724,34 @@
         return label.split('|').join('<br>')
       },
       startCreateWallet: async function () {
-        if (this.isActiveTrigger02 && !this.createParamPassword) {
+        if (this.isActiveTrigger01 && !this.createParamBalance) {
+          this.errorMsg = this.$t('errors.balanceEmpty')
+          this.isShowError = true
+          return false
+        }
+        if (!this.isActiveTrigger01) {
+          this.createParamBalance = ''
+        }
+
+        if (this.isActiveTrigger02 && !this.createParamMessage) {
+          this.errorMsg = this.$t('errors.emptyText')
+          this.isShowError = true
+          return false
+        }
+        if (!this.isActiveTrigger02) {
+          this.createParamMessage = ''
+        }
+
+        if (this.isActiveTrigger03 && !this.createParamPassword) {
           this.errorMsg = this.$t('errors.passErrorEmpty')
           this.isShowError = true
           return false
+        }
+        if (!this.isActiveTrigger03) {
+          this.createParamPassword = ''
+        }
+        if (!this.isActiveTrigger04) {
+          this.createParamSkin = ''
         }
 
         if ((this.step === 31 || this.step === 32) && this.createParamTask.length === 0) {
@@ -714,6 +788,9 @@
           params: {
             title: this.createParamMessage,
             notice: this.createParamTask,
+            skin: this.createParamSkin,
+            amount: this.createParamBalance,
+            count: 1,
           }
         })
         this.companyLink = `${BACKEND_BASE_URL}/api/company/${this.company.uid}/get_wallet?count=1`
@@ -782,6 +859,7 @@
             notice: this.createParamTask,
             count: this.createParamCount,
             amount: this.createParamBalance,
+            skin: this.createParamSkin,
           }
         })
         this.minNewBalance = new Decimal(this.createParamBalance)
@@ -1025,8 +1103,10 @@
         }else {
           this.isTextarea[param] = true
         }
-      }
-
+      },
+      showSkinPreviewModal(skin) {
+        console.log(skin)
+      },
     },
     // html header section
     head: {
