@@ -50,7 +50,9 @@
   --green: #63d96e;
   --green-lighting: #d2fed6;
   --green-dark: #319939;
-  --blue: #4a40fd; }
+  --blue: #4a40fd;
+  --yellow: #ffd753;
+}
 
 * {
   outline: none; }
