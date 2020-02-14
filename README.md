@@ -9,6 +9,16 @@ Although the link-wallet app has advanced options for users that wish to create 
 
 ### Modes and usage scenarios
 
+#### One wallet mode
+
+<b>`Simple.`</b> The app creates a unique URL-wallet for a user. Anyone who knows the URL gets access to a balance. The user is able to attach a message or set a password to the link-wallet if they want. In this case a recipient will need to know the URL and the password. Also a user may customise the wallet by picking an envelope for it from the preset skins.
+
+<b>`Feedback.`</b> The scenario in which the wallet user, before gaining access to it, must leave some kind of feedback: review, opinion, suggestion, recommendation, consultation or other valuable information. After filling out the form and submitting it, the user gets access to the balance. The user's feedback is sent to the creator email 
+address.
+
+<b>`Action.`</b> In this scenario, the user must complete a task and fill out a form with proof of its completion before accessing the link-wallet. The task to be performed is described by the creator in the step of wallet generation. For example: repost, like, comment, or other action. The result of the user’s action is sent to the creator email address.
+
+
 ## Backend part
 Deploy you copy on server or use our public api - `https://p.motherminter.org/api/`<br>
 Backend - is'a <a href=https://nestjs.com/>NestJS</a> app starting on **3048** port <br>
