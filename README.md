@@ -13,7 +13,7 @@ Although the link-wallet app has advanced options for users that wish to create 
 
 #### One wallet mode
 
-<b>`Simple.`</b> The app creates a unique URL-wallet for a user. Anyone who knows the URL gets access to a balance. The user is able to attach a message or set a password to the link-wallet if they want. In this case a recipient will need to know the URL and the password. Also a user may customise the wallet by picking an envelope for it from the preset skins.
+<b>`Simple.`</b> The app creates a unique URL-wallet for a user. Anyone who knows the URL gets access to a balance. The user is able to attach a message or set a password to the link-wallet if they want. In this case a recipient will need to know the URL and the password. Also a user may customise the wallet by picking an envelope for it from the preset skins. All modes contain easy and wide sharing options.
 
 <b>`Feedback.`</b> The scenario in which the wallet user, before gaining access to it, must leave some kind of feedback: review, opinion, suggestion, recommendation, consultation or other valuable information. After filling out the form and submitting it, the user gets access to the balance. The user's feedback is sent to the creator email 
 address.
@@ -27,7 +27,7 @@ address.
 A user have to signup and login into an account to be able to create multiple wallet campaigns. 
 They will be offered to specify:
 
-* A number of wallets to generate (fixed or unlimited*)
+* A number of wallets to generate (fixed or unlimited)
 * Upload campaign logo
 * Specify a sender
 * Indicate one wallet balance 
@@ -40,18 +40,22 @@ They will be offered to specify:
 * Export or copy a generated list of link-wallets
 * Track statistics
 
-*<b>Unlimited wallets:</b> 
+<b>Unlimited wallets:</b> 
 This option allows a user to create an unlimited number of wallets through an API method:
 
 `/api/company/uid/get_wallet?count=N` 
 
-API request generate N number of wallets and returns them in JSON format. Please note, newly created wallets will have zero balances by default and will be credited only after a recipient's first visit.
+API request generates N number of wallets and returns them in JSON format. Please note, newly created wallets will have zero balances by default and will be credited only after a recipient's first visit.
 
-There are two options to create multiple wallet campaigns: 
+<b>There are two scenarios to create multiple wallet campaigns:</b> 
 
 <b>`Simple.`</b> Unique URL-wallets with easy access to them, just by clicking the link.
 
 <b>`Feedback.`</b> Before accessing, users must leave feedback.
+
+* Please note the mechanics of creating an array of wallets that has been implemented.
+The funds sent to deposit a campaign are initially credited to an intermediate address. The activation of individual wallets of the array (meaning depositing funds to the wallet) occurs only after a user visits a wallet link. This provides an opportunity to return unused funds of the campaign creator.
+
 
 ## Backend part
 Deploy you copy on server or use our public api - `https://p.motherminter.org/api/`<br>
