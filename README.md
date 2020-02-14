@@ -1,4 +1,3 @@
-<img src="https://github.com/MotherMinter/Push/blob/master/www/static/android-icon-192x192.png" alt="Push. by Mother Minter team">
 # Push.
 Send, receive and spend Minter coins with ease.
 
