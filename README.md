@@ -9,9 +9,9 @@ Push is a light web-app wallet to get access to it a user only need to know a un
 
 Although the link-wallet app has advanced options for users that wish to create multiple wallets and run commercial campaigns. The app offers to users different modes and scenarios that could be applied to big variety of private and commercial cases.
 
-### Modes and usage scenarios
+## Modes and usage scenarios
 
-#### One wallet mode
+### One wallet mode
 
 <b>`Simple.`</b> The app creates a unique URL-wallet for a user. Anyone who knows the URL gets access to a balance. The user is able to attach a message or set a password to the link-wallet if they want. In this case a recipient will need to know the URL and the password. Also a user may customise the wallet by picking an envelope for it from the preset skins. All modes contain easy and wide sharing options.
 
@@ -22,7 +22,20 @@ address.
 
 * In One wallet mode, a link-wallet is sent from one user to another (one-to-one), which most likely implies the presence of acquaintance between the participants in the process, or the presence of a basic level of trust. Obviously, these cases do not require an advanced level of validation of actions, a useful action will be performed efficiently due to the mutual interest of the parties.
 
-#### Multiple wallet mode
+<b>One wallet mode functionality</b>
+
+* Balance auto check & load
+* Deeplink transaction functionality 
+* Link-wallet password protection
+* Customization skins
+* Localization (languages, currencies)
+* Extensive share options: native, QRs, copy buffer, direct target spending links, shares & QRs
+* Balance spend: top-up mobile (<a href="https://biptophone.ru/apiuser.php" target="_blank">api options</a>), Time Loop game, charity fund
+* Balance transfer (other address)
+* Balance forwarding (new wallet-link generation) 
+
+
+### Multiple wallet mode
 
 A user have to signup and login into an account to be able to create multiple wallet campaigns. 
 They will be offered to specify:
