@@ -834,6 +834,109 @@ header {
 .modal-activation-types.modal-type2 .close-modal-alert {
   margin-bottom: 20px; }
 
+.modal-login {
+  padding-top: 36px;
+  text-align: left; }
+  .modal-login .close-modal-alert {
+    margin-top: 0; }
+  .modal-login h5 {
+    font: 48px/1 'SegoeUISemiBold', sans-serif;
+    margin-bottom: 24px; }
+  .modal-login p {
+    font-size: 16px;
+    margin-bottom: 24px; }
+  .modal-login .input {
+    font: 18px/1 'SegoeUILight', sans-serif;
+    color: #525252; }
+  .modal-login .btn {
+    background: var(--blue);
+    margin-bottom: 12px; }
+    .modal-login .btn:last-child {
+      background: var(--pink); }
+
+.modal-emails {
+  padding-top: 36px;
+  text-align: left; }
+  .modal-emails .close-modal-alert {
+    margin-top: 0; }
+  .modal-emails p {
+    font-size: 18px;
+    margin-bottom: 8px; }
+    .modal-emails p .more-about {
+      font-size: 18px; }
+  .modal-emails .caption {
+    font-size: 10px;
+    text-transform: uppercase;
+    margin-bottom: 12px; }
+  .modal-emails .input {
+    height: 38px;
+    padding: 0 4px 2px;
+    border: 1px solid #dcdcdc;
+    border-radius: 2px;
+    background: #f6f6f6;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box; }
+  .modal-emails .btn {
+    background: var(--pink); }
+  .modal-emails .btn-back {
+    background: #f4f4f4;
+    margin-top: 36px; }
+
+.modal-target {
+  padding-top: 24px; }
+  .modal-target .close-modal-alert {
+    margin-top: 0; }
+  .modal-target .checkbox-items {
+    padding-left: 24px; }
+    .modal-target .checkbox-items .checkbox__item {
+      display: -webkit-box;
+      display: -ms-flexbox;
+      display: flex;
+      -webkit-box-align: center;
+      -ms-flex-align: center;
+      align-items: center;
+      position: relative;
+      padding: 4px 0; }
+      .modal-target .checkbox-items .checkbox__item input[type=checkbox] {
+        opacity: 0; }
+      .modal-target .checkbox-items .checkbox__item label::before {
+        display: block;
+        content: "";
+        width: 16px;
+        height: 16px;
+        border: 1px solid #94969d;
+        position: absolute;
+        top: 21px;
+        left: 0; }
+      .modal-target .checkbox-items .checkbox__item label:after {
+        display: block;
+        width: 10px;
+        height: 6px;
+        border-left: 3px solid var(--green-dark);
+        border-bottom: 3px solid var(--green-dark);
+        position: absolute;
+        top: 23px;
+        left: 2px;
+        -webkit-transform: rotate(-45deg);
+        -ms-transform: rotate(-45deg);
+        transform: rotate(-45deg); }
+      .modal-target .checkbox-items .checkbox__item input[type=checkbox] + label:after {
+        content: none; }
+      .modal-target .checkbox-items .checkbox__item input[type=checkbox]:checked + label:after {
+        content: ""; }
+    .modal-target .checkbox-items img {
+      margin: 0 24px; }
+    .modal-target .checkbox-items p {
+      font: 10px/1 'SegoeUIBold', sans-serif;
+      text-transform: uppercase; }
+
+.modal-skins {
+  padding-top: 24px; }
+  .modal-skins .close-modal-alert {
+    margin-top: 0; }
+  .modal-skins .skins-items {
+    display: block; }
+
 .content__success {
   margin-top: calc(50% - 210px);
   margin-top: calc(50vh - 210px);
