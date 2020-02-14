@@ -1,5 +1,5 @@
 # Push.
-Send, receive and spend Minter coins with ease.
+Light web wallet to send, receive and spend Minter coins with ease.
 
 ## Description
 
