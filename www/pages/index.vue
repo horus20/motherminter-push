@@ -97,7 +97,7 @@
 
           <transition name="fade">
             <!-- Content Personal Area -->
-            <div v-if="isShowAccountPage" class="content__item content__personal-area content__item-active">
+            <div v-if="step === 21"  class="content__item content__personal-area content__item-active">
               <div class="capaing-info">
                 <div class="campaing-logo">
                   <a href="#" class="more-about">Logo</a>
@@ -590,7 +590,6 @@
         isShowModalQR: false,
         isShowModalDir: false,
         isShowLoginModal: false,
-        isShowAccountPage: false,
         isCreateOne: true,
         isActiveTrigger01: false,
         isActiveTrigger02: false,
@@ -720,7 +719,6 @@
       },
       showLoginModal () {
         this.isShowLoginModal = true
-
       },
       closeError: function () {
         this.isShowError = false
@@ -1226,13 +1224,13 @@
           this.createParamLogoPath = response.data.logo
 
           // show account page
-          this.isShowAccountPage = true
+          this.isShowLoginModal = false
+          this.prevStep.push(this.step)
+          this.step = 21
         } catch (error) {
           this.isShowError = true
           this.errorMsg = this.$t('errors.errorLogin')
         }
-
-        this.isShowAccountPage = true
       },
       loginAccount: async function (){
          try {
@@ -1246,7 +1244,9 @@
            this.createParamLogoPath = response.data.logo
 
            // show account page
-           this.isShowAccountPage = true
+           this.isShowLoginModal = false
+           this.prevStep.push(this.step)
+           this.step = 21
          } catch (error) {
            this.isShowError = true
            this.errorMsg = this.$t('errors.errorLogin')
