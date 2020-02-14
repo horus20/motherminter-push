@@ -1,4 +1,4 @@
-<img src="https://github.com/MotherMinter/Push/blob/master/www/static/push_logo.svg" alt="Push.">
+<img style="width:10px !important; max-width: none;" src="https://github.com/MotherMinter/Push/blob/master/www/static/push_logo.svg" alt="Push.">
 
 # Push.
 Send, receive and spend Minter coins with ease. Powered by <a href="https://github.com/MinterTeam" target="_blank">Minter blockchain</a>.
