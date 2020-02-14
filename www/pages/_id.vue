@@ -755,16 +755,7 @@
                 usdAmount
               }
             })
-
-          this.balanceSumFiat = this.balanceSumUSD
-          const fiatVal = getFiatByLocale(this.currentLang)
-          if (fiatVal) {
-            const fiatCur = this.fiat[fiatVal.name]
-            if (this.currentLang !== 'en' && fiatCur) {
-              this.balanceSumFiat = this.balanceSumUSD
-                .mul(fiatCur)
-            }
-          }
+          this.recalculateBalance()
 
           const response = await axios.get(`${EXPLORER_GATE_API_URL}/api/v1/nonce/${this.address}`)
           if (response.data && response.data.data && response.data.data.nonce) {

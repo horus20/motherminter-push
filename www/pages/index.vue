@@ -570,6 +570,7 @@
 
         maxLen: 140,
         minLen: 100,
+        isMobile: false,
 
         skins: [
           {
@@ -629,12 +630,21 @@
       },
       deepLink() {
         if (this.minNewBalance) {
-          return createDeepLink(this.addressForFilling, this.minNewBalance)
+          return createDeepLink({
+            to: this.addressForFilling,
+            amount: this.minNewBalance,
+            isMobile: this.isMobile,
+          })
         }
         return ''
       },
       footerStatic() {
         return this.step === 3 || this.step === 4
+      }
+    },
+    created () {
+      if (navigator.share) {
+        this.isMobile = true
       }
     },
     // method
@@ -921,8 +931,7 @@
       loadAdditionalInfo: async function () {
         this.bipToUSD = await getBipPrice()
         this.fiat = await getFiatExchangeList()
-        this.coins = getCoinExchangeList()
-        this.fiat = getFiatExchangeList()
+        // this.coins = getCoinExchangeList()
       },
       startCreateSuccess: async function (showError = true) {
         if (!this.isAddressFilling) {
@@ -1034,15 +1043,7 @@
               }
             })
 
-          this.balanceSumFiat = this.balanceSumUSD
-          const fiatVal = getFiatByLocale(this.currentLang)
-          if (fiatVal) {
-            const fiatCur = this.fiat[fiatVal.name]
-            if (this.currentLang !== 'en' && fiatCur) {
-              this.balanceSumFiat = this.balanceSumUSD
-                .mul(fiatCur)
-            }
-          }
+          this.recalculateBalance()
         } catch (error) {
           console.error(error)
           // this.errorMsg = error.message
