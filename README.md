@@ -1,13 +1,31 @@
+<img style="width:10px !important; max-width: none;" src="https://github.com/MotherMinter/Push/blob/master/www/static/push_logo.svg" alt="Push.">
+
 # Push.
-Light web wallet to send, receive and spend Minter coins with ease. Powered by <a href="https://github.com/MinterTeam" target="_blank">Minter blockchain</a>.
+Send, receive and spend Minter coins with ease. Powered by <a href="https://github.com/MinterTeam" target="_blank">Minter blockchain</a>.
 
 ## Description
 
-Push is a light web-app wallet to get access to it a user only need to know a unique URL address, we also call is a link-wallet. The main advantage of a link-wallet is the ease of getting access to it and start spending with no sign up, no login, no registration, no password or whatever. 
+Push is a light web-app wallet to get access to it a user only need to know a unique URL address, also call a link-wallet. The main advantage of a link-wallet is the ease of getting access to it and start spending with no sign up, no login, no registration, no password or whatever. 
 
 Although the link-wallet app has advanced options for users that wish to create multiple wallets and run commercial campaigns. The app offers to users different modes and scenarios that could be applied to big variety of private and commercial cases.
 
 ### Modes and usage scenarios
+
+#### One wallet mode
+
+<b>`Simple.`</b> The app creates a unique URL-wallet for a user. Anyone who knows the URL gets access to a balance. The user is able to attach a message or set a password to the link-wallet if they want. In this case a recipient will need to know the URL and the password. Also a user may customise the wallet by picking an envelope for it from the preset skins.
+
+<b>`Feedback.`</b> The scenario in which the wallet user, before gaining access to it, must leave some kind of feedback: review, opinion, suggestion, recommendation, consultation or other valuable information. After filling out the form and submitting it, the user gets access to the balance. The user's feedback is sent to the creator email 
+address.
+
+<b>`Action.`</b> In this scenario, the user must complete a task and fill out a form with proof of its completion before accessing the link-wallet. The task to be performed is described by the creator in the step of wallet generation. For example: repost, like, comment, or other action. The result of the user’s action is sent to the creator email address.
+
+* In One wallet mode, a link-wallet is sent from one user to another (one-to-one), which most likely implies the presence of acquaintance between the participants in the process, or the presence of a basic level of trust. Obviously, these cases do not require an advanced level of validation of actions, a useful action will be performed efficiently due to the mutual interest of the parties.
+
+#### Multiple wallet mode
+
+
+
 
 ## Backend part
 Deploy you copy on server or use our public api - `https://p.motherminter.org/api/`<br>
