@@ -39,7 +39,7 @@ A user has to sign-up and login to an account to be able to create multiple wall
 They will be offered to specify:
 
 * A number of wallets to generate (fixed or unlimited)
-* Upload campaign logo
+* Upload campaign logo (white label option)
 * Specify a sender
 * Indicate one wallet balance 
 * Indicate target spending (completely flexible)
@@ -69,7 +69,7 @@ The funds sent to deposit a campaign are initially credited to an intermediate a
 
 
 ## Backend part
-Deploy you copy on server or use our public api - `https://p.motherminter.org/api/`<br>
+Deploy your copy on a server or use our public api - `https://p.motherminter.org/api/`<br>
 Backend - is'a <a href=https://nestjs.com/>NestJS</a> app starting on **3048** port <br>
 
 ### Installation and running
@@ -112,9 +112,9 @@ pm2 start npm --name "nuxt" -- start
 
 ## API Description
 Project exists Swagger api doc on `https://<your_host>:3048/docs/` . 
-You may use it for test you backend.
+You may use it for test of your backend.
 
-#### 1. Create company
+#### 1. Create a campaign
 ```
 POST /api/company
 
@@ -141,7 +141,7 @@ protected - flag - True if wallet have a password
 callback_link - used for feedback|action company
 ``` 
 
-#### 2. "One more wallet" link for Unlim company
+#### 2. "One more wallet" link for an Unlimited campaign
 ```
 GET /api/company/{company_uid}/get_wallet?count=N
 
@@ -149,13 +149,13 @@ N - count of new wallet you need
 ```
 
 #### 3. Get wallet information
-Check if wallet exist and return info and status (need activate, need password)
+Check if wallet exists and returns info and status (need activation, need password)
 ```
 GET /api/{wallet_uid}
 ```
 
-#### 4. Try login or activate wallet
-Wallet interface calculate address from (uid and password if exist) and send it to back, server check it and return success or fail.
+#### 4. Try to login or activate a wallet
+Wallet interface calculates an address from (uid and password if exists) and sends it back, server checks it and returns: success or fail.
 
 ```
 POST /api/{wallet_uid}
@@ -169,7 +169,7 @@ Params
 custom - flag if it address is custom type 
 ``` 
 
-#### 5. Before/After activate
+#### 5. Before/After activation
 This request's used for feedback/action wallet type
 ```
 POST /api/{wallet_uid}/complex
@@ -194,7 +194,7 @@ Return message to user
 ```
 
 #### 6. Send reply for complex type
-Store user reply to DB and activate wallet if need
+Store user reply to DB and activate wallet if needed
 
 ```
 POST /api/{wallet_uid}/reply
@@ -206,8 +206,8 @@ Params
 }
 ``` 
 
-#### 7. Send signed raw transaction to network
-All transaction created and signed in wallet interface (on client side)
+#### 7. Send signed raw transaction to the network
+All transaction created and signed in a wallet interface (on a client side)
 
 ```
 POST /api/{wallet_uid}/send
