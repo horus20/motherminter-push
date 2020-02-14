@@ -5,7 +5,7 @@ Send, receive and spend Minter coins with ease. Powered by <a href="https://gith
 
 ## Description
 
-Push is a light web-app wallet accessed by a unique URL address, also called a link-wallet. The main advantage of a link-wallet is the ease of getting entrance to it and ability spending balance with no sign-up, no login, no registration, no password or whatever. Although the link-wallet app has advanced options for users that wish to create multiple wallets and run commercial campaigns. The app offers users different modes and scenarios that could be applied to a big variety of private and commercial cases with excellent customization abilities.
+Push is a light web-app wallet accessed by a unique URL address, also called a link-wallet. The main advantage of a link-wallet is the ease of getting entrance to it and ability spending balance with no sign-up, no login, no registration, no password or whatever. Although the link-wallet app has advanced options for users that wish to create multiple wallets and run commercial campaigns. The app offers users different modes and scenarios that could be applied to a big variety of private and commercial cases with excellent customization abilities and API methods.
 
 ## Modes and usage scenarios
 
