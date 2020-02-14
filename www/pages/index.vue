@@ -60,7 +60,7 @@
 
           <!-- Content Choose Wallet -->
           <transition name="fade">
-          <div v-if="step === 2" class="content__item content__choose-wallet content__item-active step-2">
+          <!--<div v-if="step === 2" class="content__item content__choose-wallet content__item-active step-2">
             <h5 v-html="newLineLabel($t('create.title'))"></h5>
             <div class="buttons">
               <button v-on:click="isCreateOne = true" class="btn btn-radio" v-bind:class="{ 'btn-radio__active': isCreateOne }">
@@ -82,7 +82,16 @@
                 <a class="btn" id="feedback" v-on:click="startCreateFeedback()"><img src="/assets/img/svg/feedback.svg" alt="">{{ $t('create.feedback') }}</a>
               </div>
             </div>
-          </div>
+          </div>-->
+            <div v-if="step === 2" class="content__item content__choose-wallet-new content__item-active step-2">
+              <h5 v-html="newLineLabel($t('create.one'))"></h5>
+              <a class="more-about" v-on:click="toggleShowType()">{{ $t('create.learnMore') }}</a>
+              <a class="btn" id="feedback" v-on:click="startCreateFeedback()"><img src="/assets/img/svg/feedback.svg" alt="">{{ $t('create.feedback') }}</a>
+              <a class="btn" id="action" v-on:click="startCreateAction()"><img src="/assets/img/svg/action.svg" alt="">{{ $t('create.action') }}</a>
+
+              <h5 v-html="newLineLabel($t('create.multi'))"></h5>
+              <a class="btn" id="multiple" v-on:click="showLoginModal()"><img src="/assets/img/svg/fixed_white.svg" alt="">{{ $t('create.multiple') }}</a>
+            </div>
           </transition>
           <!-- /Content Choose Wallet -->
 
@@ -485,6 +494,24 @@
     </div>
     <!-- /Modal Alert -->
 
+    <!-- Modal Login -->
+    <transition name="fade">
+    <div class="modal-alert modal-login" v-bind:class="{ 'modal-activation-error': isShowLoginModal }" v-if="isShowLoginModal">
+      <div class="close-modal-alert" v-on:click="isShowLoginModal = false">
+        <span></span><span></span>
+      </div>
+      <div class="container">
+        <h5>{{ $t('menu.account') }}</h5>
+        <p>{{ $t('create.loginHelp') }}</p>
+        <input type="text" class="input"  v-bind:placeholder="$t('Email')" v-model="createParamEmail">
+        <input type="password" class="input" v-bind:placeholder="$t('password.Password')" v-model="createParamPassword">
+        <button class="btn" v-on:click="createAccountShow()">{{ $t('create.createAccount') }}</button>
+        <button class="btn" v-on:click="loginAccount()">{{ $t('create.loginAccount') }}</button>
+      </div>
+    </div>
+    </transition>
+    <!-- /Modal Login -->
+
     <!-- /Page -->
   </div>
 </template>
@@ -505,7 +532,7 @@
     getCoinExchangeList,
     getFiatExchangeList,
     getBipPrice,
-    prettyFormat, createCompany, DEFAULT_SYMBOL, getFiatByLocale, ACTIVATE_FEE, createDeepLink
+    prettyFormat, createCompany, DEFAULT_SYMBOL, getFiatByLocale, ACTIVATE_FEE, createDeepLink, getHash
   } from './core'
   import { SKINS } from './skins'
   import { SPENDS } from './spendings'
@@ -531,6 +558,7 @@
         isShowModalNType: false,
         isShowModalQR: false,
         isShowModalDir: false,
+        isShowLoginModal: false,
         isCreateOne: true,
         isActiveTrigger01: false,
         isActiveTrigger02: false,
@@ -655,6 +683,10 @@
       toggleShowDir: function () {
         this.isShowModalDir = !this.isShowModalDir
       },
+      showLoginModal () {
+        this.isShowLoginModal = true
+
+      },
       closeError: function () {
         this.isShowError = false
       },
@@ -668,6 +700,12 @@
         this.step = 2
         return false
       },
+      startCreateAccount: function () {
+        // advanced mod
+        this.prevStep.push(this.step)
+        this.step = 11
+        return false
+      },
       clearParams: function () {
         this.createParamCompanyPass = ''
         this.createParamEmail = ''
@@ -679,7 +717,8 @@
         this.minNewBalance = new Decimal(0)
         this.isBalanceGreatThenZero = false
       },
-      startCreateSimple: function () {
+      startCreateSimple: function (isCreateOne = true) {
+        this.isCreateOne = isCreateOne
         this.prevStep.push(this.step)
         if (this.isCreateOne) {
           this.step = 3
@@ -691,7 +730,8 @@
         this.clearParams()
         return false
       },
-      startCreateFeedback: function () {
+      startCreateFeedback: function (isCreateOne = true) {
+        this.isCreateOne = isCreateOne
         this.prevStep.push(this.step)
         if (this.isCreateOne) {
           this.step = 31
@@ -703,7 +743,8 @@
         this.clearParams()
         return false
       },
-      startCreateAction: function () {
+      startCreateAction: function (isCreateOne = true) {
+        this.isCreateOne = isCreateOne
         this.prevStep.push(this.step)
         if (this.isCreateOne) {
           this.step = 32
@@ -1123,6 +1164,24 @@
       },
       showSkinPreviewModal(skin) {
         console.log(skin)
+      },
+      createAccountShow() {
+
+      },
+      loginAccount: async function (){
+         try {
+           const response = await axios.post(`${BACKEND_BASE_URL}/api/account`, {
+             email: this.createParamEmail,
+             password: getHash(this.createParamPassword),
+           })
+           console.log(response.data)
+
+           // show account page
+
+         } catch (error) {
+           this.isShowError = true
+           this.errorMsg = this.$t('error.errorLogin')
+         }
       },
     },
     // html header section

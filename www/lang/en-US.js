@@ -14,6 +14,7 @@ export default {
   Unlimited: 'Unlimited',
   Send: 'Send',
   Prev: 'Prev',
+  Email: 'Email',
   index: {
     preTitle: 'Send Minter coins with ease.',
     title: 'Fast. Easy. Secure.',
@@ -27,12 +28,16 @@ export default {
   },
   create: {
     title: 'What kind of wallet|you want to create?',
-    one: 'One',
-    multi: 'Multiple',
+    one: 'Create one wallet',
+    multi: 'Create multiple wallets',
     learnMore: 'Learn more about types',
     simple: 'Simple',
     feedback: 'Feedback',
     action: 'Action',
+    multiple: 'Multiple',
+    loginHelp: 'To create or edit multiple wallet campaigns you need to login.',
+    createAccount: 'Create an account',
+    loginAccount: 'Login to account',
     detailTypeTitle: 'Wallet activation types',
     detailSimple: 'Allows you to create a link-wallet with simple access to it just by clicking the link.',
     detailFeedback: 'Allows you to create a link-wallet that can be accessed after filling a feedback form.',
@@ -78,6 +83,7 @@ export default {
     waitingForPayment: 'Waiting for payment',
   },
   password: {
+    password: 'Password',
     havePassword: 'You enter password?',
     enterPassword: 'Enter password',
     passwordPlaceholder: 'Password...',
@@ -134,6 +140,7 @@ export default {
     countEmpty: 'Error. Count less than 1.',
     errorSend: 'Error on sending to email.',
     shareError: 'Error. Your browser not support this interface',
+    errorLogin: 'Error on login to account, check email and pass',
   },
   successMsg: {
     successSend: 'Success of sending to email.',
