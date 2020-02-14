@@ -116,7 +116,7 @@ pm2 start npm --name "nuxt" -- start
 Project exists Swagger api doc on `https://<your_host>:3048/docs/` . 
 You may use it for test you backend.
 
-##### 1. Create company
+#### 1. Create company
 ```
 POST /api/company
 
@@ -143,20 +143,20 @@ protected - flag - True if wallet have a password
 callback_link - used for feedback|action company
 ``` 
 
-##### 2. "One more wallet" link for Unlim company
+#### 2. "One more wallet" link for Unlim company
 ```
 GET /api/company/{company_uid}/get_wallet?count=N
 
 N - count of new wallet you need
 ```
 
-##### 3. Get wallet information
+#### 3. Get wallet information
 Check if wallet exist and return info and status (need activate, need password)
 ```
 GET /api/{wallet_uid}
 ```
 
-##### 4. Try login or activate wallet
+#### 4. Try login or activate wallet
 Wallet interface calculate address from (uid and password if exist) and send it to back, server check it and return success or fail.
 
 ```
@@ -171,7 +171,7 @@ Params
 custom - flag if it address is custom type 
 ``` 
 
-##### 5. Before/After activate
+#### 5. Before/After activate
 This request's used for feedback/action wallet type
 ```
 POST /api/{wallet_uid}/complex
@@ -195,7 +195,7 @@ Params
 Return message to user
 ```
 
-##### 6. Send reply for complex type
+#### 6. Send reply for complex type
 Store user reply to DB and activate wallet if need
 
 ```
@@ -208,7 +208,7 @@ Params
 }
 ``` 
 
-##### 7. Send signed raw transaction to network
+#### 7. Send signed raw transaction to network
 All transaction created and signed in wallet interface (on client side)
 
 ```
