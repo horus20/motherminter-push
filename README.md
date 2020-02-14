@@ -1,3 +1,5 @@
+<img src="https://github.com/MotherMinter/Push/blob/master/www/static/push_logo.svg" alt="Push.">
+
 # Push.
 Send, receive and spend Minter coins with ease. Powered by <a href="https://github.com/MinterTeam" target="_blank">Minter blockchain</a>.
 
@@ -19,6 +21,10 @@ address.
 <b>`Action.`</b> In this scenario, the user must complete a task and fill out a form with proof of its completion before accessing the link-wallet. The task to be performed is described by the creator in the step of wallet generation. For example: repost, like, comment, or other action. The result of the user’s action is sent to the creator email address.
 
 * In One wallet mode, a link-wallet is sent from one user to another (one-to-one), which most likely implies the presence of acquaintance between the participants in the process, or the presence of a basic level of trust. Obviously, these cases do not require an advanced level of validation of actions, a useful action will be performed efficiently due to the mutual interest of the parties.
+
+#### Multiple wallet mode
+
+
 
 
 ## Backend part
