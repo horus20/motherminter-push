@@ -5,20 +5,18 @@ Send, receive and spend Minter coins with ease. Powered by <a href="https://gith
 
 ## Description
 
-Push is a light web-app wallet to get access to it a user only need to know a unique URL address, also call a link-wallet. The main advantage of a link-wallet is the ease of getting access to it and start spending with no sign up, no login, no registration, no password or whatever. 
-
-Although the link-wallet app has advanced options for users that wish to create multiple wallets and run commercial campaigns. The app offers to users different modes and scenarios that could be applied to big variety of private and commercial cases.
+Push is a light web-app wallet accessed by a unique URL address, also called a link-wallet. The main advantage of a link-wallet is the ease of getting entrance to it and ability spending balance with no sign-up, no login, no registration, no password or whatever. Although the link-wallet app has advanced options for users that wish to create multiple wallets and run commercial campaigns. The app offers users different modes and scenarios that could be applied to a big variety of private and commercial cases with excellent customization abilities.
 
 ## Modes and usage scenarios
 
 ### One wallet mode
 
-<b>`Simple.`</b> The app creates a unique URL-wallet for a user. Anyone who knows the URL gets access to a balance. The user is able to attach a message or set a password to the link-wallet if they want. In this case a recipient will need to know the URL and the password. Also a user may customise the wallet by picking an envelope for it from the preset skins. All modes contain easy and wide sharing options.
+<b>`Simple.`</b> The app creates a unique URL-wallet for a user. Anyone who knows the URL gets access to a balance. The user is able to attach a message or set a password to the link-wallet if they want. In this case, a recipient will need to know the URL and the password. Also, a user may customize the wallet by picking an envelope for it from the preset skins. All modes contain easy and wide sharing options.
 
 <b>`Feedback.`</b> The scenario in which the wallet user, before gaining access to it, must leave some kind of feedback: review, opinion, suggestion, recommendation, consultation or other valuable information. After filling out the form and submitting it, the user gets access to the balance. The user's feedback is sent to the creator email 
 address.
 
-<b>`Action.`</b> In this scenario, the user must complete a task and fill out a form with proof of its completion before accessing the link-wallet. The task to be performed is described by the creator in the step of wallet generation. For example: repost, like, comment, or other action. The result of the user’s action is sent to the creator email address.
+<b>`Action.`</b> In this scenario, the user must complete a task and fill out a form with proof of its completion before accessing the link-wallet. The task to be performed is described by the creator in the step of wallet generation. For example repost, like, comment, or other action. The result of the user’s action is sent to the creator's email address.
 
 * In One wallet mode, a link-wallet is sent from one user to another (one-to-one), which most likely implies the presence of acquaintance between the participants in the process, or the presence of a basic level of trust. Obviously, these cases do not require an advanced level of validation of actions, a useful action will be performed efficiently due to the mutual interest of the parties.
 
@@ -37,7 +35,7 @@ address.
 
 ### Multiple wallet mode
 
-A user have to signup and login into an account to be able to create multiple wallet campaigns. 
+A user has to sign-up and login to an account to be able to create multiple wallet campaigns. 
 They will be offered to specify:
 
 * A number of wallets to generate (fixed or unlimited)
@@ -66,8 +64,8 @@ API request generates N number of wallets and returns them in JSON format. Pleas
 
 <b>`Feedback.`</b> Before accessing, users must leave feedback.
 
-* Please note the mechanics of creating an array of wallets that has been implemented.
-The funds sent to deposit a campaign are initially credited to an intermediate address. The activation of individual wallets of the array (meaning depositing funds to the wallet) occurs only after a user visits a wallet link. This provides an opportunity to return unused funds of the campaign creator.
+* Please note the mechanics of creating an array of wallets that have been implemented.
+The funds sent to deposit a campaign are initially credited to an intermediate address. The activation of individual wallets  (meaning depositing funds to the wallets) occurs only after a user visits a wallet link. This provides an ability to return unused funds to the campaign creator.
 
 
 ## Backend part
