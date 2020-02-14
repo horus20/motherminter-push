@@ -27,9 +27,11 @@ address.
 A user have to signup and login into an account to be able to create multiple wallet campaigns. 
 They will be offered to specify:
 
-* A number of wallets to generate (fixed or unlimited)
+* A number of wallets to generate (fixed or unlimited*)
+* Upload campaign logo
+* Specify a sender
 * Indicate one wallet balance 
-* Indicate target spending 
+* Indicate target spending (completely flexible)
 * Attach message (in simple mode)
 * Attach feedback request (in feedback mode)
 * Pick up skins (in simple mode)
@@ -37,6 +39,19 @@ They will be offered to specify:
 * Send wallets to imported email database
 * Export or copy a generated list of link-wallets
 * Track statistics
+
+*<b>Unlimited wallets:</b> 
+This option allows a user to create an unlimited number of wallets through an API method:
+
+`/api/company/uid/get_wallet?count=N` 
+
+API request generate N number of wallets and returns them in JSON format. Please note, newly created wallets will have zero balances by default and will be credited only after a recipient's first visit.
+
+There are two options to create multiple wallet campaigns: 
+
+<b>`Simple.`</b> Unique URL-wallets with easy access to them, just by clicking the link.
+
+<b>`Feedback.`</b> Before accessing, users must leave feedback.
 
 ## Backend part
 Deploy you copy on server or use our public api - `https://p.motherminter.org/api/`<br>
