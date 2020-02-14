@@ -24,7 +24,7 @@ address.
 
 #### Multiple wallet mode
 
-A user have to signup and login into the account to be able to create multiple wallet campaigns. 
+A user have to signup and login into an account to be able to create multiple wallet campaigns. 
 They will be offered to specify:
 
 * A number of wallets to generate (fixed or unlimited)
