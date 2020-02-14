@@ -151,7 +151,13 @@ export class CoreController {
   @ApiOperation({ description: 'Create account'})
   async createAccount(@Body() body: AccountDto, @UploadedFile() file): Promise<Account> {
     if (body && body.password && body.email) {
-      return this.accountService.create(body, file);
+      try {
+        const account = await this.accountService.get(body.email, body.password);
+
+        return this.accountService.update(account, body, file);
+      } catch (error) {
+        return this.accountService.create(body, file);
+      }
     }
     throw new HttpException('Bad request', HttpStatus.BAD_REQUEST);
   }

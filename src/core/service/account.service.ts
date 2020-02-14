@@ -32,6 +32,23 @@ export class AccountService {
     }
   }
 
+  async update(account: Account, accountData: AccountDto, file): Promise<Account> {
+    try {
+      account.brand = accountData.brand;
+
+      if (file) {
+        account.logo = `/tmp/uploads/${file.filename}`;
+      }
+
+      await this.accountRepository.save(account);
+
+      return account;
+    } catch (error) {
+      global.console.error({ error, data: accountData });
+      throw new HttpException('Fail to update account', HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+  }
+
   async get(email: string, passwordHash: string): Promise<Account> {
     let account;
     try {

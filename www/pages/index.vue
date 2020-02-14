@@ -95,6 +95,37 @@
           </transition>
           <!-- /Content Choose Wallet -->
 
+          <transition name="fade">
+            <!-- Content Personal Area -->
+            <div v-if="isShowAccountPage" class="content__item content__personal-area content__item-active">
+              <div class="capaing-info">
+                <div class="campaing-logo">
+                  <a href="#" class="more-about">Logo</a>
+                </div>
+                <div class="personal-data">
+                  <input type="text" class="input" readonly="readonly" v-bind:placeholder="$t('Email')" v-model="createParamEmail">
+                  <input type="text" class="input" v-bind:placeholder="$t('create.Brand')" v-model="createParamBrand">
+                </div>
+              </div>
+              <p class="caption">{{$t('create.myCompany')}}</p>
+              <div class="campaings-items">
+                <div v-for="company in companies" class="campaings__item">
+                  <span class="name">{{ company.uid }}</span>
+                  <span class="date">{{ company.created }}</span>
+                </div>
+              </div>
+              <h5>{{ $t('create.multi')}}</h5>
+              <a class="more-about" v-on:click="toggleShowType()">{{ $t('create.learnMore') }}</a>
+              <div>
+                <div class="buttons-one">
+                  <a class="btn" id="simple" v-on:click="startCreateSimple(false)"><img src="/assets/img/svg/wallet_light.svg" alt="">{{ $t('create.simple') }}</a>
+                  <a class="btn" id="feedback" v-on:click="startCreateFeedback(false)"><img src="/assets/img/svg/feedback.svg" alt="">{{ $t('create.feedback') }}</a>
+                </div>
+              </div>
+            </div>
+            <!-- /Content Personal Areas  -->
+          </transition>
+
           <!-- Content Attach Messege -->
           <transition name="fade">
           <div v-if="step === 3" class="content__item content__attach-messege content__item-active">
@@ -496,7 +527,7 @@
 
     <!-- Modal Login -->
     <transition name="fade">
-    <div class="modal-alert modal-login" v-bind:class="{ 'modal-activation-error': isShowLoginModal }" v-if="isShowLoginModal">
+    <div class="modal-alert modal-login" v-bind:class="{ 'modal-activation-dir': isShowLoginModal }" v-if="isShowLoginModal">
       <div class="close-modal-alert" v-on:click="isShowLoginModal = false">
         <span></span><span></span>
       </div>
@@ -504,8 +535,8 @@
         <h5>{{ $t('menu.account') }}</h5>
         <p>{{ $t('create.loginHelp') }}</p>
         <input type="text" class="input"  v-bind:placeholder="$t('Email')" v-model="createParamEmail">
-        <input type="password" class="input" v-bind:placeholder="$t('password.Password')" v-model="createParamPassword">
-        <button class="btn" v-on:click="createAccountShow()">{{ $t('create.createAccount') }}</button>
+        <input type="password" class="input" v-bind:placeholder="$t('password.password')" v-model="createParamPassword">
+        <button class="btn" v-on:click="createOrUpdateAccount()">{{ $t('create.createAccount') }}</button>
         <button class="btn" v-on:click="loginAccount()">{{ $t('create.loginAccount') }}</button>
       </div>
     </div>
@@ -559,6 +590,7 @@
         isShowModalQR: false,
         isShowModalDir: false,
         isShowLoginModal: false,
+        isShowAccountPage: false,
         isCreateOne: true,
         isActiveTrigger01: false,
         isActiveTrigger02: false,
@@ -577,6 +609,8 @@
         createParamMessage: '',
         createParamPassword: '',
         createParamEmail: '',
+        createParamBrand: '',
+        createParamLogoPath: '',
         createParamUID: '',
         createParamType: 'simple',
         createParamCount: 0,
@@ -585,6 +619,7 @@
         createParamCompanyPass: '',
         createParamSkin: '',
         company: null,
+        companies: [],
         companyLink: '',
         minNewBalance: 0,
         isBalanceGreatThenZero: false,
@@ -845,6 +880,7 @@
             count: this.createParamCount,
           }
         })
+        this.companies.push(this.company)
         this.companyLink = `${BACKEND_BASE_URL}/api/company/${this.company.uid}/get_wallet?count=1`
         console.log(this.company)
 
@@ -939,6 +975,7 @@
           this.addressForFilling = 'empty'
         }
         this.company = company
+        this.companies.push(this.company)
         this.companyLink = `${BACKEND_BASE_URL}/api/company/${this.company.uid}/get_wallet?count=1`
 
         this.loadAdditionalInfo()
@@ -1165,22 +1202,54 @@
       showSkinPreviewModal(skin) {
         console.log(skin)
       },
-      createAccountShow() {
+      createOrUpdateAccount: async function () {
+        if (this.createParamPassword === '') {
+          this.errorMsg = this.$t('errors.passErrorEmpty')
+          this.isShowError = true
+          return false
+        }
+        if (this.createParamEmail === '') {
+          this.errorMsg = this.$t('errors.failEmail')
+          this.isShowError = true
+          return false
+        }
 
+        try {
+          const response = await axios.post(`${BACKEND_BASE_URL}/api/account`, {
+            email: this.createParamEmail,
+            password: getHash(this.createParamPassword),
+            brand: this.createParamBrand,
+          })
+          console.log(response.data)
+          this.companies = response.data.companies ? response.data.companies: []
+          this.createParamBrand = response.data.brand
+          this.createParamLogoPath = response.data.logo
+
+          // show account page
+          this.isShowAccountPage = true
+        } catch (error) {
+          this.isShowError = true
+          this.errorMsg = this.$t('errors.errorLogin')
+        }
+
+        this.isShowAccountPage = true
       },
       loginAccount: async function (){
          try {
-           const response = await axios.post(`${BACKEND_BASE_URL}/api/account`, {
+           const response = await axios.post(`${BACKEND_BASE_URL}/api/account/login`, {
              email: this.createParamEmail,
              password: getHash(this.createParamPassword),
            })
            console.log(response.data)
+           this.companies = response.data.companies
+           this.createParamBrand = response.data.brand
+           this.createParamLogoPath = response.data.logo
 
            // show account page
-
+           this.isShowAccountPage = true
          } catch (error) {
            this.isShowError = true
-           this.errorMsg = this.$t('error.errorLogin')
+           this.errorMsg = this.$t('errors.errorLogin')
          }
       },
     },

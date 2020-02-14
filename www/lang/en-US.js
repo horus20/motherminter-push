@@ -35,6 +35,8 @@ export default {
     feedback: 'Feedback',
     action: 'Action',
     multiple: 'Multiple',
+    Brand: 'Brand',
+    myCompany: 'My campaigns',
     loginHelp: 'To create or edit multiple wallet campaigns you need to login.',
     createAccount: 'Create an account',
     loginAccount: 'Login to account',
