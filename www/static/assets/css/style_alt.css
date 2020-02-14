@@ -2348,3 +2348,94 @@ footer {
     color: var(--blue);
     border-bottom: 1px solid var(--blue);
     margin-bottom: 18px; }
+
+.content__personal-area {
+  padding-top: calc(50% - 180px);
+  padding-top: calc(50vh - 180px);
+  text-align: center; }
+  .content__personal-area .capaing-info {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    margin-bottom: 24px; }
+    .content__personal-area .capaing-info .campaing-logo {
+      width: 78px;
+      height: 78px;
+      border: 1px solid #dcdcdc;
+      -webkit-box-flex: 0;
+      -ms-flex: none;
+      flex: none;
+      background: #f6f6f6;
+      margin-right: 21px; }
+      .content__personal-area .capaing-info .campaing-logo a {
+        font-size: 16px;
+        margin-top: 26px; }
+    .content__personal-area .capaing-info .input {
+      width: 100%;
+      font: 16px/1 "SegoeUIRegular", sans-serif;
+      color: var(--prim-color);
+      border: none;
+      padding-bottom: 8px;
+      border-bottom: 1px solid #dcdcdc;
+      margin-bottom: 18px; }
+      .content__personal-area .capaing-info .input:last-child {
+        margin-bottom: 0; }
+  .content__personal-area .internal {
+    background: #000; }
+  .content__personal-area .caption {
+    font-size: 12px;
+    color: #8a8a8a;
+    font-family: 'SegoeUIRegular', sans-serif;
+    text-align: left;
+    margin-left: 6px; }
+  .content__personal-area .campaings-items {
+    border-radius: 7px;
+    overflow: hidden;
+    margin-bottom: 24px; }
+    .content__personal-area .campaings-items .campaings__item {
+      display: -webkit-box;
+      display: -ms-flexbox;
+      display: flex;
+      margin-bottom: 1px; }
+      .content__personal-area .campaings-items .campaings__item:last-child {
+        margin-bottom: 0; }
+      .content__personal-area .campaings-items .campaings__item * {
+        height: 41px;
+        line-height: 42px;
+        background: #f7f7f7; }
+      .content__personal-area .campaings-items .campaings__item .name {
+        width: 159px;
+        margin-right: 1px;
+        padding-left: 12px;
+        font-size: 14px;
+        text-align: left;
+        -webkit-box-sizing: border-box;
+        box-sizing: border-box;
+        color: var(--blue); }
+      .content__personal-area .campaings-items .campaings__item .date {
+        width: 90px;
+        font-size: 14px;
+        color: #8a8a8a; }
+    .content__personal-area .campaings-items .completed .name {
+      color: var(--pink); }
+  .content__personal-area h5 {
+    font-size: 24px;
+    margin-bottom: 4px; }
+  .content__personal-area .more-about {
+    margin-bottom: 18px; }
+  .content__personal-area .btn {
+    display: inline-block;
+    background: var(--blue);
+    margin-bottom: 8px; }
+  .content__personal-area #simple img {
+    margin-right: 18px;
+    margin-left: -36px;
+    margin-bottom: -3px; }
+  .content__personal-area #feedback img {
+    margin-right: 19px;
+    margin-left: -8px;
+    margin-bottom: -7px; }
+  .content__personal-area #action img {
+    margin-right: 18px;
+    margin-left: -38px;
+    margin-bottom: -3px; }
