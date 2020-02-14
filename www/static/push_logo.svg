@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="80" height="80" viewBox="0 0 80 80">
+  <defs>
+    <style>
+      .cls-1 {
+        fill: #f2093d;
+      }
+
+      .cls-2 {
+        fill: #ffd753;
+      }
+
+      .cls-2, .cls-3 {
+        fill-rule: evenodd;
+      }
+
+      .cls-3 {
+        fill: #90e0c7;
+      }
+    </style>
+  </defs>
+  <rect class="cls-1" width="80" height="80"/>
+  <path id="Push." class="cls-2" d="M58.1,44.224C53.325,48.326,46.989,50,39,50H32V39h6c7.927,0,12-4.056,12-11,0-6.79-4.073-10-12-10H32V7h9c16.653,0,24,6.959,24,21C65,34.637,62.88,40.122,58.1,44.224Z"/>
+  <path id="Push._copy" data-name="Push. copy" class="cls-3" d="M32,73H17V7H32V73Z"/>
+</svg>
