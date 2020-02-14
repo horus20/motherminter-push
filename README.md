@@ -24,8 +24,19 @@ address.
 
 #### Multiple wallet mode
 
+A user have to signup and login into the account to be able to create multiple wallet campaigns. 
+They will be offered to specify:
 
-
+* A number of wallets to generate (fixed or unlimited)
+* Indicate one wallet balance 
+* Indicate target spending 
+* Attach message (in simple mode)
+* Attach feedback request (in feedback mode)
+* Pick up skins (in simple mode)
+* Import email database to generate wallets for it
+* Send wallets to imported email database
+* Export or copy a generated list of link-wallets
+* Track statistics
 
 ## Backend part
 Deploy you copy on server or use our public api - `https://p.motherminter.org/api/`<br>
