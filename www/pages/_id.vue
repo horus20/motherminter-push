@@ -69,36 +69,41 @@
           <p class="balance" v-for="balance in balances">{{ balance.amount }} {{ balance.coin }}</p>
           <p class="currency">~{{ balanceSum }}</p>
 
-          <p class="transfer">{{ $t('main.transferSection') }}</p>
-          <div class="transfer-items">
-            <a class="transfer__item" v-on:click="showTransfer()">
-              <img src="assets/img/svg/person.svg" alt="">
-              <p v-html="newLineLabel($t('main.anotherPerson'))"></p>
-            </a>
-            <a class="transfer__item" v-on:click="showMyTransfer()">
-              <img src="assets/img/svg/wallet.svg" alt="">
-              <p v-html="newLineLabel($t('main.youWallet'))"></p>
-            </a>
-            <a class="transfer__item" v-on:click="showFund()">
-              <img src="assets/img/svg/charity.svg" alt="">
-              <p v-html="newLineLabel($t('main.charityFund'))"></p>
-            </a>
-          </div>
-          <p class="transfer">{{ $t('main.spendSection') }}</p>
-          <div class="transfer-items">
-            <a class="transfer__item" v-on:click="showMobile()">
-              <img src="assets/img/svg/services.svg" alt="">
-              <p v-html="newLineLabel($t('main.mobileService'))"></p>
-            </a>
-            <a class="transfer__item" v-on:click="showGames()">
-              <img src="assets/img/svg/games.svg" alt="">
-              <p v-html="newLineLabel($t('main.games'))"></p>
-            </a>
-            <span class="transfer__item" v-on:click="showFuel()">
-                <img src="assets/img/svg/fuel.svg" alt="" v-on:click="showFood()">
-                <p v-html="newLineLabel($t('main.foodDelivery'))"></p>
-              </span>
-          </div>
+          <template  v-if="spends['transfer'] || spends['charityFund']">
+            <p class="transfer">{{ $t('main.transferSection') }}</p>
+            <div class="transfer-items">
+              <a class="transfer__item" v-on:click="showTransfer()" v-if="spends['transfer']">
+                <img src="assets/img/svg/person.svg" alt="">
+                <p v-html="newLineLabel($t('main.anotherPerson'))"></p>
+              </a>
+              <a class="transfer__item" v-on:click="showMyTransfer()" v-if="spends['transfer']">
+                <img src="assets/img/svg/wallet.svg" alt="">
+                <p v-html="newLineLabel($t('main.youWallet'))"></p>
+              </a>
+              <a class="transfer__item" v-on:click="showFund()" v-if="spends['charityFund']">
+                <img src="assets/img/svg/charity.svg" alt="">
+                <p v-html="newLineLabel($t('main.charityFund'))"></p>
+              </a>
+            </div>
+          </template>
+
+          <template v-if="">
+            <p class="transfer">{{ $t('main.spendSection') }}</p>
+            <div class="transfer-items">
+              <a class="transfer__item" v-on:click="showMobile()" v-if="spends['phone']">
+                <img src="assets/img/svg/services.svg" alt="">
+                <p v-html="newLineLabel($t('main.mobileService'))"></p>
+              </a>
+              <a class="transfer__item" v-on:click="showGames()" v-if="spends['timeloop']">
+                <img src="assets/img/svg/games.svg" alt="">
+                <p v-html="newLineLabel($t('main.games'))"></p>
+              </a>
+              <span class="transfer__item" v-on:click="showFuel()" v-if="spends['fuel']">
+                  <img src="assets/img/svg/fuel.svg" alt="" v-on:click="showFood()">
+                  <p v-html="newLineLabel($t('main.foodDelivery'))"></p>
+                </span>
+            </div>
+          </template>
           <!--                <button class="btn btn-more">More info</button>-->
 
           <template v-if="isCustomWallet">
@@ -431,6 +436,8 @@
   import TxSignature from 'minterjs-tx/src/tx-signature'
   import * as cryptoRandomString from 'crypto-random-string'
   import { SHA256 } from 'crypto-js'
+  import { SKINS } from './skins'
+  import { SPENDS } from './spendings'
 
   if (process.client) {
     Vue.use(VueClipboard)
@@ -499,6 +506,9 @@
         },
         successIcon: '/assets/img/svg/person.svg',
         successLink: '',
+
+        skins: SKINS,
+        spends: SPENDS,
       }
     },
     components: {

@@ -75,6 +75,22 @@ export class CompanyService {
         }
       }
 
+      if (companyData.emailList && Array.isArray(companyData.emailList)) {
+        let walletIndexShift = 0;
+        for (let emailIndex = 0; emailIndex < companyData.emailList.length; emailIndex += 1) {
+          if (company.wallets.length > emailIndex
+            && typeof company.wallets[emailIndex + walletIndexShift] !== 'undefined') {
+            const wallet = company.wallets[emailIndex + walletIndexShift];
+            if (!!wallet.email) {
+              walletIndexShift += 1;
+              emailIndex -= 1;
+            } else {
+              await this.walletService.addEmailToWallet(wallet, companyData.emailList[emailIndex]);
+            }
+          }
+        }
+      }
+
       return company;
     } catch (error) {
       global.console.error({ error, data: companyData });

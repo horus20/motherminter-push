@@ -19,6 +19,9 @@ export class Wallet {
   @Column({length: 42, nullable: true})
   mxaddress: string;
 
+  @Column({length: 512, nullable: true})
+  email: string;
+
   @Expose()
   @Column('int')
   status: number;

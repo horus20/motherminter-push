@@ -9,15 +9,17 @@ import {
   Controller,
   ClassSerializerInterceptor,
   UseInterceptors,
-  HttpException, HttpStatus, HttpCode,
+  HttpException, HttpStatus, HttpCode, UploadedFiles, UploadedFile,
 } from '@nestjs/common';
 import { ApiBearerAuth, ApiResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
 import axios from 'axios';
+import { diskStorage } from 'multer';
+import { FilesInterceptor, FileInterceptor } from '@nestjs/platform-express';
+import { extname } from 'path';
 
-import { Company, Wallet } from './entity';
-import { CompanyDto, WalletDto } from './dto';
-import { CompanyService, LINK, PartnerService, WalletService } from './service';
-import { json } from 'express';
+import { Company, Wallet, Account } from './entity';
+import { AccountDto, CompanyDto, WalletDto } from './dto';
+import { AccountService, CompanyService, LINK, PartnerService, WalletService } from './service';
 
 const API_LINK = 'https://p.motherminter.org/';
 
@@ -28,6 +30,7 @@ export class CoreController {
     private readonly companyService: CompanyService,
     private readonly walletService: WalletService,
     private readonly partnerService: PartnerService,
+    private readonly accountService: AccountService,
   ) {
   }
 
@@ -117,24 +120,50 @@ export class CoreController {
     throw new HttpException('Bad request', HttpStatus.BAD_REQUEST);
   }
 
-  @Get(':id')
+  /**
+   * Account section
+   * @param body
+   * @param file
+   */
+  @Post('account')
   @UseInterceptors(ClassSerializerInterceptor)
-  @ApiOperation({ description: 'Get wallet information by UID'})
-  async getWallet(@Param() params): Promise<Wallet> {
-    return this.walletService.get(params.id);
+  @UseInterceptors(FileInterceptor('file', {
+    fileFilter: (req, file, cb) => {
+      if (file.mimetype === 'image/png' || file.mimetype === 'image/jpg' || file.mimetype === 'image/jpeg') {
+        cb(null, true);
+        return ;
+      }
+      cb(null, false);
+    },
+    storage: diskStorage({
+      destination: '../www/static/tmp/uploads',
+      path: '/tmp/uploads',
+      filename: (req, file, cb) => {
+        // Generating a 32 random chars long string
+        const randomName = Array(32).fill(null).map(() =>
+          (Math.round(Math.random() * 16))
+            .toString(16)).join('');
+        // Calling the callback passing the random name generated with the original extension name
+        cb(null, `${randomName}${extname(file.originalname)}`);
+      },
+    }),
+  }))
+  @ApiOperation({ description: 'Create account'})
+  async createAccount(@Body() body: AccountDto, @UploadedFile() file): Promise<Account> {
+    if (body && body.password && body.email) {
+      return this.accountService.create(body, file);
+    }
+    throw new HttpException('Bad request', HttpStatus.BAD_REQUEST);
   }
 
-  @Post(':id')
-  @HttpCode(HttpStatus.OK)
+  @Post('account/login')
   @UseInterceptors(ClassSerializerInterceptor)
-  @ApiOperation({ description: 'Check login or activate wallet'})
-  async activateWallet(@Param() params, @Body() walletData: WalletDto): Promise<Wallet> {
-    if (walletData.custom) {
-      const company = await this.companyService.getCustomCompany();
-
-      return this.walletService.custom(company, params.id, walletData);
+  @ApiOperation({ description: 'Try login account'})
+  async getAccount(@Body() body: AccountDto): Promise<Account> {
+    if (body && body.password && body.email) {
+      return this.accountService.get(body.email, body.password);
     }
-    return this.walletService.login(params.id, walletData);
+    throw new HttpException('Bad request', HttpStatus.BAD_REQUEST);
   }
 
   @Post(':id/complex')
@@ -254,4 +283,25 @@ export class CoreController {
 
     return this.partnerService.sendToPhone(body.phone);
   }
+
+  @Get(':id')
+  @UseInterceptors(ClassSerializerInterceptor)
+  @ApiOperation({ description: 'Get wallet information by UID'})
+  async getWallet(@Param() params): Promise<Wallet> {
+    return this.walletService.get(params.id);
+  }
+
+  @Post(':id')
+  @HttpCode(HttpStatus.OK)
+  @UseInterceptors(ClassSerializerInterceptor)
+  @ApiOperation({ description: 'Check login or activate wallet'})
+  async activateWallet(@Param() params, @Body() walletData: WalletDto): Promise<Wallet> {
+    if (walletData.custom) {
+      const company = await this.companyService.getCustomCompany();
+
+      return this.walletService.custom(company, params.id, walletData);
+    }
+    return this.walletService.login(params.id, walletData);
+  }
+
 }

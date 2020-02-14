@@ -201,4 +201,15 @@ export class WalletService {
       return false;
     }
   }
+
+  /**
+   * Add email to wallet
+   * @param wallet
+   * @param email
+   */
+  async addEmailToWallet(wallet: Wallet, email: string) {
+    wallet.email = email;
+
+    return this.walletRepository.save(wallet);
+  }
 }

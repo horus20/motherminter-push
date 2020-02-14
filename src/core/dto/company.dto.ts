@@ -24,4 +24,7 @@ export class CompanyDto {
 
   @ApiProperty()
   readonly mxaddress: string;
+
+  @ApiProperty()
+  readonly emailList: string[];
 }

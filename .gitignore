@@ -392,3 +392,5 @@ docker-compose.yml
 dist
 
 ormconfig.json
+
+/www/static/tmp

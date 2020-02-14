@@ -507,6 +507,8 @@
     getBipPrice,
     prettyFormat, createCompany, DEFAULT_SYMBOL, getFiatByLocale, ACTIVATE_FEE, createDeepLink
   } from './core'
+  import { SKINS } from './skins'
+  import { SPENDS } from './spendings'
 
   if (process.client) {
     Vue.use(VueClipboard)
@@ -572,28 +574,8 @@
         minLen: 100,
         isMobile: false,
 
-        skins: [
-          {
-            id: 'bday',
-            label: 'HAPPY BIRTHDAY',
-            image: '',
-          },
-          {
-            id: 'mday',
-            label: 'VALENTINE\'S DAY',
-            image: '',
-          },
-          {
-            id: 'march8',
-            label: 'MARCH 8',
-            image: '',
-          },
-          {
-            id: 'feb23',
-            label: 'FEBRUARY 23',
-            image: '',
-          },
-        ],
+        skins: SKINS,
+        spends: SPENDS,
       }
     },
     created () {
