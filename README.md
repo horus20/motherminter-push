@@ -62,7 +62,7 @@ API request generates N number of wallets and returns them in JSON format. Pleas
 
 <b>`Simple.`</b> Unique URL-wallets with easy access to them, just by clicking the link.
 
-<b>`Feedback.`</b> Before accessing, users must leave feedback.
+<b>`Feedback.`</b> Before accessing, users must leave feedback. For validation purposes, our solution has a developed api method, please check point 5 of an api description section.
 
 * Please note the mechanics of creating an array of wallets that have been implemented.
 The funds sent to deposit a campaign are initially credited to an intermediate address. The activation of individual wallets  (meaning depositing funds to the wallets) occurs only after a user visits a wallet link. This provides an ability to return unused funds to the campaign creator.
