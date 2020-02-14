@@ -74,7 +74,8 @@ export class WalletService {
       { relations: ['company'] },
       );
     if (wallet && (wallet.status === WalletStatus.NEW
-      || wallet.status === WalletStatus.WAIT_ACTION || wallet.status === WalletStatus.WAIT_FEEDBACK)) {
+      || wallet.status === WalletStatus.WAIT_ACTION
+      || wallet.status === WalletStatus.WAIT_FEEDBACK)) {
       return wallet;
     }
     if (wallet && !wallet.company.isProtected) {
@@ -97,7 +98,6 @@ export class WalletService {
 
         wallet.mxaddress = walletData.mxaddress;
         // run active company procedure
-        // todo: new activate procedure for complex wallet
         const isActivate = await this.activateWallet(wallet);
 
         if (isActivate) {

@@ -209,17 +209,7 @@ export class CoreController {
       };
     }
 
-    const wallet = await this.walletService.login(params.id, walletData);
-    await this.walletService.storeReply(wallet, walletData);
-    if (wallet.company && wallet.company.email) {
-      const email = '';
-      await this.partnerService.sendEmail({
-        to: wallet.company.email,
-        subject: 'New reply', // Subject line
-        text: `${wallet.wallet} - ${walletData.reply}`,
-      });
-    }
-
+    const wallet = await this.walletService.get(params.id);
     const globalResult = {
       status: 'ok',
     };
@@ -236,13 +226,27 @@ export class CoreController {
         globalResult.status = 'error';
         if (response.status === HttpStatus.OK && response.data) {
           if (response.data.status === 'ok') {
-            // todo: set wallet active only here!
             globalResult.status = 'ok';
           }
         }
       } catch (error) {
         global.console.warn('error on send info', info);
       }
+    }
+
+    if (globalResult.status === 'ok') {
+      await this.walletService.login(params.id, walletData);
+
+      await this.walletService.storeReply(wallet, walletData);
+      if (wallet.company && wallet.company.email) {
+        const email = '';
+        await this.partnerService.sendEmail({
+          to: wallet.company.email,
+          subject: 'New reply', // Subject line
+          text: `${wallet.wallet} - ${walletData.reply}`,
+        });
+      }
+
     }
 
     return globalResult;

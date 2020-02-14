@@ -78,6 +78,23 @@ protected - flag - True if wallet have a password
 callback_link - used for feedback|action company
 ``` 
 
+###### Callback request to validate reply
+IF company have callback_link, our server send all reply to this callback
+```
+request - json
+{
+    "waller_uid": "wallet_uid",
+    "company_uid": "company_uid",
+    "reply": "user reply text"
+}
+
+
+response must return json
+{
+    "status": "ok|error",
+}
+```
+
 ##### 2. "One more wallet" link for Unlim company
 ```
 GET /api/company/{company_uid}/get_wallet?count=N
