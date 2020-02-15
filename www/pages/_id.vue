@@ -541,7 +541,7 @@
         self.isShowSkin = false
       }
       window.skinMessage = function () {
-        return self.createParamMessage
+        return self.companyMsg
       }
     },
     computed: {
@@ -691,7 +691,7 @@
             })
 
             if (afterActivateResponse.status === 200 && afterActivateResponse.data) {
-              this.companyMsg = afterActivateResponse.data.notice ?? ''
+              this.companyMsg = afterActivateResponse.data.msg ?? ''
               this.skin = afterActivateResponse.data.skin ?? ''
               this.spendChecks = afterActivateResponse.data.spends ?? []
 
