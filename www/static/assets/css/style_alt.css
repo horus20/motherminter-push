@@ -2501,3 +2501,7 @@ footer {
     background: #defcfe; }
   .statistics .activated {
     background: #dffed7; }
+.body-overflow {
+  overflow: hidden;
+  -webkit-overflow-scrolling:touch;
+}

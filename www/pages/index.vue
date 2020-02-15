@@ -946,7 +946,7 @@
       const self = this
       window.hideSkin = function () {
         self.isShowSkin = false
-        document.body.style.overflow = ''
+        document.body.classList.remove('body-overflow')
       }
       window.skinMessage = function () {
         return self.companyMsg
@@ -1493,7 +1493,7 @@
         console.log(skin)
         this.isShowSkin = true
         this.skinContent = skin.path
-        document.body.style.overflow = 'hidden'
+        document.body.classList.add('body-overflow')
       },
       createOrUpdateAccount: async function () {
         if (this.createParamCompanyPass === '') {
