@@ -1232,4 +1232,14 @@
   .fade-enter, .fade-leave-to {
     opacity: 0;
   }
+  main {
+    padding-bottom: 50px;
+  }
+  footer {
+    position: relative;
+    margin-top: -50px;
+    height: 50px;
+    clear: both;
+    padding-top: 20px;
+  }
 </style>

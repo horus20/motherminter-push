@@ -52,7 +52,7 @@ export class AccountService {
   async get(email: string, passwordHash: string): Promise<Account> {
     let account;
     try {
-      account = await this.accountRepository.findOneOrFail({ email, password: passwordHash });
+      account = await this.accountRepository.findOneOrFail({ email, password: passwordHash }, { relations: ['companies'] });
     } catch (error) {
       global.console.error({ error, data: email });
       throw new HttpException('Bad password', HttpStatus.UNAUTHORIZED);
