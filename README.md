@@ -29,7 +29,7 @@ address.
 * Localization (languages, currencies)
 * Extensive share options: native, QRs, copy buffer, direct target spending links, shares & QRs
 * Balance spend: top-up mobile (<a href="https://biptophone.ru/apiuser.php" target="_blank">api options</a>), Time Loop game, charity fund
-* Balance transfer (other address)
+* Balance transfer (other addresses)
 * Balance forwarding (new wallet-link generation) 
 
 
@@ -66,6 +66,14 @@ API request generates N number of wallets and returns them in JSON format. Pleas
 
 * Please note the mechanics of creating an array of wallets that have been implemented.
 The funds sent to deposit a campaign are initially credited to an intermediate address. The activation of individual wallets  (meaning depositing funds to the wallets) occurs only after a user visits a wallet link. This provides an ability to return unused funds to the campaign creator.
+
+## Security
+
+The wallet app is implemented using light client technology, this approach ensures that a private key (and seed phrase) never leaves the user's end-device. The process of transaction creation and signing takes place in the application, after which the formed transactions are sent to the network through the server. A password that the user inputs during wallet creation is involved in private key generation, and not transmitted outside the application in an open way.
+
+## UX & UI
+
+
 
 
 ## Backend part
