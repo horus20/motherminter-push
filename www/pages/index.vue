@@ -847,6 +847,7 @@
         isCopiededAdress: false,
         isCopiededSuccess: false,
         isTextarea: [true, true],
+        isBodyOverflow: false,
 
         qrLink: 'empty',
 
@@ -945,6 +946,7 @@
       const self = this
       window.hideSkin = function () {
         self.isShowSkin = false
+        document.body.style.overflow = ''
       }
       window.skinMessage = function () {
         return self.companyMsg
@@ -1491,6 +1493,7 @@
         console.log(skin)
         this.isShowSkin = true
         this.skinContent = skin.path
+        document.body.style.overflow = 'hidden'
       },
       createOrUpdateAccount: async function () {
         if (this.createParamCompanyPass === '') {
