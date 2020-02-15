@@ -2376,6 +2376,9 @@ footer {
       background-color: transparent;
       font-weight: bold;
     }
+    .personal-data {
+      width: 100%;
+    }
     .content__personal-area .capaing-info .input {
       width: 100%;
       font: 16px/1 "SegoeUIRegular", sans-serif;

@@ -437,6 +437,7 @@
                 </div>
 
                 <button class="btn" v-on:click="startCreateCompany()">{{$t('create.launch')}}</button>
+                <a class="btn btn-more btn-back" v-on:click="goBack()"><img src="/assets/img/svg/back.svg" alt="">{{ $t('back') }}</a>
               </div>
 
             </div>

@@ -115,7 +115,7 @@
     <!-- Scripts -->
     <script>
       document.addEventListener('DOMContentLoaded', function(){
-        document.getElementById('message').innerHTML  = parent.skinMessage() ?? '';
+        document.getElementById('message').innerHTML  = parent.skinMessage() || '';
       })
 
         let W = window.innerWidth;
