@@ -614,8 +614,8 @@
           <p class="title"><img src="/assets/img/svg/wallet_dark.svg" alt="">{{ $t('create.simple') }}</p>
           <p>{{ $t('create.detailSimple') }}</p>
           <p class="title"><img src="/assets/img/svg/feedback_dark.svg" alt="">{{ $t('create.feedback') }}</p>
-        <!--    <p>{{ $t('create.detailFeedback') }}</p>
-          <p class="title"><img src="/assets/img/svg/action_dark.svg" alt="">{{ $t('create.action') }}</p>
+          <p>{{ $t('create.detailFeedback') }}</p>
+          <!--<p class="title"><img src="/assets/img/svg/action_dark.svg" alt="">{{ $t('create.action') }}</p>
           <p>{{ $t('create.detailAction') }}</p>-->
         </div>
       </div>
