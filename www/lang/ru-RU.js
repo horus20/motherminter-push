@@ -16,7 +16,7 @@ export default {
   index: {
     preTitle: 'Отправляй монеты с легкостью.',
     title: 'Быстро. Надежно.',
-    btnStartSending: 'Приступить',
+    btnStartSending: 'Отправить монеты',
   },
   menu: {
     home: 'Главная',
