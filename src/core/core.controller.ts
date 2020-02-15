@@ -255,6 +255,8 @@ export class CoreController {
 
     return {
       msg: (companyParams && companyParams.title) ? companyParams.title : '',
+      skin: (companyParams && companyParams.skin) ? companyParams.skin : '',
+      spends: (companyParams && companyParams.spends) ? companyParams.spends : [],
     };
   }
 
