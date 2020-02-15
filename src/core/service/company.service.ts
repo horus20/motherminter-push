@@ -2,7 +2,7 @@ import { Injectable, HttpException, HttpStatus } from '@nestjs/common';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 
-import { Company, Wallet } from '../entity';
+import { Account, Company, Wallet } from '../entity';
 import { CompanyDto } from '../dto';
 import { CompanyStatus } from '../enum';
 import { WarehouseService } from './warehouse.service';
@@ -20,7 +20,7 @@ export class CompanyService {
   ) {
   }
 
-  async create(companyData: CompanyDto): Promise<Company> {
+  async create(companyData: CompanyDto, account: Account = null): Promise<Company> {
     try {
       const company = new Company();
       company.email = companyData.email ?? '';
@@ -30,6 +30,7 @@ export class CompanyService {
       company.isProtected = !!companyData.protected;
       company.setParams(companyData.params);
       company.uid = this.walletService.generateUniqWalletId(10);
+      company.account = account;
 
       let isWaitNewAddress = false;
       if (companyData.type === 'complex') {

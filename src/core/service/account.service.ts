@@ -12,7 +12,7 @@ export class AccountService {
   ) {
   }
 
-  async create(accountData: AccountDto, file): Promise<Account> {
+  async create(accountData: AccountDto, file = null): Promise<Account> {
     try {
       const account = new Account();
       account.email = accountData.email;
@@ -32,7 +32,7 @@ export class AccountService {
     }
   }
 
-  async update(account: Account, accountData: AccountDto, file): Promise<Account> {
+  async update(account: Account, accountData: AccountDto, file = null): Promise<Account> {
     try {
       account.brand = accountData.brand;
 

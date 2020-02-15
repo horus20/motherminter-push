@@ -38,6 +38,21 @@ export class CoreController {
   @UseInterceptors(ClassSerializerInterceptor)
   @ApiOperation({ description: 'Create company simple/complex'})
   async createCompany(@Body() company: CompanyDto): Promise<Company> {
+    let account = null;
+    try {
+      account = this.accountService.get(company.email, company.password);
+    } catch (error) {
+      // create new account this credentials
+      try {
+        const accountData = new AccountDto();
+        accountData.email = company.email;
+        accountData.password = company.password;
+        account = this.accountService.create(accountData);
+      } catch (error) {
+        global.console.warn(error);
+      }
+    }
+
     return this.companyService.create(company);
   }
 

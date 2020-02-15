@@ -2,10 +2,10 @@ import { ApiProperty } from '@nestjs/swagger';
 
 export class AccountDto {
   @ApiProperty()
-  readonly email: string;
+  email: string;
 
   @ApiProperty()
-  readonly password: string;
+  password: string;
 
   @ApiProperty()
   readonly brand: string;
