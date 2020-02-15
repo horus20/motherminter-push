@@ -118,7 +118,7 @@ export default {
   },
   main: {
     youBalance: 'Your balance',
-    transferSection: 'You can transfer your coins to',
+    transferSection: 'You can spend or transfer your coins',
     anotherPerson: 'Another|person',
     youWallet: 'Your|wallet',
     charityFund: 'Charity|fund',
