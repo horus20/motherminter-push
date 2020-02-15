@@ -97,6 +97,7 @@ export default {
     emailLinkText: 'Please insert a link to a google spreadsheet with your email database. Make sure the access is open.',
     emailLink: 'Link to the spreadsheet',
     feedbackTask: 'Feedback task',
+    emailWallets: 'Send wallets to emails',
   },
   password: {
     password: 'Password',
@@ -158,10 +159,13 @@ export default {
     shareError: 'Error. Your browser not support this interface',
     errorLogin: 'Error on login to account, check email and pass',
     importError: 'Error on import sheet',
+    closeError: 'Error on try close company',
   },
   successMsg: {
     successSend: 'Success of sending to email.',
     successReply: 'Thank you very much!',
+    successEmailSending: 'Success email sending',
+    successClose: 'Success closed',
   },
   about: {
     title: 'About',

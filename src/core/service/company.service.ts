@@ -177,4 +177,20 @@ export class CompanyService {
   async getCompany(uid: string): Promise<Company> {
     return this.companyRepository.findOneOrFail({uid});
   }
+
+  checkCredentials(company: Company, email: string, password: string) {
+    return company.email === email && company.password === password;
+  }
+
+  async close(company: Company) {
+    company.status = CompanyStatus.CANCEL;
+    await this.companyRepository.save(company);
+
+    if (company.warehouseWallet) {
+      const balance = await this.warehouseService.checkBalance(company.warehouseWallet);
+      await this.warehouseService.return(company.warehouseWallet);
+    }
+
+    return true;
+  }
 }

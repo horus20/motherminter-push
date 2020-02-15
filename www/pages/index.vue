@@ -551,7 +551,7 @@
                     <button v-if="!createParamIsFixed" id="share" class="btn btn-copy" v-on:click="startShare(companyLink, 'Wallet api link', '', $event)">{{ $t('create.shareApiLink') }}<img src="/assets/img/svg/share.svg" alt="">
                     </button>
                   </div>
-                  <button v-if="createParamIsFixed" class="btn send-emails" v-on:click="sendWalletToUser()">Send wallets to emails</button>
+                  <button v-if="createParamIsFixed" class="btn send-emails" v-on:click="sendWalletToUser()">{{$t('emailWallets')}}</button>
 
                   <!--<a href="" class="link">Statistics</a>-->
 
@@ -883,8 +883,6 @@
         spendChecks: [],
       }
     },
-    created () {
-    },
     computed: {
       currentLang() {
         return this.$i18n.locale
@@ -933,6 +931,7 @@
       if (navigator.share) {
         this.isMobile = true
       }
+      this.minNewBalance = new Decimal(0)
     },
     filters: {
       short: function (date) {
@@ -991,20 +990,26 @@
         return false
       },
       clearParams: function () {
+        console.log('clear')
         //this.createParamCompanyPass = ''
         //this.createParamEmail = ''
+        this.createParamCount = 0
         this.createParamMessage = ''
         this.createParamTask = ''
         this.createParamBalance = ''
         this.createParamUID = ''
         this.createParamSkin = ''
+        this.spendChecks = []
         this.minNewBalance = new Decimal(0)
         this.isBalanceGreatThenZero = false
+        this.addressForFilling = 'empty'
+        this.isAddressFilling = false
         this.spendChecks = []
       },
       startCreateSimple: function (isCreateOne = true) {
         this.isCreateOne = isCreateOne
         this.prevStep.push(this.step)
+        this.clearParams()
         if (this.isCreateOne) {
           this.step = 3
           this.createParamType = 'simple'
@@ -1013,12 +1018,12 @@
           this.step = 61
           this.createParamType = 'complex'
         }
-        this.clearParams()
         return false
       },
       startCreateFeedback: function (isCreateOne = true) {
         this.isCreateOne = isCreateOne
         this.prevStep.push(this.step)
+        this.clearParams()
         if (this.isCreateOne) {
           this.step = 31
           this.createParamType = 'simple_feedback'
@@ -1027,17 +1032,16 @@
           this.step = 62
           this.createParamType = 'complex_feedback'
         }
-        this.clearParams()
         return false
       },
       startCreateAction: function (isCreateOne = true) {
         this.isCreateOne = isCreateOne
         this.prevStep.push(this.step)
+        this.clearParams()
         if (this.isCreateOne) {
           this.step = 32
           this.createParamType = 'simple_action'
         }
-        this.clearParams()
         return false
       },
       startCreateMultiFixed: function () {
@@ -1344,7 +1348,7 @@
                 this.isAddressFilling = true
 
                 const coinToDef = this.coins[coin]
-                if (coinToDef || coin === DEFAULT_SYMBOL) {
+                if (amount && (coinToDef || coin === DEFAULT_SYMBOL)) {
                   usdAmount = new Decimal(amount)
                     .mul(coinToDef ?? 1)
                     .mul(this.bipToUSD)
@@ -1368,7 +1372,7 @@
         } catch (error) {
           console.error(error)
           // this.errorMsg = error.message
-          this.isShowError = true
+          // this.isShowError = true
         }
       },
       recalculateBalance() {
@@ -1490,6 +1494,7 @@
           this.isShowLoginModal = false
           this.prevStep.push(this.step)
           this.step = 21
+          this.loadAdditionalInfo()
         } catch (error) {
           this.isShowError = true
           this.errorMsg = this.$t('errors.errorLogin')
@@ -1510,6 +1515,7 @@
            this.isShowLoginModal = false
            this.prevStep.push(this.step)
            this.step = 21
+           this.loadAdditionalInfo()
          } catch (error) {
            this.isShowError = true
            this.errorMsg = this.$t('errors.errorLogin')
@@ -1547,10 +1553,32 @@
         }
       },
       closeCompany: async function () {
-        //todo: add close company method
+        try {
+          const response = await axios.post(`${BACKEND_BASE_URL}/api/company/${this.company.uid}/close`, {
+            email: this.createParamEmail,
+            password: getHash(this.createParamCompanyPass),
+          })
+          console.log(response.data)
+          this.errorMsg = this.$t('successMsg.successClose')
+          this.isShowError = true
+        } catch (error) {
+          this.isShowError = true
+          this.errorMsg = this.$t('errors.closeError')
+        }
       },
       sendWalletToUser: async function () {
-        //todo: add method
+        try {
+          const response = await axios.post(`${BACKEND_BASE_URL}/api/company/${this.company.uid}/email_wallets`, {
+            email: this.createParamEmail,
+            password: getHash(this.createParamCompanyPass),
+          })
+          console.log(response.data)
+          this.errorMsg = this.$t('successMsg.successEmailSending')
+          this.isShowError = true
+        } catch (error) {
+          this.isShowError = true
+          this.errorMsg = this.$t('errors.errorSend')
+        }
       },
       selectCompany(company) {
         if (company) {

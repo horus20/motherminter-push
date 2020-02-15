@@ -135,6 +135,46 @@ export class CoreController {
     throw new HttpException('Bad request', HttpStatus.BAD_REQUEST);
   }
 
+  @Post('company/:uid/email_wallets')
+  @UseInterceptors(ClassSerializerInterceptor)
+  @ApiOperation({ description: 'Send wallet link to user emails'})
+  async sentLinkToEmailWallet(@Param() params, @Query() query) {
+    if (params.uid) {
+      const company = await this.companyService.getCompany(params.uid);
+
+      if (company.wallets) {
+        company.wallets.forEach((wallet) => {
+          if (wallet.email) {
+            const walletLink = `${API_LINK}${wallet.wallet}`;
+            const emailData = `
+          Hi. This is your new push wallet. Use this link: ${walletLink}
+          `;
+
+            this.partnerService.sendEmail({
+              to: wallet.email,
+              subject: `Push. Your will receive new push wallet`, // Subject line
+              text: emailData,
+            });
+          }
+        });
+      }
+      return true;
+    }
+    throw new HttpException('Bad request', HttpStatus.BAD_REQUEST);
+  }
+
+  @Post('company/:uid/close')
+  @UseInterceptors(ClassSerializerInterceptor)
+  @ApiOperation({ description: 'Close the company'})
+  async closeCompany(@Param() params, @Query() query) {
+    if (params.uid) {
+      const company = await this.companyService.getCompany(params.uid);
+
+      return this.companyService.close(company);
+    }
+    throw new HttpException('Bad request', HttpStatus.BAD_REQUEST);
+  }
+
   /**
    * Account section
    * @param body

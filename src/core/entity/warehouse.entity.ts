@@ -14,6 +14,9 @@ export class Warehouse {
   @Column({length: 42, nullable: true})
   mxaddress: string;
 
+  @Column({length: 42, nullable: true})
+  owner: string;
+
   @Exclude()
   @Column('text')
   seed: string;
