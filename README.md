@@ -5,7 +5,7 @@ Send, receive and spend Minter coins with ease. Powered by <a href="https://gith
 
 ## Description
 
-Push is a light web-app wallet accessed by a unique URL address, also called a link-wallet. The main advantage of a link-wallet is the ease of getting entrance to it and ability spending balance with no sign-up, no login, no registration, no password or whatever. Although the link-wallet app has advanced options for users that wish to create multiple wallets and run commercial campaigns. The app offers users different modes and scenarios that could be applied to a big variety of private and commercial cases with excellent customization abilities and API methods.
+Push is a light web-app wallet accessed by a unique URL address, also called a link-wallet. The main advantage of a link-wallet is the ease of getting access to it and ability spending balance with no sign-up, no login, no registration, no password or whatever. Although the link-wallet app has advanced options for users that wish to create multiple wallets and run commercial campaigns. The app offers users different modes and scenarios that could be applied to a big variety of private and commercial cases with excellent customization abilities and API methods.
 
 ## Modes and usage scenarios
 
@@ -39,11 +39,9 @@ A user has to sign-up and login to an account to be able to create multiple wall
 They will be offered to specify:
 
 * A number of wallets to generate (fixed or unlimited)
-* Upload campaign logo (white label option)
-* Specify a sender
+* Wallets working scenario (simple or feedback)
 * Indicate one wallet balance 
 * Indicate target spending (completely flexible)
-* Attach message (in simple mode)
 * Attach feedback request (in feedback mode)
 * Pick up skins (in simple mode)
 * Import email database to generate wallets for it
@@ -62,10 +60,21 @@ API request generates N number of wallets and returns them in JSON format. Pleas
 
 <b>`Simple.`</b> Unique URL-wallets with easy access to them, just by clicking the link.
 
-<b>`Feedback.`</b> Before accessing, users must leave feedback. For validation purposes, our solution has a developed api method, please check <a href="https://github.com/MotherMinter/Push#5-beforeafter-activation">5 of an api description section</a>
+<b>`Feedback.`</b> Before accessing, users must leave feedback. For validation purposes, our solution has a developed api method, please check point <a href="https://github.com/MotherMinter/Push#5-beforeafter-activation">5 of an API documentation section</a>
 
 * Please note the mechanics of creating an array of wallets that have been implemented.
 The funds sent to deposit a campaign are initially credited to an intermediate address. The activation of individual wallets  (meaning depositing funds to the wallets) occurs only after a user visits a wallet link. This provides an ability to return unused funds to the campaign creator.
+
+## Branded link-wallet
+
+The branded URL feature has been implemented. 
+
+<b>Examples</b>
+
+`https://<your_host>/coffeyshop` 
+`https://<your_host>/barbershop`
+
+Any other URL address from 6 to 64 characters will work fine. To generate a link-wallet a user needs to go by a branded link and input a password they want. After the password entrance, a URL-wallet is created in which the address for replenishing the balance is indicated. To access the balance the URL and the password needed.
 
 ## Security
 
@@ -82,7 +91,11 @@ For developing the app a clear and light design approach was adopted.
 
 ## Customization
 
-1 Add skin information to `/www/pages/skin.js`
+There is the ability to attach full-screen custom animation and a message to a link-wallet. Also, the campaign creator is able to indicate target spending, this option is completely flexible.
+
+<b>Adding new skins</b>
+
+1 Add skin stiles to `/www/pages/skin.js`
 ```
 {
     id: 'starwars',
@@ -93,8 +106,7 @@ For developing the app a clear and light design approach was adopted.
 ``` 
 
 2 Create skin html. Template - `/www/static/skins/_skin-template.html`
-Skin may consist html, css, js.
-
+Skin have to consist from - html, css, js.
 
 ## Backend part
 Deploy your copy on a server or use our public api - `https://p.motherminter.org/api/`<br>
@@ -138,8 +150,8 @@ yarn start
 pm2 start npm --name "nuxt" -- start
 ```
 
-## API Description
-Project exists Swagger api doc on `https://<your_host>:3048/docs/` . 
+## API Documentation
+You can find the project Swagger API doc on `https://<your_host>:3048/docs/` . 
 You may use it for test of your backend.
 
 #### 1. Create a campaign
