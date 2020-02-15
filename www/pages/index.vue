@@ -28,6 +28,10 @@
     </transition>
     <!-- /Header -->
     <main>
+      <template v-if="isShowSkin">
+        <iframe style="width: 100%; height: 100%; position: absolute; z-index: 100;" v-bind:src="skinContent"></iframe>
+      </template>
+
       <div v-if="isShowLoader"  class="louder">
         <div class="louder-wrap"><div class="lds-ripple"><div></div><div></div></div></div>
       </div>
@@ -883,6 +887,8 @@
         skins: SKINS,
         spends: SPENDS,
         spendChecks: [],
+        isShowSkin: false,
+        skinContent: '',
       }
     },
     computed: {
@@ -934,6 +940,14 @@
         this.isMobile = true
       }
       this.minNewBalance = new Decimal(0)
+
+      const self = this
+      window.hideSkin = function () {
+        self.isShowSkin = false
+      }
+      window.skinMessage = function () {
+        return self.companyMsg
+      }
     },
     filters: {
       short: function (date) {
@@ -1474,6 +1488,8 @@
       },
       showSkinPreviewModal(skin) {
         console.log(skin)
+        this.isShowSkin = true
+        this.skinContent = skin.path
       },
       createOrUpdateAccount: async function () {
         if (this.createParamCompanyPass === '') {
