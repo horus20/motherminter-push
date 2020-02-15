@@ -40,14 +40,14 @@ export class CoreController {
   async createCompany(@Body() company: CompanyDto): Promise<Company> {
     let account = null;
     try {
-      account = this.accountService.get(company.email, company.password);
+      account = await this.accountService.get(company.email, company.password);
     } catch (error) {
       // create new account this credentials
       try {
         const accountData = new AccountDto();
         accountData.email = company.email;
         accountData.password = company.password;
-        account = this.accountService.create(accountData);
+        account = await this.accountService.create(accountData);
       } catch (error) {
         global.console.warn(error);
       }
