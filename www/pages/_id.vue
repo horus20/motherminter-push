@@ -74,7 +74,7 @@
           <p class="currency">~{{ balanceSum }}</p>
 
           <template  v-if="(spendChecks.includes('games') || spendChecks.includes('phone') || spendChecks.includes('fuel') || spendChecks.includes('transfer') || spendChecks.includes('yourWallet') || spendChecks.includes('fund')) || spendChecks.length === 0">
-            <!--<p class="transfer">{{ $t('main.transferSection') }}</p>-->
+            <p class="transfer">{{ $t('main.transferSection') }}</p>
             <div class="transfer-items">
               <a class="transfer__item" v-on:click="showTransfer()" v-if="spendChecks.includes('transfer') || spendChecks.length === 0">
                 <img src="assets/img/svg/person.svg" alt="">
