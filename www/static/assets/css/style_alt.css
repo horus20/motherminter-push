@@ -1253,6 +1253,7 @@ header {
     flex-wrap: wrap;
     justify-content: flex-start; }
     .main .transfer-items .transfer__item {
+      width: 33%;
       margin: 22px 0; }
     .main .transfer-items p {
       font: 10px/1.2 "SegoeUIBold", sans-serif;
