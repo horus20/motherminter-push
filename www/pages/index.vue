@@ -103,8 +103,8 @@
                   <a href="#" class="more-about">Logo</a>
                 </div>
                 <div class="personal-data">
-                  <input type="text" class="input" readonly="readonly" v-bind:placeholder="$t('Email')" v-model="createParamEmail">
-                  <input type="text" class="input" v-bind:placeholder="$t('create.Brand')" v-model="createParamBrand" v-on:focusout="createOrUpdateAccount()">
+                  <input type="text" class="input" disabled readonly="readonly" v-bind:placeholder="$t('Email')" v-model="createParamEmail">
+                  <input type="text" class="input" v-model="createParamBrand" v-on:focusout="createOrUpdateAccount()">
                 </div>
               </div>
               <p class="caption">{{$t('create.myCompany')}}</p>

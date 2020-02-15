@@ -2360,6 +2360,7 @@ footer {
     display: flex;
     margin-bottom: 24px; }
     .content__personal-area .capaing-info .campaing-logo {
+      display: none;
       width: 78px;
       height: 78px;
       border: 1px solid #dcdcdc;
@@ -2371,13 +2372,17 @@ footer {
       .content__personal-area .capaing-info .campaing-logo a {
         font-size: 16px;
         margin-top: 26px; }
+    .content__personal-area .capaing-info .input[placeholder=Email] {
+      background-color: transparent;
+      font-weight: bold;
+    }
     .content__personal-area .capaing-info .input {
       width: 100%;
       font: 16px/1 "SegoeUIRegular", sans-serif;
       color: var(--prim-color);
       border: none;
       padding-bottom: 8px;
-      border-bottom: 1px solid #dcdcdc;
+      /*border-bottom: 1px solid #dcdcdc;*/
       margin-bottom: 18px; }
       .content__personal-area .capaing-info .input:last-child {
         margin-bottom: 0; }
