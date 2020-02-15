@@ -98,6 +98,7 @@ export default {
     emailLink: 'Link to the spreadsheet',
     feedbackTask: 'Feedback task',
     emailWallets: 'Send wallets to emails',
+    createTxt: 'Advanced mode'
   },
   password: {
     password: 'Password',

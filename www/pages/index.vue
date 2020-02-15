@@ -45,7 +45,7 @@
             <p>{{ $t('index.preTitle') }}</p>
             <h1>{{ $t('index.title') }}</h1>
             <a class="btn" v-on:click="startCreateSimple()">{{ $t('index.btnStartSending') }}</a>
-            <a class="advanced" v-on:click="startCreate()">Advanced mode</a>
+            <a class="advanced" v-on:click="startCreate()">{{ $t('create.createTxt') }}</a>
             <div class="back">
               <div class="group">
                 <img src="/assets/img/svg/back/f.svg" alt="" class="img-01">
@@ -167,7 +167,7 @@
               </div>
               <transition name="fadeDown">
                 <div class="skins-items" id="skins" v-if="isActiveTrigger04"  style="display: block">
-                  <div v-for="skin in skins" class="skins__item" tabindex="0">
+                  <div v-for="skin in skins" class="skins__item tab__" tabindex="0" @click="isActiveTab($event)">
                     <span v-on:click="createParamSkin = skin.id">{{ skin.label }}</span><a v-on:click="showSkinPreviewModal(skin)">{{ $t('Prev') }}</a>
                   </div>
                 </div>
@@ -946,7 +946,7 @@
       const self = this
       window.hideSkin = function () {
         self.isShowSkin = false
-        document.body.classList.remove('body-overflow')
+        //document.body.classList.remove('body-overflow')
       }
       window.skinMessage = function () {
         return self.companyMsg
@@ -959,6 +959,16 @@
     },
     // method
     methods: {
+      isActiveTab($event) {
+        let tab = document.querySelectorAll('.tab__')
+
+        if(tab.length) {
+          [].forEach.call(tab, function(item) {
+            item.querySelector('span').classList.remove('activeTab__')
+          });
+          $event.target.classList.add('activeTab__')
+        }
+      },
       changeLocale: function (locale) {
         this.$i18n.setLocaleCookie(locale)
         this.$i18n.setLocale(locale)
@@ -1493,7 +1503,7 @@
         console.log(skin)
         this.isShowSkin = true
         this.skinContent = skin.path
-        document.body.classList.add('body-overflow')
+        //document.body.classList.add('body-overflow')
       },
       createOrUpdateAccount: async function () {
         if (this.createParamCompanyPass === '') {

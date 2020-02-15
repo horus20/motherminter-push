@@ -70,6 +70,7 @@ export default {
     copyLink: 'Копировать',
     shareList: 'Поделиться',
     shareApiLink: 'Поделиться',
+    createTxt: 'Расширенный режим'
   },
   password: {
     havePassword: 'Вы ввели пароль?',
