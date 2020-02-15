@@ -82,6 +82,20 @@ For developing the app a clear and light design approach was adopted.
 
 ## Customization
 
+1 Add skin information to `/www/pages/skin.js`
+```
+{
+    id: 'starwars',
+    label: 'STAR WARS',
+    image: '',
+    path: './skins/star-wars-day.html'
+},
+``` 
+
+2 Create skin html. Template - `/www/static/skins/_skin-template.html`
+Skin may consist html, css, js.
+
+
 ## Backend part
 Deploy your copy on a server or use our public api - `https://p.motherminter.org/api/`<br>
 Backend - is'a <a href=https://nestjs.com/>NestJS</a> app starting on **3048** port <br>

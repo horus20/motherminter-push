@@ -465,12 +465,14 @@
                   </div>
                 </div>
 
-                <div class="loader-02" v-if="!isAddressFilling">
-                  <div class="inner one"></div>
-                  <div class="inner two"></div>
-                  <div class="inner three"></div>
-                </div>
-                <p id="waiting">{{ $t('create.waitingForPayment') }} ...</p>
+                <template  v-if="!isAddressFilling">
+                  <div class="loader-02">
+                    <div class="inner one"></div>
+                    <div class="inner two"></div>
+                    <div class="inner three"></div>
+                  </div>
+                  <p id="waiting">{{ $t('create.waitingForPayment') }} ...</p>
+                </template>
               </template>
 
               <template>
@@ -1197,6 +1199,12 @@
       startCreateCompany: async function () {
         if (this.createParamType === 'complex_feedback' && this.createParamTask.length === 0) {
           this.errorMsg = this.$t('errors.emptyText')
+          this.isShowError = true
+          return false
+        }
+
+        if (!this.createParamBalance) {
+          this.errorMsg = this.$t('errors.balanceEmpty')
           this.isShowError = true
           return false
         }
