@@ -73,8 +73,14 @@ The wallet app is implemented using light client technology, this approach ensur
 
 ## UX & UI
 
+For developing the app a clear and light design approach was adopted. 
 
+* Clean modern design
+* No visual barriers or distractions
+* All app interface scenarios are decorated with meta-data, modal windows with prompts, place holders with examples to facilitate user navigation and interaction with the application
+* Short link-wallets (6 characters, apart from a domain name)
 
+## Customization
 
 ## Backend part
 Deploy your copy on a server or use our public api - `https://p.motherminter.org/api/`<br>
