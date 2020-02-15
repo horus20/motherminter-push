@@ -13,6 +13,8 @@ export default {
   Fixed: 'Фикс',
   Unlimited: 'Безлимит',
   Send: 'Отправить',
+  Settings: 'Настройки',
+  compaingWallet: 'Кошелек кампании',
   index: {
     preTitle: 'Отправляй монеты с легкостью.',
     title: 'Быстро. Надежно.',
@@ -28,6 +30,7 @@ export default {
     title: 'Сколько кошельков|вы хотите создать?',
     one: 'Создать один кошелек',
     multi: 'Создать много',
+    multi2: 'Выберите тип для новой кампании',
     learnMore: 'Подробнее о типах кошельков',
     simple: 'Простой',
     feedback: 'Фидбэк',
@@ -70,7 +73,15 @@ export default {
     copyLink: 'Копировать',
     shareList: 'Поделиться',
     shareApiLink: 'Поделиться',
-    createTxt: 'Расширенный режим'
+    createTxt: 'Расширенный режим',
+    multipleBtn: 'Приступить',
+    loginHelp: 'Для создания или редактирования кампаний множественных кошельков войдите в систему.',
+    createAccount: 'Создать аккаунт',
+    loginAccount: 'Войти в аккаунт',
+    targetSpending: 'Целевая трата',
+    launch: 'Запустить кампанию',
+    compainInfo: 'Инфо о кампании',
+    yourMoneyCountHere: 'Любую сумму 5, 10, 5000 ...',
   },
   password: {
     havePassword: 'Вы ввели пароль?',

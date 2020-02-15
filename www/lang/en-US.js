@@ -38,6 +38,7 @@ export default {
     title: 'What kind of wallet|you want to create?',
     one: 'Create one wallet',
     multi: 'Create multiple wallets',
+    multi2: 'Choose a type for a new campaign',
     learnMore: 'Learn more about types',
     simple: 'Simple',
     feedback: 'Feedback',
@@ -98,7 +99,8 @@ export default {
     emailLink: 'Link to the spreadsheet',
     feedbackTask: 'Feedback task',
     emailWallets: 'Send wallets to emails',
-    createTxt: 'Advanced mode'
+    createTxt: 'Advanced mode',
+    multipleBtn: 'Multiple'
   },
   password: {
     password: 'Password',

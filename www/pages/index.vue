@@ -94,7 +94,7 @@
               <a class="btn" id="action" v-on:click="startCreateAction()"><img src="/assets/img/svg/action.svg" alt="">{{ $t('create.action') }}</a>
 
               <h5 v-html="newLineLabel($t('create.multi'))"></h5>
-              <a class="btn" id="multiple" v-on:click="showLoginModal()"><img src="/assets/img/svg/fixed_white.svg" alt="">{{ $t('create.multiple') }}</a>
+              <a class="btn" id="multiple" v-on:click="showLoginModal()"><img src="/assets/img/svg/fixed_white.svg" alt="">{{ $t('create.multipleBtn') }}</a>
             </div>
           </transition>
           <!-- /Content Choose Wallet -->
@@ -118,8 +118,8 @@
                   <span class="date">{{ company.created|short }}</span>
                 </div>
               </div>
-              <h5>{{ $t('create.multi')}}</h5>
-              <a class="more-about" v-on:click="toggleShowType()">{{ $t('create.learnMore') }}</a>
+              <h5>{{ $t('create.multi2')}}</h5>
+              <a class="more-about" v-on:click="toggleShowType2()">{{ $t('create.learnMore') }}</a>
               <div>
                 <div class="buttons-one">
                   <a class="btn" id="simple" v-on:click="startCreateSimple(false)"><img src="/assets/img/svg/wallet_light.svg" alt="">{{ $t('create.simple') }}</a>
@@ -584,9 +584,9 @@
     <!-- /Footer -->
 
 
-    <!-- Modal Activation Types-->
+    <!-- Modal Activation Types 1-->
     <transition name="fade">
-    <div class="modal-alert modal-activation-types" v-bind:class="{ 'modal-activation-types-active': isShowModalType }" v-show="isShowModalType">
+    <div class="modal-alert modal-activation-types" v-bind:class="{ 'modal-activation-types-active': isShowModalType1 }" v-show="isShowModalType1">
       <div class="container">
           <div class="close-modal-alert" v-on:click="toggleShowType()">
               <span></span><span></span>
@@ -601,7 +601,26 @@
       </div>
     </div>
     </transition>
-    <!-- /Modal Activation Types -->
+    <!-- /Modal Activation Types 1 -->
+
+    <!-- Modal Activation Types 2-->
+    <transition name="fade">
+      <div class="modal-alert modal-activation-types" v-bind:class="{ 'modal-activation-types-active': isShowModalType2 }" v-show="isShowModalType2">
+        <div class="container">
+          <div class="close-modal-alert" v-on:click="toggleShowType2()">
+            <span></span><span></span>
+          </div>
+          <h5>{{ $t('create.detailTypeTitle') }}</h5>
+          <p class="title"><img src="/assets/img/svg/wallet_dark.svg" alt="">{{ $t('create.simple') }}</p>
+          <p>{{ $t('create.detailSimple') }}</p>
+          <p class="title"><img src="/assets/img/svg/feedback_dark.svg" alt="">{{ $t('create.feedback') }}</p>
+        <!--    <p>{{ $t('create.detailFeedback') }}</p>
+          <p class="title"><img src="/assets/img/svg/action_dark.svg" alt="">{{ $t('create.action') }}</p>
+          <p>{{ $t('create.detailAction') }}</p>-->
+        </div>
+      </div>
+    </transition>
+    <!-- /Modal Activation Types 1 -->
 
     <!-- Modal Activation Types-->
     <transition name="fade">
@@ -829,7 +848,8 @@
 
         isShowLoader: false,
         isShowMenu: false,
-        isShowModalType: false,
+        isShowModalType1: false,
+        isShowModalType2: false,
         isShowModalNType: false,
         isShowModalQR: false,
         isShowModalDir: false,
@@ -981,7 +1001,10 @@
         this.IsActiveHamburgerClass = !this.IsActiveHamburgerClass
       },
       toggleShowType: function () {
-        this.isShowModalType = !this.isShowModalType
+        this.isShowModalType1 = !this.isShowModalType1
+      },
+      toggleShowType2: function () {
+        this.isShowModalType2 = !this.isShowModalType2
       },
       toggleShowNType: function () {
         this.isShowModalNType = !this.isShowModalNType
