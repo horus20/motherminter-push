@@ -150,6 +150,7 @@ export class WalletService {
       reply: walletData.reply,
     });
     wallet.status = WalletStatus.ACTIVE;
+    wallet.mxaddress = walletData.mxaddress;
     await this.walletRepository.save(wallet);
 
     return true;

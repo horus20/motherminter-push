@@ -557,7 +557,7 @@
                     <button v-if="!createParamIsFixed" id="share" class="btn btn-copy" v-on:click="startShare(companyLink, 'Wallet api link', '', $event)">{{ $t('create.shareApiLink') }}<img src="/assets/img/svg/share.svg" alt="">
                     </button>
                   </div>
-                  <button v-if="createParamIsFixed" class="btn send-emails" v-on:click="sendWalletToUser()">{{$t('emailWallets')}}</button>
+                  <button v-if="createParamIsFixed" class="btn send-emails" v-on:click="sendWalletToUser()">{{$t('create.emailWallets')}}</button>
 
                   <!--<a href="" class="link">Statistics</a>-->
 
