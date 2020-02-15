@@ -71,9 +71,9 @@ The branded URL feature has been implemented.
 
 <b>Examples</b>
 
-`https://<your_host>/<b>coffeyshop</b>`
+`https://<your_host>/coffeyshop`
 
-`https://<your_host>/<b>barbershop</b>`
+`https://<your_host>/barbershop`
 
 Any other URL address from 6 to 64 characters will work fine. To generate a link-wallet a user needs to go by a branded link and input a password they want. After the password entrance, a URL-wallet is created in which the address for replenishing the balance is indicated. To access the balance the URL and the password needed.
 
