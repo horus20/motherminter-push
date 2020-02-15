@@ -94,7 +94,8 @@ For developing the app a clear and light design approach was adopted.
 
 There are two main directions for app customization, both of them are implemented in the project.
 
-<b>`Branded stile.`</b> There is the ability to attach full-screen custom animation and a message to a wallet. 
+<b>`Branded stile.`</b> There is the ability to attach full-screen custom animation and a message to a wallet.
+
 <b>`Target spending.`</b> A campaign creator is able to indicate target spending in a completely flexible way.
 
 <b>Adding new skins</b>
