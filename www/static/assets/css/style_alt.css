@@ -2439,3 +2439,56 @@ footer {
     margin-right: 18px;
     margin-left: -38px;
     margin-bottom: -3px; }
+
+.main-logo {
+  padding-top: 24px; }
+  .main-logo #main-logo {
+    display: block;
+    width: 60px;
+    height: 60px;
+    margin: 0 auto 6px; }
+  .main-logo .main-brand {
+    color: #6f6f6f;
+    font-size: 14px;
+    margin-bottom: 24px; }
+    .main-logo .main-brand span {
+      font-family: 'SegoeUIBold', sans-serif; }
+
+.statistics {
+  width: 500px;
+  margin: 0 auto;
+  padding: 12px;
+  font-size: 14px; }
+  .statistics p {
+    margin-bottom: 12px; }
+    .statistics p span {
+      font-family: 'SegoeUIBold', sans-serif; }
+  .statistics ul {
+    margin-bottom: 24px; }
+    .statistics ul li {
+      margin-bottom: 4px; }
+      .statistics ul li:nth-child(2) span {
+        color: #909924; }
+      .statistics ul li:nth-child(3) span {
+        color: #74b1b5; }
+      .statistics ul li:nth-child(4) span {
+        color: #64a048; }
+  .statistics table {
+    width: 100%; }
+    .statistics table .first-tr td {
+      font-family: 'SegoeUIBold', sans-serif; }
+    .statistics table td {
+      padding: 12px 24px 12px 0; }
+  .statistics .center {
+    text-align: center; }
+    .statistics .center span {
+      padding: 2px 8px 4px;
+      border-radius: 14px; }
+  .statistics .not-sent {
+    background: #e9e9e9; }
+  .statistics .sent {
+    background: #f8fed3; }
+  .statistics .opened {
+    background: #defcfe; }
+  .statistics .activated {
+    background: #dffed7; }
