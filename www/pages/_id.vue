@@ -1136,12 +1136,6 @@
             break
           }
         }
-
-        Vue.component('manage-posts', function(resolve, reject){
-          axios.get("../../Views/login.html").then(response => {
-            resolve({template: response.data})
-          })
-        })
       },
     },
     // html header section
