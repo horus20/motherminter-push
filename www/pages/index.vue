@@ -163,7 +163,7 @@
               </div>
               <transition name="fadeDown">
                 <div class="skins-items" id="skins" v-if="isActiveTrigger04"  style="display: block">
-                  <div v-for="skin in skins" class="skins__item">
+                  <div v-for="skin in skins" class="skins__item" tabindex="0">
                     <span v-on:click="createParamSkin = skin.id">{{ skin.label }}</span><a v-on:click="showSkinPreviewModal(skin)">{{ $t('Prev') }}</a>
                   </div>
                 </div>
@@ -1733,5 +1733,8 @@
     height: 50px;
     clear: both;
     padding-top: 20px;
+  }
+  skin_item_focus {
+    background: var(--green-lighting);
   }
 </style>
