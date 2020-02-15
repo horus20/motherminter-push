@@ -1,7 +1,17 @@
-import { BeforeUpdate, Column, Entity, JoinColumn, OneToMany, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  BeforeUpdate,
+  Column,
+  Entity,
+  JoinColumn,
+  ManyToOne,
+  OneToMany,
+  OneToOne,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 import { Exclude, Expose } from 'class-transformer';
 import { Wallet } from './wallet.entity';
 import { Warehouse } from './warehouse.entity';
+import { Account } from './account.entity';
 
 @Entity()
 export class Company {
@@ -50,6 +60,9 @@ export class Company {
   })
   @JoinColumn()
   wallets: Wallet[];
+
+  @ManyToOne(type => Account, account => account.companies)
+  account: Account;
 
   getParams() {
     return JSON.parse(this.params ?? '{}');

@@ -2,7 +2,7 @@ import { Injectable, HttpException, HttpStatus } from '@nestjs/common';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 
-import { Company, Wallet } from '../entity';
+import { Account, Company, Wallet } from '../entity';
 import { CompanyDto } from '../dto';
 import { CompanyStatus } from '../enum';
 import { WarehouseService } from './warehouse.service';
@@ -20,7 +20,7 @@ export class CompanyService {
   ) {
   }
 
-  async create(companyData: CompanyDto): Promise<Company> {
+  async create(companyData: CompanyDto, account: Account = null): Promise<Company> {
     try {
       const company = new Company();
       company.email = companyData.email ?? '';
@@ -30,6 +30,7 @@ export class CompanyService {
       company.isProtected = !!companyData.protected;
       company.setParams(companyData.params);
       company.uid = this.walletService.generateUniqWalletId(10);
+      company.account = account;
 
       let isWaitNewAddress = false;
       if (companyData.type === 'complex') {
@@ -72,6 +73,22 @@ export class CompanyService {
         } else {
           // simple company with one wallet
           await this.walletService.create(company);
+        }
+      }
+
+      if (companyData.emailList && Array.isArray(companyData.emailList)) {
+        let walletIndexShift = 0;
+        for (let emailIndex = 0; emailIndex < companyData.emailList.length; emailIndex += 1) {
+          if (company.wallets.length > emailIndex
+            && typeof company.wallets[emailIndex + walletIndexShift] !== 'undefined') {
+            const wallet = company.wallets[emailIndex + walletIndexShift];
+            if (!!wallet.email) {
+              walletIndexShift += 1;
+              emailIndex -= 1;
+            } else {
+              await this.walletService.addEmailToWallet(wallet, companyData.emailList[emailIndex]);
+            }
+          }
         }
       }
 
@@ -159,5 +176,21 @@ export class CompanyService {
 
   async getCompany(uid: string): Promise<Company> {
     return this.companyRepository.findOneOrFail({uid});
+  }
+
+  checkCredentials(company: Company, email: string, password: string) {
+    return company.email === email && company.password === password;
+  }
+
+  async close(company: Company) {
+    company.status = CompanyStatus.CANCEL;
+    await this.companyRepository.save(company);
+
+    if (company.warehouseWallet) {
+      const balance = await this.warehouseService.checkBalance(company.warehouseWallet);
+      await this.warehouseService.return(company.warehouseWallet);
+    }
+
+    return true;
   }
 }

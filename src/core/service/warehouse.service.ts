@@ -80,16 +80,43 @@ export class WarehouseService {
 
   async checkBalance(warehouseWallet: Warehouse) {
     // get account info from explorer
-    const response = await axios.get(
+    let response = await axios.get(
       `${this.explorerURL}/api/v1/addresses/${warehouseWallet.mxaddress}`,
     );
     if (response.data && response.data.data && response.data.data.balances) {
       warehouseWallet.setBalances(response.data.data.balances);
 
+      if (warehouseWallet.owner === null) {
+        response = await axios.get(
+          `${this.explorerURL}/api/v1/addresses/${warehouseWallet.mxaddress}/transactions`,
+        );
+        if (response.data && response.data.data) {
+          response.data.data
+            .reverse()
+            .forEach((tx) => {
+            if (!Array.isArray(tx.data)) {
+              if (tx.data.to === warehouseWallet.mxaddress) {
+                if (warehouseWallet.owner === null) {
+                  warehouseWallet.owner = tx.from;
+                }
+              }
+            }
+          });
+        }
+      }
+
       await this.warehouseRepository.save(warehouseWallet);
 
       return ;
     }
+    throw new Error('Fail to load balance');
+  }
+
+  async return(warehouseWallet: Warehouse) {
+    if (warehouseWallet.owner) {
+      return this.transfer(warehouseWallet, warehouseWallet.owner, '');
+    }
+
     throw new Error('Fail to load balance');
   }
 

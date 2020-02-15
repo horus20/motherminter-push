@@ -60,7 +60,7 @@
 
           <!-- Content Choose Wallet -->
           <transition name="fade">
-          <div v-if="step === 2" class="content__item content__choose-wallet content__item-active step-2">
+          <!--<div v-if="step === 2" class="content__item content__choose-wallet content__item-active step-2">
             <h5 v-html="newLineLabel($t('create.title'))"></h5>
             <div class="buttons">
               <button v-on:click="isCreateOne = true" class="btn btn-radio" v-bind:class="{ 'btn-radio__active': isCreateOne }">
@@ -82,14 +82,56 @@
                 <a class="btn" id="feedback" v-on:click="startCreateFeedback()"><img src="/assets/img/svg/feedback.svg" alt="">{{ $t('create.feedback') }}</a>
               </div>
             </div>
-          </div>
+          </div>-->
+            <div v-if="step === 2" class="content__item content__choose-wallet-new content__item-active step-2">
+              <h5 v-html="newLineLabel($t('create.one'))"></h5>
+              <a class="more-about" v-on:click="toggleShowType()">{{ $t('create.learnMore') }}</a>
+              <a class="btn" id="feedback" v-on:click="startCreateFeedback()"><img src="/assets/img/svg/feedback.svg" alt="">{{ $t('create.feedback') }}</a>
+              <a class="btn" id="action" v-on:click="startCreateAction()"><img src="/assets/img/svg/action.svg" alt="">{{ $t('create.action') }}</a>
+
+              <h5 v-html="newLineLabel($t('create.multi'))"></h5>
+              <a class="btn" id="multiple" v-on:click="showLoginModal()"><img src="/assets/img/svg/fixed_white.svg" alt="">{{ $t('create.multiple') }}</a>
+            </div>
           </transition>
           <!-- /Content Choose Wallet -->
+
+          <transition name="fade">
+            <!-- Content Personal Area -->
+            <div v-if="step === 21"  class="content__item content__personal-area content__item-active">
+              <div class="capaing-info">
+                <div class="campaing-logo">
+                  <a href="#" class="more-about">Logo</a>
+                </div>
+                <div class="personal-data">
+                  <input type="text" class="input" readonly="readonly" v-bind:placeholder="$t('Email')" v-model="createParamEmail">
+                  <input type="text" class="input" v-bind:placeholder="$t('create.Brand')" v-model="createParamBrand" v-on:focusout="createOrUpdateAccount()">
+                </div>
+              </div>
+              <p class="caption">{{$t('create.myCompany')}}</p>
+              <div class="campaings-items">
+                <div v-for="company in companies" class="campaings__item" v-on:click="selectCompany(company)">
+                  <span class="name">{{ company.uid }}</span>
+                  <span class="date">{{ company.created|short }}</span>
+                </div>
+              </div>
+              <h5>{{ $t('create.multi')}}</h5>
+              <a class="more-about" v-on:click="toggleShowType()">{{ $t('create.learnMore') }}</a>
+              <div>
+                <div class="buttons-one">
+                  <a class="btn" id="simple" v-on:click="startCreateSimple(false)"><img src="/assets/img/svg/wallet_light.svg" alt="">{{ $t('create.simple') }}</a>
+                  <a class="btn" id="feedback" v-on:click="startCreateFeedback(false)"><img src="/assets/img/svg/feedback.svg" alt="">{{ $t('create.feedback') }}</a>
+                </div>
+              </div>
+            </div>
+            <!-- /Content Personal Areas  -->
+          </transition>
 
           <!-- Content Attach Messege -->
           <transition name="fade">
           <div v-if="step === 3" class="content__item content__attach-messege content__item-active">
             <form>
+
+
               <p>{{ $t('create.putMoney') }}?</p>
               <div class="trigger trigger-01" v-bind:class="{ 'trigger-active': isActiveTrigger01 }" v-on:click="isActiveTrigger01 = !isActiveTrigger01">
                 <span class="trigger_no">{{ $t('NO') }}</span><span class="trigger_circle"></span><span class="trigger_yes">{{ $t('YES') }}</span>
@@ -344,35 +386,214 @@
           </div>
           </transition>
 
+          <transition name="fade">
+            <!-- Content Personal Area -->
+            <div v-if="step === 61 || step === 62" class="content__item content__feedback-simple content__item-active">
+
+              <template v-if="typeof addressForFilling !== 'undefined' && addressForFilling.length > 10">
+              <h5>{{ $t('compaingWallet') }}</h5>
+              <div class="score">
+                <p class="balance" v-for="balance in balances">{{ prettyFormat(balance.amount) }} {{ balance.coin }}</p>
+                <span class="currency">~{{ balanceSum }}</span>
+              </div>
+              <div class="copy_link">
+                <p :class="{'active-copy' : isCopiededSuccess}">{{ addressForFilling }}</p>
+                <div class="buttons">
+                  <button :class="{'active-copy' : isCopiededSuccess}" class="btn btn-copy btn-link-copy" v-on:click="copyToClipboard(addressForFilling, $event)">Copy<img src="/assets/img/svg/copy.svg" alt=""></button>
+                  <button class="btn btn-copy btn-qr" v-on:click="toggleShowQR(addressForFilling)">QR<img src="/assets/img/svg/qr_link_blue.svg" alt=""></button>
+                  <a v-if="this.isBalanceGreatThenZero" class="btn btn-copy " target="_blank" v-bind:href="deepLink">{{$t('DeepLink')}}</a>
+                </div>
+              </div>
+              </template>
+
+              <h5>{{$t('Settings')}}</h5>
+              <div class="settings">
+                <p class="caption">{{$t('create.numberWallet')}}:</p>
+                <div class="number-of-wallets">
+                  <input type="text" class="input" v-model="createParamCount">
+                  <button class="btn lim" v-on:click="showEmailModal()">Emails</button>
+                  <button class="btn unlim" v-on:click="selectUnlim()">{{$t('Unlim')}}<img src="/assets/img/svg/unlimited_blue.svg" alt=""></button>
+                </div>
+                <input type="text" class="input" v-bind:placeholder="$t('create.oneWalletBalance')" v-model="createParamBalance">
+                <div class="target">
+                  <span>{{$t('create.targetSpending')}}</span>
+                  <span class="more-about" v-on:click="isShowSpendModal = true">{{$t('Select')}}</span>
+                </div>
+                <div class="target skins" v-if="step === 61">
+                  <span>{{$t('create.Skins')}}</span>
+                  <span class="more-about" v-on:click="isShowSkinModal = true">{{$t('Select')}}</span>
+                </div>
+
+                <div class="text-wrap" v-if="step === 62">
+                  <textarea id="ta" name="" maxlength="140" v-bind:placeholder="$t('create.feedbackPlaceholder')" v-model="createParamTask"></textarea>
+                  <div class="max-lenght">
+                    <span id="max_lenght">{{ msgSize }}</span>
+                    <img src="/assets/img/svg/feedback_grey.svg" alt="">
+                  </div>
+                </div>
+
+                <button class="btn" v-on:click="startCreateCompany()">{{$t('create.launch')}}</button>
+              </div>
+
+            </div>
+            <!-- /Content Personal Areas  -->
+          </transition>
+
+
+          <transition name="fade">
+            <!-- Content Personal Area -->
+            <div v-if="step === 80" class="content__item content__campaing-wallet content__item-active">
+
+              <template v-if="typeof addressForFilling !== 'undefined' && addressForFilling.length > 10">
+                <h5>{{ $t('compaingWallet') }}</h5>
+                <div class="score">
+                  <p class="balance" >
+                    <template v-for="balance in balances">
+                      {{ prettyFormat(balance.amount) }} {{ balance.coin }}
+                    </template>
+                    <span class="currency">~{{ balanceSum }}</span>
+                  </p>
+
+                  <p v-if="this.isBalanceGreatThenZero">{{ $t('create.plzFillPart1') }} <span v-on:click="copyToClipboard(minNewBalance)">{{ minNewBalance }} {{ $t('create.minBalanceCoin')}}</span> {{ $t('create.plzFillPart2') }}</p>
+                </div>
+                <div class="copy_link">
+                  <p :class="{'active-copy' : isCopiededSuccess}">{{ addressForFilling }}</p>
+                  <div class="buttons">
+                    <button :class="{'active-copy' : isCopiededSuccess}" class="btn btn-copy btn-link-copy" v-on:click="copyToClipboard(addressForFilling, $event)">Copy<img src="/assets/img/svg/copy.svg" alt=""></button>
+                    <button class="btn btn-copy btn-qr" v-on:click="toggleShowQR(addressForFilling)">QR<img src="/assets/img/svg/qr_link_blue.svg" alt=""></button>
+                    <a v-if="this.isBalanceGreatThenZero" class="btn btn-copy " target="_blank" v-bind:href="deepLink">{{$t('DeepLink')}}</a>
+                  </div>
+                </div>
+
+                <div class="loader-02" v-if="!isAddressFilling">
+                  <div class="inner one"></div>
+                  <div class="inner two"></div>
+                  <div class="inner three"></div>
+                </div>
+                <p id="waiting">{{ $t('create.waitingForPayment') }} ...</p>
+              </template>
+
+              <template>
+                <h5>{{$t('create.compainInfo')}}</h5>
+                <div class="info">
+                  <p>{{$t('create.numberWallet')}}: <span>{{createParamCount}}</span></p>
+                  <p v-if="createParamBalance">{{$t('create.oneWalletBalance')}}: <span>{{createParamBalance}} BIP</span></p>
+                  <p>{{$t('create.targetSpending')}}:</p>
+                  <ul v-if="spendChecks.length > 0">
+                    <li v-for="idSpend in spendChecks" v-html="getSpendLabelById(idSpend)"></li>
+                  </ul>
+                  <ul v-if="spendChecks.length === 0">
+                    <li v-for="spend in spends">{{ spend.label }}</li>
+                  </ul>
+                  <p v-if="createParamType === 'complex_feedback'">{{$t('create.feedbackTask')}}:</p>
+                  <p class="task">{{createParamTask}} <!--<img src="/assets/img/svg/edit.svg" alt="">--></p>
+                </div>
+
+                <template v-if="isAddressFilling">
+                  <h6 v-if="createParamIsFixed" class="share">{{ $t('create.walletList') }}:</h6>
+                  <h6 v-if="!createParamIsFixed" class="share">{{ $t('create.grabApi') }}:</h6>
+
+                  <div class="buttons">
+                    <button v-if="createParamIsFixed" id="send" class="btn btn-copy" v-on:click="sendListToEmail($event)">{{ $t('create.sendEmail') }}
+                      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="16" viewBox="0 0 20 16">
+                        <defs>
+                          <style>
+                            .cls-1 {
+                              fill: #4a40fd;
+                              fill-rule: evenodd;
+                            }
+                          </style>
+                        </defs>
+                        <path id="Forma_1" data-name="Forma 1" class="cls-1" d="M1894.63,3187h-15.26a2.313,2.313,0,0,0-2.37,2.25v11.5a2.313,2.313,0,0,0,2.37,2.25h15.26a2.32,2.32,0,0,0,2.37-2.25v-11.5A2.32,2.32,0,0,0,1894.63,3187Zm0,14.01h-15.26a0.331,0.331,0,0,1-.36-0.26v-10.11l6.9,5.75a0.775,0.775,0,0,0,.51.18h1.16a0.775,0.775,0,0,0,.51-0.18l6.9-5.75v10.11A0.331,0.331,0,0,1,1894.63,3201.01Zm-7.63-6.41-6.71-5.61h13.42Z" transform="translate(-1877 -3187)"/>
+                      </svg></button>
+                    <button v-if="!createParamIsFixed" id="send" class="btn btn-copy" v-on:click="sendLinkToEmail($event)">{{ $t('create.sendApiEmail') }}
+                      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="16" viewBox="0 0 20 16">
+                        <defs>
+                          <style>
+                            .cls-1 {
+                              fill: #4a40fd;
+                              fill-rule: evenodd;
+                            }
+                          </style>
+                        </defs>
+                        <path id="Forma_1" data-name="Forma 1" class="cls-1" d="M1894.63,3187h-15.26a2.313,2.313,0,0,0-2.37,2.25v11.5a2.313,2.313,0,0,0,2.37,2.25h15.26a2.32,2.32,0,0,0,2.37-2.25v-11.5A2.32,2.32,0,0,0,1894.63,3187Zm0,14.01h-15.26a0.331,0.331,0,0,1-.36-0.26v-10.11l6.9,5.75a0.775,0.775,0,0,0,.51.18h1.16a0.775,0.775,0,0,0,.51-0.18l6.9-5.75v10.11A0.331,0.331,0,0,1,1894.63,3201.01Zm-7.63-6.41-6.71-5.61h13.42Z" transform="translate(-1877 -3187)"/>
+                      </svg></button>
+
+                    <button v-if="createParamIsFixed" id="save" class="btn btn-copy" v-on:click="copyList($event)">{{ $t('create.copyList') }}
+                      <svg xmlns="http://www.w3.org/2000/svg" width="18" height="22" viewBox="0 0 18 22">
+                        <defs>
+                          <style>
+                            .cls-1 {
+                              fill: #4a40fd;
+                              fill-rule: evenodd;
+                            }
+                          </style>
+                        </defs>
+                        <path id="Rounded_Rectangle_6" data-name="Rounded Rectangle 6" class="cls-1" d="M860,2138h-2v2a2,2,0,0,1-2,2H846a2,2,0,0,1-2-2v-14a2,2,0,0,1,2-2h2v-2a2,2,0,0,1,2-2h10a2,2,0,0,1,2,2v14A2,2,0,0,1,860,2138Zm-12-2v-10h-1a1,1,0,0,0-1,1v12a1,1,0,0,0,1,1h8a1,1,0,0,0,1-1v-1h-6A2,2,0,0,1,848,2136Zm12-13a1,1,0,0,0-1-1h-8a1,1,0,0,0-1,1v12a1,1,0,0,0,1,1h8a1,1,0,0,0,1-1v-12Z" transform="translate(-844 -2120)"/>
+                      </svg>
+                    </button>
+                    <button v-if="!createParamIsFixed" id="copy" class="btn btn-copy" v-on:click="copyUrlSuccess($event)">{{ $t('create.copyLink') }}
+                      <svg xmlns="http://www.w3.org/2000/svg" width="18" height="22" viewBox="0 0 18 22">
+                        <defs>
+                          <style>
+                            .cls-1 {
+                              fill: #4a40fd;
+                              fill-rule: evenodd;
+                            }
+                          </style>
+                        </defs>
+                        <path id="Rounded_Rectangle_6" data-name="Rounded Rectangle 6" class="cls-1" d="M860,2138h-2v2a2,2,0,0,1-2,2H846a2,2,0,0,1-2-2v-14a2,2,0,0,1,2-2h2v-2a2,2,0,0,1,2-2h10a2,2,0,0,1,2,2v14A2,2,0,0,1,860,2138Zm-12-2v-10h-1a1,1,0,0,0-1,1v12a1,1,0,0,0,1,1h8a1,1,0,0,0,1-1v-1h-6A2,2,0,0,1,848,2136Zm12-13a1,1,0,0,0-1-1h-8a1,1,0,0,0-1,1v12a1,1,0,0,0,1,1h8a1,1,0,0,0,1-1v-12Z" transform="translate(-844 -2120)"/>
+                      </svg>
+                    </button>
+
+                    <button v-if="createParamIsFixed" id="share" class="btn btn-copy" v-on:click="startShareList($event)">{{ $t('create.shareList') }}<img src="/assets/img/svg/share.svg" alt="">
+                    </button>
+                    <button v-if="!createParamIsFixed" id="share" class="btn btn-copy" v-on:click="startShare(companyLink, 'Wallet api link', '', $event)">{{ $t('create.shareApiLink') }}<img src="/assets/img/svg/share.svg" alt="">
+                    </button>
+                  </div>
+                  <button v-if="createParamIsFixed" class="btn send-emails" v-on:click="sendWalletToUser()">{{$t('emailWallets')}}</button>
+
+                  <!--<a href="" class="link">Statistics</a>-->
+
+                  <button class="btn to-account" v-on:click="step = 21">{{$t('goToAcc')}}</button>
+                  <button class="btn close" v-on:click="closeCompany()">Close the campaign<br>and return the balance</button>
+                </template>
+
+              </template>
+
+            </div>
+            <!-- /Content Personal Areas  -->
+          </transition>
+
         </div>
       </div>
     </main>
     <!--  -->
     <!-- / -->
     <!-- Footer -->
-    <footer :class="{'footer-static': footerStatic}">
+    <footer v-bind:class="{ 'fixed-footer': step === 1, 'footer-static': footerStatic }">
       <a href="https://www.minter.network/" target="_blank" class="copy">Powered by <span>Minter</span></a>
     </footer>
     <!-- /Footer -->
 
 
     <!-- Modal Activation Types-->
-      <transition name="fade">
-      <div class="modal-alert modal-activation-types" v-bind:class="{ 'modal-activation-types-active': isShowModalType }" v-show="isShowModalType">
-        <div class="container">
-            <div class="close-modal-alert" v-on:click="toggleShowType()">
-                <span></span><span></span>
-            </div>
-            <h5>{{ $t('create.detailTypeTitle') }}</h5>
-            <p class="title"><img src="/assets/img/svg/wallet_dark.svg" alt="">{{ $t('create.simple') }}</p>
-            <p>{{ $t('create.detailSimple') }}</p>
-            <p class="title"><img src="/assets/img/svg/feedback_dark.svg" alt="">{{ $t('create.feedback') }}</p>
-            <p>{{ $t('create.detailFeedback') }}</p>
-            <p class="title"><img src="/assets/img/svg/action_dark.svg" alt="">{{ $t('create.action') }}</p>
-            <p>{{ $t('create.detailAction') }}</p>
-        </div>
+    <transition name="fade">
+    <div class="modal-alert modal-activation-types" v-bind:class="{ 'modal-activation-types-active': isShowModalType }" v-show="isShowModalType">
+      <div class="container">
+          <div class="close-modal-alert" v-on:click="toggleShowType()">
+              <span></span><span></span>
+          </div>
+          <h5>{{ $t('create.detailTypeTitle') }}</h5>
+          <p class="title"><img src="/assets/img/svg/wallet_dark.svg" alt="">{{ $t('create.simple') }}</p>
+          <p>{{ $t('create.detailSimple') }}</p>
+          <p class="title"><img src="/assets/img/svg/feedback_dark.svg" alt="">{{ $t('create.feedback') }}</p>
+          <p>{{ $t('create.detailFeedback') }}</p>
+          <p class="title"><img src="/assets/img/svg/action_dark.svg" alt="">{{ $t('create.action') }}</p>
+          <p>{{ $t('create.detailAction') }}</p>
       </div>
-      </transition>
+    </div>
+    </transition>
     <!-- /Modal Activation Types -->
 
     <!-- Modal Activation Types-->
@@ -483,6 +704,81 @@
     </div>
     <!-- /Modal Alert -->
 
+    <!-- Modal Login -->
+    <transition name="fade">
+    <div class="modal-alert modal-login" v-bind:class="{ 'modal-activation-dir': isShowLoginModal }" v-if="isShowLoginModal">
+      <div class="close-modal-alert" v-on:click="isShowLoginModal = false">
+        <span></span><span></span>
+      </div>
+      <div class="container">
+        <h5>{{ $t('menu.account') }}</h5>
+        <p>{{ $t('create.loginHelp') }}</p>
+        <input type="text" class="input"  v-bind:placeholder="$t('Email')" v-model="createParamEmail">
+        <input type="password" class="input" v-bind:placeholder="$t('password.password')" v-model="createParamCompanyPass">
+        <button class="btn" v-on:click="createOrUpdateAccount()">{{ $t('create.createAccount') }}</button>
+        <button class="btn" v-on:click="loginAccount()">{{ $t('create.loginAccount') }}</button>
+      </div>
+    </div>
+    </transition>
+    <!-- /Modal Login -->
+
+    <transition name="fade">
+      <!-- Modal Emails -->
+      <div class="modal-alert modal-emails" v-bind:class="{ 'modal-activation-dir': isShowEmailModal }" v-if="isShowEmailModal">
+        <div class="container">
+          <div class="close-modal-alert" v-on:click="isShowEmailModal = false">
+            <span></span><span></span>
+          </div>
+          <p>{{$t('create.emailLinkText')}}<a href="https://docs.google.com/spreadsheets/d/1KFYlkgu7bXZ6Z0HlbXbZQe7NnVuUEtBLo0JDQXZUWws/edit?usp=sharing" target="_blank" class="more-about">{{$t('Example')}}</a></p>
+          <p class="caption">{{$t('create.emailLink')}}</p>
+          <input type="text" class="input" placeholder="https://docs.google.com/spreadsheets" v-model="emailTableLink">
+          <button class="btn" v-on:click="importEmail()">{{$t('Import')}}</button>
+          <button class="btn btn-more btn-back" v-on:click="isShowEmailModal = false"><img src="/assets/img/svg/back.svg" alt="">{{ $t('back') }}</button>
+        </div>
+      </div>
+      <!-- /Modal Emails -->
+    </transition>
+
+    <transition name="fade">
+      <div class="modal-alert modal-target" v-bind:class="{ 'modal-activation-dir': isShowSpendModal }" v-if="isShowSpendModal">
+        <div class="container">
+          <div class="close-modal-alert" v-on:click="isShowSpendModal = false">
+            <span></span><span></span>
+          </div>
+          <div class="checkbox-items">
+
+            <template  v-for="spend in spends">
+              <div  v-if="spend.show" class="checkbox__item">
+                <input type="checkbox" v-bind:id="spend.id" v-model="spendChecks" :value="spend.id">
+                <label v-bind:for="spend.id"><img v-bind:src="spend.ico" alt=""></label>
+                <p style="width: 1000px;" v-html="newLineLabel($t(spend.label))"></p>
+              </div>
+            </template>
+
+          </div>
+          <button class="btn btn-more btn-back" v-on:click="isShowSpendModal = false"><img src="/assets/img/svg/back.svg" alt="">{{ $t('back') }}</button>
+        </div>
+      </div>
+    </transition>
+
+    <transition name="fade">
+      <div class="modal-alert modal-skins" v-bind:class="{ 'modal-activation-dir': isShowSkinModal }" v-if="isShowSkinModal">
+        <div class="container">
+          <div class="close-modal-alert" v-on:click="isShowSkinModal = false">
+            <span></span><span></span>
+          </div>
+          <div class="skins-items" id="skins">
+
+            <div v-for="skin in skins" class="skins__item" tabindex="0" >
+              <span v-on:click="createParamSkin = skin.id">{{ skin.label }}</span><a v-on:click="showSkinPreviewModal(skin)">{{ $t('Prev') }}</a>
+            </div>
+
+          </div>
+
+          <button class="btn btn-more btn-back" v-on:click="isShowSkinModal = false"><img src="/assets/img/svg/back.svg" alt="">{{ $t('back') }}</button>
+        </div>
+      </div>
+    </transition>
     <!-- /Page -->
   </div>
 </template>
@@ -493,6 +789,7 @@
   import axios from 'axios'
   import VueQrcode from '@chenfengyuan/vue-qrcode'
   import { Decimal } from 'decimal.js'
+  import moment from 'moment'
 
   import {
     LINK,
@@ -503,8 +800,10 @@
     getCoinExchangeList,
     getFiatExchangeList,
     getBipPrice,
-    prettyFormat, createCompany, DEFAULT_SYMBOL, getFiatByLocale, ACTIVATE_FEE, createDeepLink
+    prettyFormat, createCompany, DEFAULT_SYMBOL, getFiatByLocale, ACTIVATE_FEE, createDeepLink, getHash
   } from './core'
+  import { SKINS } from './skins'
+  import { SPENDS } from './spendings'
 
   if (process.client) {
     Vue.use(VueClipboard)
@@ -527,6 +826,10 @@
         isShowModalNType: false,
         isShowModalQR: false,
         isShowModalDir: false,
+        isShowLoginModal: false,
+        isShowEmailModal: false,
+        isShowSpendModal: false,
+        isShowSkinModal: false,
         isCreateOne: true,
         isActiveTrigger01: false,
         isActiveTrigger02: false,
@@ -545,17 +848,22 @@
         createParamMessage: '',
         createParamPassword: '',
         createParamEmail: '',
+        createParamBrand: '',
+        createParamLogoPath: '',
         createParamUID: '',
         createParamType: 'simple',
-        createParamCount: 0,
+        createParamCount: '',
         createParamIsFixed: true,
         createParamBalance: '',
         createParamCompanyPass: '',
         createParamSkin: '',
         company: null,
+        companies: [],
         companyLink: '',
         minNewBalance: 0,
         isBalanceGreatThenZero: false,
+        emailTableLink: '',
+        emailList: [],
 
         balances: [],
         addressForFilling: 'empty',
@@ -568,32 +876,12 @@
 
         maxLen: 140,
         minLen: 100,
+        isMobile: false,
 
-        skins: [
-          {
-            id: 'bday',
-            label: 'HAPPY BIRTHDAY',
-            image: '',
-          },
-          {
-            id: 'mday',
-            label: 'VALENTINE\'S DAY',
-            image: '',
-          },
-          {
-            id: 'march8',
-            label: 'MARCH 8',
-            image: '',
-          },
-          {
-            id: 'feb23',
-            label: 'FEBRUARY 23',
-            image: '',
-          },
-        ],
+        skins: SKINS,
+        spends: SPENDS,
+        spendChecks: [],
       }
-    },
-    created () {
     },
     computed: {
       currentLang() {
@@ -627,12 +915,27 @@
       },
       deepLink() {
         if (this.minNewBalance) {
-          return createDeepLink(this.addressForFilling, this.minNewBalance)
+          return createDeepLink({
+            to: this.addressForFilling,
+            amount: this.minNewBalance,
+            isMobile: this.isMobile,
+          })
         }
         return ''
       },
       footerStatic() {
         return this.step === 3 || this.step === 4
+      }
+    },
+    created () {
+      if (navigator.share) {
+        this.isMobile = true
+      }
+      this.minNewBalance = new Decimal(0)
+    },
+    filters: {
+      short: function (date) {
+        return moment(date).format('DD.MM.YY');
       }
     },
     // method
@@ -661,6 +964,12 @@
       toggleShowDir: function () {
         this.isShowModalDir = !this.isShowModalDir
       },
+      showLoginModal () {
+        this.isShowLoginModal = true
+      },
+      showEmailModal () {
+        this.isShowEmailModal = true
+      },
       closeError: function () {
         this.isShowError = false
       },
@@ -674,48 +983,65 @@
         this.step = 2
         return false
       },
+      startCreateAccount: function () {
+        // advanced mod
+        this.prevStep.push(this.step)
+        this.step = 11
+        return false
+      },
       clearParams: function () {
-        this.createParamCompanyPass = ''
-        this.createParamEmail = ''
+        console.log('clear')
+        //this.createParamCompanyPass = ''
+        //this.createParamEmail = ''
+        this.createParamCount = 0
         this.createParamMessage = ''
         this.createParamTask = ''
         this.createParamBalance = ''
         this.createParamUID = ''
         this.createParamSkin = ''
+        this.spendChecks = []
         this.minNewBalance = new Decimal(0)
         this.isBalanceGreatThenZero = false
+        this.addressForFilling = 'empty'
+        this.isAddressFilling = false
+        this.spendChecks = []
       },
-      startCreateSimple: function () {
+      startCreateSimple: function (isCreateOne = true) {
+        this.isCreateOne = isCreateOne
         this.prevStep.push(this.step)
+        this.clearParams()
         if (this.isCreateOne) {
           this.step = 3
           this.createParamType = 'simple'
         } else {
-          this.step = 6
+          //this.step = 6
+          this.step = 61
           this.createParamType = 'complex'
         }
-        this.clearParams()
         return false
       },
-      startCreateFeedback: function () {
+      startCreateFeedback: function (isCreateOne = true) {
+        this.isCreateOne = isCreateOne
         this.prevStep.push(this.step)
+        this.clearParams()
         if (this.isCreateOne) {
           this.step = 31
           this.createParamType = 'simple_feedback'
         } else {
-          this.step = 6
+          // this.step = 6
+          this.step = 62
           this.createParamType = 'complex_feedback'
         }
-        this.clearParams()
         return false
       },
-      startCreateAction: function () {
+      startCreateAction: function (isCreateOne = true) {
+        this.isCreateOne = isCreateOne
         this.prevStep.push(this.step)
+        this.clearParams()
         if (this.isCreateOne) {
           this.step = 32
           this.createParamType = 'simple_action'
         }
-        this.clearParams()
         return false
       },
       startCreateMultiFixed: function () {
@@ -738,6 +1064,9 @@
       },
       newLineLabel(label) {
         return label.split('|').join('<br>')
+      },
+      oneLineLabel(label) {
+        return label.split('|').join(' ')
       },
       startCreateWallet: async function () {
         if (this.isActiveTrigger01 && !this.createParamBalance) {
@@ -810,6 +1139,7 @@
             count: this.createParamCount,
           }
         })
+        this.companies.push(this.company)
         this.companyLink = `${BACKEND_BASE_URL}/api/company/${this.company.uid}/get_wallet?count=1`
         console.log(this.company)
 
@@ -871,32 +1201,32 @@
           return false
         }
 
-        this.prevStep.push(this.step)
-        this.step = 4
-
         // send info to server
         const company = await createCompany({
           type: this.createParamType,
           uid: '',
           mxaddress: '',
           email: this.createParamEmail,
-          password: this.createParamCompanyPass,
+          password: getHash(this.createParamCompanyPass),
           params: {
             title: this.createParamMessage,
             notice: this.createParamTask,
-            count: this.createParamCount,
+            count: this.createParamCount === 'Unlim' ? 0: this.createParamCount,
             amount: this.createParamBalance,
             skin: this.createParamSkin,
-          }
+            spends: this.spendChecks,
+          },
+          emailList: this.emailList,
         })
         if (this.createParamBalance) {
           this.minNewBalance = new Decimal(this.createParamBalance)
             .plus(ACTIVATE_FEE)
-            .mul(this.createParamCount)
+            .mul(this.createParamCount === 'Unlim' ? 1: this.createParamCount)
           if (this.minNewBalance.gt(0)) {
             this.isBalanceGreatThenZero = true
           }
         }
+        this.createParamIsFixed = this.createParamCount !== 'Unlim'
 
         if (company && company.warehouseWallet && company.warehouseWallet.mxaddress) {
           this.addressForFilling = company.warehouseWallet.mxaddress
@@ -904,6 +1234,7 @@
           this.addressForFilling = 'empty'
         }
         this.company = company
+        this.companies.push(this.company)
         this.companyLink = `${BACKEND_BASE_URL}/api/company/${this.company.uid}/get_wallet?count=1`
 
         this.loadAdditionalInfo()
@@ -911,16 +1242,17 @@
         const self = this
         this.checkInterval = setInterval(function(){
           self.checkFilledBalance()
-          self.startCreateSuccess(false)
+          //self.startCreateSuccess(false)
         }, 3 * 1000)
 
+        this.prevStep.push(this.step)
+        this.step = 80
         return false
       },
       loadAdditionalInfo: async function () {
         this.bipToUSD = await getBipPrice()
         this.fiat = await getFiatExchangeList()
-        this.coins = getCoinExchangeList()
-        this.fiat = getFiatExchangeList()
+        // this.coins = getCoinExchangeList()
       },
       startCreateSuccess: async function (showError = true) {
         if (!this.isAddressFilling) {
@@ -1016,7 +1348,7 @@
                 this.isAddressFilling = true
 
                 const coinToDef = this.coins[coin]
-                if (coinToDef || coin === DEFAULT_SYMBOL) {
+                if (amount && (coinToDef || coin === DEFAULT_SYMBOL)) {
                   usdAmount = new Decimal(amount)
                     .mul(coinToDef ?? 1)
                     .mul(this.bipToUSD)
@@ -1032,19 +1364,15 @@
               }
             })
 
-          this.balanceSumFiat = this.balanceSumUSD
-          const fiatVal = getFiatByLocale(this.currentLang)
-          if (fiatVal) {
-            const fiatCur = this.fiat[fiatVal.name]
-            if (this.currentLang !== 'en' && fiatCur) {
-              this.balanceSumFiat = this.balanceSumUSD
-                .mul(fiatCur)
-            }
+          if (this.isAddressFilling) {
+            clearInterval(this.checkInterval)
           }
+
+          this.recalculateBalance()
         } catch (error) {
           console.error(error)
           // this.errorMsg = error.message
-          this.isShowError = true
+          // this.isShowError = true
         }
       },
       recalculateBalance() {
@@ -1138,6 +1466,139 @@
       },
       showSkinPreviewModal(skin) {
         console.log(skin)
+      },
+      createOrUpdateAccount: async function () {
+        if (this.createParamCompanyPass === '') {
+          this.errorMsg = this.$t('errors.passErrorEmpty')
+          this.isShowError = true
+          return false
+        }
+        if (this.createParamEmail === '') {
+          this.errorMsg = this.$t('errors.failEmail')
+          this.isShowError = true
+          return false
+        }
+
+        try {
+          const response = await axios.post(`${BACKEND_BASE_URL}/api/account`, {
+            email: this.createParamEmail,
+            password: getHash(this.createParamCompanyPass),
+            brand: this.createParamBrand,
+          })
+          console.log(response.data)
+          this.companies = response.data.companies ? response.data.companies: []
+          this.createParamBrand = response.data.brand
+          this.createParamLogoPath = response.data.logo
+
+          // show account page
+          this.isShowLoginModal = false
+          this.prevStep.push(this.step)
+          this.step = 21
+          this.loadAdditionalInfo()
+        } catch (error) {
+          this.isShowError = true
+          this.errorMsg = this.$t('errors.errorLogin')
+        }
+      },
+      loginAccount: async function (){
+         try {
+           const response = await axios.post(`${BACKEND_BASE_URL}/api/account/login`, {
+             email: this.createParamEmail,
+             password: getHash(this.createParamCompanyPass),
+           })
+           console.log(response.data)
+           this.companies = response.data.companies
+           this.createParamBrand = response.data.brand
+           this.createParamLogoPath = response.data.logo
+
+           // show account page
+           this.isShowLoginModal = false
+           this.prevStep.push(this.step)
+           this.step = 21
+           this.loadAdditionalInfo()
+         } catch (error) {
+           this.isShowError = true
+           this.errorMsg = this.$t('errors.errorLogin')
+         }
+      },
+      selectUnlim() {
+        this.createParamCount = 'Unlim'
+      },
+      importEmail: async function () {
+        try {
+          const response = await axios.get(this.emailTableLink)
+          if (response.status === 200) {
+            const regexp = RegExp(/>(\S+@\S+\.\S+)<\/td/,'g')
+            const matches = response.data.matchAll(regexp)
+
+            this.emailList = []
+            for (const match of matches) {
+              this.emailList.push(match[1])
+            }
+            this.createParamCount = this.emailList.length
+            this.isShowEmailModal = false
+            return false
+          }
+        } catch (error) {
+          console.error(error)
+        }
+        this.isShowError = true
+        this.errorMsg = this.$t('errors.importError')
+      },
+      getSpendLabelById(spendId) {
+        for (const spend of this.spends) {
+          if (spend.id === spendId) {
+            return this.oneLineLabel(this.$t(spend.label))
+          }
+        }
+      },
+      closeCompany: async function () {
+        try {
+          const response = await axios.post(`${BACKEND_BASE_URL}/api/company/${this.company.uid}/close`, {
+            email: this.createParamEmail,
+            password: getHash(this.createParamCompanyPass),
+          })
+          console.log(response.data)
+          this.errorMsg = this.$t('successMsg.successClose')
+          this.isShowError = true
+        } catch (error) {
+          this.isShowError = true
+          this.errorMsg = this.$t('errors.closeError')
+        }
+      },
+      sendWalletToUser: async function () {
+        try {
+          const response = await axios.post(`${BACKEND_BASE_URL}/api/company/${this.company.uid}/email_wallets`, {
+            email: this.createParamEmail,
+            password: getHash(this.createParamCompanyPass),
+          })
+          console.log(response.data)
+          this.errorMsg = this.$t('successMsg.successEmailSending')
+          this.isShowError = true
+        } catch (error) {
+          this.isShowError = true
+          this.errorMsg = this.$t('errors.errorSend')
+        }
+      },
+      selectCompany(company) {
+        if (company) {
+          this.step = 80
+
+          this.addressForFilling = company.warehouseWallet ? company.warehouseWallet.mxaddress : 'empty'
+          this.company = company
+          this.companyLink = `${BACKEND_BASE_URL}/api/company/${this.company.uid}/get_wallet?count=1`
+
+          const companyParams = this.company.params ? JSON.parse(this.company.params) : {}
+          this.createParamTask = companyParams.notice ?? ''
+          this.createParamMessage = companyParams.title ?? ''
+          this.createParamCount = companyParams.count ?? 'Unlim'
+          this.createParamBalance = companyParams.amount ?? ''
+          this.createParamSkin = companyParams.skin ?? ''
+          this.spendChecks = companyParams.spends ?? ''
+
+          this.checkFilledBalance()
+        }
+        return false;
       },
     },
     // html header section
@@ -1254,5 +1715,15 @@
           opacity: 1;
           transform: translateY(0px);
       }
+  }
+  main {
+    padding-bottom: 50px;
+  }
+  footer {
+    position: relative;
+    margin-top: -50px;
+    height: 50px;
+    clear: both;
+    padding-top: 20px;
   }
 </style>

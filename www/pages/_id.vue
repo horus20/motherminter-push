@@ -59,6 +59,10 @@
         <!-- /Password -->
       </template>
 
+      <template v-if="isShowSkin">
+        <iframe style="width: 100%; height: 100%; position: absolute; z-index: 100;" v-bind:src="skinContent"></iframe>
+      </template>
+
       <template v-show="step === 1">
 
       </template>
@@ -69,36 +73,41 @@
           <p class="balance" v-for="balance in balances">{{ balance.amount }} {{ balance.coin }}</p>
           <p class="currency">~{{ balanceSum }}</p>
 
-          <p class="transfer">{{ $t('main.transferSection') }}</p>
-          <div class="transfer-items">
-            <a class="transfer__item" v-on:click="showTransfer()">
-              <img src="assets/img/svg/person.svg" alt="">
-              <p v-html="newLineLabel($t('main.anotherPerson'))"></p>
-            </a>
-            <a class="transfer__item" v-on:click="showMyTransfer()">
-              <img src="assets/img/svg/wallet.svg" alt="">
-              <p v-html="newLineLabel($t('main.youWallet'))"></p>
-            </a>
-            <a class="transfer__item" v-on:click="showFund()">
-              <img src="assets/img/svg/charity.svg" alt="">
-              <p v-html="newLineLabel($t('main.charityFund'))"></p>
-            </a>
-          </div>
-          <p class="transfer">{{ $t('main.spendSection') }}</p>
-          <div class="transfer-items">
-            <a class="transfer__item" v-on:click="showMobile()">
-              <img src="assets/img/svg/services.svg" alt="">
-              <p v-html="newLineLabel($t('main.mobileService'))"></p>
-            </a>
-            <a class="transfer__item" v-on:click="showGames()">
-              <img src="assets/img/svg/games.svg" alt="">
-              <p v-html="newLineLabel($t('main.games'))"></p>
-            </a>
-            <span class="transfer__item" v-on:click="showFuel()">
-                <img src="assets/img/svg/fuel.svg" alt="" v-on:click="showFood()">
-                <p v-html="newLineLabel($t('main.foodDelivery'))"></p>
-              </span>
-          </div>
+          <template  v-if="(spendChecks.includes('transfer') || spendChecks.includes('yourWallet') || spendChecks.includes('fund')) || spendChecks.length === 0">
+            <p class="transfer">{{ $t('main.transferSection') }}</p>
+            <div class="transfer-items">
+              <a class="transfer__item" v-on:click="showTransfer()" v-if="spendChecks.includes('transfer') || spendChecks.length === 0">
+                <img src="assets/img/svg/person.svg" alt="">
+                <p v-html="newLineLabel($t('main.anotherPerson'))"></p>
+              </a>
+              <a class="transfer__item" v-on:click="showMyTransfer()" v-if="spendChecks.includes('yourWallet') || spendChecks.length === 0">
+                <img src="assets/img/svg/wallet.svg" alt="">
+                <p v-html="newLineLabel($t('main.youWallet'))"></p>
+              </a>
+              <a class="transfer__item" v-on:click="showFund()" v-if="spendChecks.includes('fund') || spendChecks.length === 0">
+                <img src="assets/img/svg/charity.svg" alt="">
+                <p v-html="newLineLabel($t('main.charityFund'))"></p>
+              </a>
+            </div>
+          </template>
+
+          <template  v-if="(spendChecks.includes('games') || spendChecks.includes('phone') || spendChecks.includes('fuel')) || spendChecks.length === 0">
+            <p class="transfer">{{ $t('main.spendSection') }}</p>
+            <div class="transfer-items">
+              <a class="transfer__item" v-on:click="showMobile()" v-if="spendChecks.includes('phone') || spendChecks.length === 0">
+                <img src="assets/img/svg/services.svg" alt="">
+                <p v-html="newLineLabel($t('main.mobileService'))"></p>
+              </a>
+              <a class="transfer__item" v-on:click="showGames()" v-if="spendChecks.includes('games') || spendChecks.length === 0">
+                <img src="assets/img/svg/games.svg" alt="">
+                <p v-html="newLineLabel($t('main.games'))"></p>
+              </a>
+              <span class="transfer__item" v-on:click="showFuel()" v-if="spendChecks.includes('fuel') || spendChecks.length === 0">
+                  <img src="assets/img/svg/fuel.svg" alt="" v-on:click="showFood()">
+                  <p v-html="newLineLabel($t('main.foodDelivery'))"></p>
+                </span>
+            </div>
+          </template>
           <!--                <button class="btn btn-more">More info</button>-->
 
           <template v-if="isCustomWallet">
@@ -431,9 +440,15 @@
   import TxSignature from 'minterjs-tx/src/tx-signature'
   import * as cryptoRandomString from 'crypto-random-string'
   import { SHA256 } from 'crypto-js'
+  import { SKINS } from './skins'
+  import { SPENDS } from './spendings'
 
   if (process.client) {
     Vue.use(VueClipboard)
+  }
+
+  export function closeFrame() {
+    console.log(this)
   }
 
   const MAX_UID_LENGTH = 64
@@ -499,6 +514,14 @@
         },
         successIcon: '/assets/img/svg/person.svg',
         successLink: '',
+
+        skins: SKINS,
+        spends: SPENDS,
+        spendChecks: [],
+        skin: null,
+
+        isShowSkin: false,
+        skinContent: '',
       }
     },
     components: {
@@ -513,6 +536,13 @@
         return
       }
       this.checkAuth()
+      const self = this
+      window.hideSkin = function () {
+        self.isShowSkin = false
+      }
+      window.skinMessage = function () {
+        return self.companyMsg
+      }
     },
     computed: {
       currentLang() {
@@ -660,8 +690,14 @@
               custom: this.isCustomWallet,
             })
 
-            if (afterActivateResponse.status === 200 && afterActivateResponse.data && afterActivateResponse.data.notice) {
-              this.companyMsg = afterActivateResponse.data.notice
+            if (afterActivateResponse.status === 200 && afterActivateResponse.data) {
+              this.companyMsg = afterActivateResponse.data.msg ?? ''
+              this.skin = afterActivateResponse.data.skin ?? ''
+              this.spendChecks = afterActivateResponse.data.spends ?? []
+
+              if (this.skin !== '') {
+                this.loadSkin(this.skin)
+              }
             }
 
             if (response.data.status === 100) {
@@ -755,16 +791,7 @@
                 usdAmount
               }
             })
-
-          this.balanceSumFiat = this.balanceSumUSD
-          const fiatVal = getFiatByLocale(this.currentLang)
-          if (fiatVal) {
-            const fiatCur = this.fiat[fiatVal.name]
-            if (this.currentLang !== 'en' && fiatCur) {
-              this.balanceSumFiat = this.balanceSumUSD
-                .mul(fiatCur)
-            }
-          }
+          this.recalculateBalance()
 
           const response = await axios.get(`${EXPLORER_GATE_API_URL}/api/v1/nonce/${this.address}`)
           if (response.data && response.data.data && response.data.data.nonce) {
@@ -1099,6 +1126,23 @@
           this.isShowError = true
         }
       },
+      loadSkin: async function (skin) {
+        this.isShowSkin = true;
+
+        for(let i = 0; i < this.skins.length; i += 1) {
+          if (this.skins[i].id === skin) {
+            this.skinContent = this.skins[i].path
+            console.log(this.skinContent)
+            break
+          }
+        }
+
+        Vue.component('manage-posts', function(resolve, reject){
+          axios.get("../../Views/login.html").then(response => {
+            resolve({template: response.data})
+          })
+        })
+      },
     },
     // html header section
     head: {
@@ -1230,5 +1274,15 @@
   }
   .fade-enter, .fade-leave-to {
     opacity: 0;
+  }
+  main {
+    padding-bottom: 50px;
+  }
+  footer {
+    position: relative;
+    margin-top: -50px;
+    height: 50px;
+    clear: both;
+    padding-top: 20px;
   }
 </style>

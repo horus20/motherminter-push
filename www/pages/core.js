@@ -9,7 +9,7 @@ import { convertToPip, toBuffer } from 'minterjs-util'
 import { Decimal } from 'decimal.js'
 
 //export const BACKEND_BASE_URL = 'https://p.motherminter.org'
-export const BACKEND_BASE_URL = 'https://minterpush.ru'
+export const BACKEND_BASE_URL = 'https://pdev.motherminter.org'
 //export const BACKEND_BASE_URL = 'http://localhost:3048'
 export const EXPLORER_BASE_URL = 'https://explorer-api.minter.network'
 export const EXPLORER_GATE_API_URL = 'https://gate-api.minter.network'
@@ -190,41 +190,45 @@ export function getFiatByLocale (locale) {
 
 function intToHex(integer) {
   if (integer < 0) {
-    throw new Error("Invalid integer as argument, must be unsigned!");
+    throw new Error("Invalid integer as argument, must be unsigned!")
   }
-  var hex = integer.toString(16);
-  return hex.length % 2 ? "0" + hex : hex;
+  var hex = integer.toString(16)
+  return hex.length % 2 ? "0" + hex : hex
 }
 
 function encodeLength(len, offset) {
   if (len < 56) {
-    return Buffer.from([len + offset]);
+    return Buffer.from([len + offset])
   } else {
-    const hexLength = intToHex(len);
-    const lLength = hexLength.length / 2;
-    const firstByte = intToHex(offset + 55 + lLength);
-    return Buffer.from(firstByte + hexLength, "hex");
+    const hexLength = intToHex(len)
+    const lLength = hexLength.length / 2
+    const firstByte = intToHex(offset + 55 + lLength)
+    return Buffer.from(firstByte + hexLength, "hex")
   }
 }
 
 function encode(input) {
   if (Array.isArray(input)) {
-    const output = [];
+    const output = []
     for (let i = 0; i < input.length; i++) {
-      output.push(encode(input[i]));
+      output.push(encode(input[i]))
     }
-    const buf = Buffer.concat(output);
-    return Buffer.concat([encodeLength(buf.length, 192), buf]);
+    const buf = Buffer.concat(output)
+    return Buffer.concat([encodeLength(buf.length, 192), buf])
   } else {
-    const inputBuf = toBuffer(input);
+    const inputBuf = toBuffer(input)
     return inputBuf.length === 1 && inputBuf[0] < 128
       ? inputBuf
-      : Buffer.concat([encodeLength(inputBuf.length, 128), inputBuf]);
+      : Buffer.concat([encodeLength(inputBuf.length, 128), inputBuf])
   }
 }
 
-export function createDeepLink (to, amount, symbol = DEFAULT_SYMBOL) {
-  // minter:///tx?d=f83a01aae98a4249500000000000000094058fd467edc2ee20f3d6353f1ce457b67706e79f880de0b6b3a76400008000008a42495000000000000000
+export function createDeepLink ({
+    to,
+    amount,
+    symbol = DEFAULT_SYMBOL,
+    isMobile = false
+  }) {
   const txData = new TxDataSend({
     to: toBuffer(to),
     coin: coinToBuffer(symbol),
@@ -234,8 +238,9 @@ export function createDeepLink (to, amount, symbol = DEFAULT_SYMBOL) {
   const chex = encode([
     TX_TYPE.SEND,
     txData.serialize(),
-  ]);
-  const hex = Buffer.from(chex.buffer).toString('hex');
+  ])
+  const hex = Buffer.from(chex.buffer).toString('hex')
+  const prefix = isMobile ? 'minter://' : 'https://bip.to'
 
-  return `https://bip.to/tx?d=${hex}`
+  return `${prefix}/tx?d=${hex}`
 }

@@ -50,7 +50,9 @@
   --green: #63d96e;
   --green-lighting: #d2fed6;
   --green-dark: #319939;
-  --blue: #4a40fd; }
+  --blue: #4a40fd;
+  --yellow: #ffd753;
+}
 
 * {
   outline: none; }
@@ -450,7 +452,7 @@ header {
   display: block; }
 
 .content__start {
-  /*padding-top: calc(50% - 122px);*/
+  padding-top: calc(50% - 122px);
   padding-top: calc(50vh - 162px); }
   .content__start h1 {
     font: 48px/1.2 "SegoeUISemiBold", sans-serif;
@@ -831,6 +833,109 @@ header {
 
 .modal-activation-types.modal-type2 .close-modal-alert {
   margin-bottom: 20px; }
+
+.modal-login {
+  padding-top: 36px;
+  text-align: left; }
+  .modal-login .close-modal-alert {
+    margin-top: 0; }
+  .modal-login h5 {
+    font: 48px/1 'SegoeUISemiBold', sans-serif;
+    margin-bottom: 24px; }
+  .modal-login p {
+    font-size: 16px;
+    margin-bottom: 24px; }
+  .modal-login .input {
+    font: 18px/1 'SegoeUILight', sans-serif;
+    color: #525252; }
+  .modal-login .btn {
+    background: var(--blue);
+    margin-bottom: 12px; }
+    .modal-login .btn:last-child {
+      background: var(--pink); }
+
+.modal-emails {
+  padding-top: 36px;
+  text-align: left; }
+  .modal-emails .close-modal-alert {
+    margin-top: 0; }
+  .modal-emails p {
+    font-size: 18px;
+    margin-bottom: 8px; }
+    .modal-emails p .more-about {
+      font-size: 18px; }
+  .modal-emails .caption {
+    font-size: 10px;
+    text-transform: uppercase;
+    margin-bottom: 12px; }
+  .modal-emails .input {
+    height: 38px;
+    padding: 0 4px 2px;
+    border: 1px solid #dcdcdc;
+    border-radius: 2px;
+    background: #f6f6f6;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box; }
+  .modal-emails .btn {
+    background: var(--pink); }
+  .modal-emails .btn-back {
+    background: #f4f4f4;
+    margin-top: 36px; }
+
+.modal-target {
+  padding-top: 24px; }
+  .modal-target .close-modal-alert {
+    margin-top: 0; }
+  .modal-target .checkbox-items {
+    padding-left: 24px; }
+    .modal-target .checkbox-items .checkbox__item {
+      display: -webkit-box;
+      display: -ms-flexbox;
+      display: flex;
+      -webkit-box-align: center;
+      -ms-flex-align: center;
+      align-items: center;
+      position: relative;
+      padding: 4px 0; }
+      .modal-target .checkbox-items .checkbox__item input[type=checkbox] {
+        opacity: 0; }
+      .modal-target .checkbox-items .checkbox__item label::before {
+        display: block;
+        content: "";
+        width: 16px;
+        height: 16px;
+        border: 1px solid #94969d;
+        position: absolute;
+        top: 21px;
+        left: 0; }
+      .modal-target .checkbox-items .checkbox__item label:after {
+        display: block;
+        width: 10px;
+        height: 6px;
+        border-left: 3px solid var(--green-dark);
+        border-bottom: 3px solid var(--green-dark);
+        position: absolute;
+        top: 23px;
+        left: 2px;
+        -webkit-transform: rotate(-45deg);
+        -ms-transform: rotate(-45deg);
+        transform: rotate(-45deg); }
+      .modal-target .checkbox-items .checkbox__item input[type=checkbox] + label:after {
+        content: none; }
+      .modal-target .checkbox-items .checkbox__item input[type=checkbox]:checked + label:after {
+        content: ""; }
+    .modal-target .checkbox-items img {
+      margin: 0 24px; }
+    .modal-target .checkbox-items p {
+      font: 10px/1 'SegoeUIBold', sans-serif;
+      text-transform: uppercase; }
+
+.modal-skins {
+  padding-top: 24px; }
+  .modal-skins .close-modal-alert {
+    margin-top: 0; }
+  .modal-skins .skins-items {
+    display: block; }
 
 .content__success {
   margin-top: calc(50% - 210px);
@@ -1857,3 +1962,533 @@ footer {
   margin-bottom: 6px;
   -webkit-box-sizing: border-box;
   box-sizing: border-box; }
+
+.content__choose-wallet-new {
+  padding-top: calc(50% - 200px);
+  padding-top: calc(50vh - 200px);
+  text-align: center; }
+  .content__choose-wallet-new h5 {
+    font-size: 24px;
+    margin-bottom: 4px; }
+  .content__choose-wallet-new .btn {
+    display: inline-block;
+    background: var(--blue);
+    margin-bottom: 8px; }
+  .content__choose-wallet-new .buttons {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-pack: justify;
+    -ms-flex-pack: justify;
+    justify-content: space-between; }
+  .content__choose-wallet-new .more-about {
+    margin-bottom: 18px; }
+  .content__choose-wallet-new .btn-radio {
+    font-size: 18px;
+    color: var(--prim-color);
+    width: auto;
+    height: 47px;
+    line-height: 47px;
+    padding-left: 40px;
+    padding-right: 30px;
+    position: relative;
+    background: #fff;
+    -webkit-transition: background-color .2s;
+    -o-transition: background-color .2s;
+    transition: background-color .2s; }
+    .content__choose-wallet-new .btn-radio span {
+      border-radius: 50%; }
+    .content__choose-wallet-new .btn-radio .outer {
+      position: absolute;
+      top: 16px;
+      left: 22px;
+      width: 13px;
+      height: 13px;
+      border: 1px solid #000;
+      background: #fff; }
+    .content__choose-wallet-new .btn-radio .internal {
+      position: absolute;
+      top: 2px;
+      left: 2px;
+      width: 9px;
+      height: 9px;
+      background: #fff;
+      -webkit-transition: background-color .2s;
+      -o-transition: background-color .2s;
+      transition: background-color .2s; }
+  .content__choose-wallet-new .btn-radio__active {
+    background: var(--green-lighting); }
+    .content__choose-wallet-new .btn-radio__active .internal {
+      background: #000; }
+  .content__choose-wallet-new #feedback img {
+    margin-right: 19px;
+    margin-left: -8px;
+    margin-bottom: -7px; }
+  .content__choose-wallet-new #action {
+    margin-bottom: 24px; }
+    .content__choose-wallet-new #action img {
+      margin-right: 18px;
+      margin-left: -38px;
+      margin-bottom: -3px; }
+  .content__choose-wallet-new #multiple {
+    margin-top: 12px; }
+    .content__choose-wallet-new #multiple img {
+      margin-right: 28px;
+      margin-left: -41px;
+      margin-bottom: -9px; }
+
+.content__attach-messege {
+  padding-top: calc(50% - 180px);
+  padding-top: calc(50vh - 180px); }
+  .content__attach-messege form {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-wrap: wrap;
+    flex-wrap: wrap;
+    -webkit-box-pack: justify;
+    -ms-flex-pack: justify;
+    justify-content: space-between; }
+    .content__attach-messege form input {
+      display: none;
+      width: 100%;
+      font: 14px/1 "SegoeUILight", sans-serif;
+      color: var(--grey-light);
+      border: none;
+      padding-bottom: 14px;
+      border-bottom: 1px solid #dcdcdc;
+      margin-bottom: 24px; }
+  .content__attach-messege .btn:not(.btn-back) {
+    margin-top: 16px;
+    background: var(--blue); }
+  .content__attach-messege p {
+    font-size: 24px;
+    margin-bottom: 28px; }
+  .content__attach-messege .trigger {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    width: 46px;
+    height: 19px;
+    border-radius: 9px;
+    color: #fff;
+    background: var(--grey-lighting);
+    cursor: pointer;
+    overflow: hidden;
+    margin-top: 8px;
+    -webkit-transition: background-color .2s;
+    -o-transition: background-color .2s;
+    transition: background-color .2s; }
+    .content__attach-messege .trigger span {
+      display: block;
+      font: 10px/19px "SegoeUIBold", sans-serif;
+      letter-spacing: 1px;
+      -webkit-box-flex: 0;
+      -ms-flex: none;
+      flex: none; }
+    .content__attach-messege .trigger .trigger_no {
+      padding: 0 6px;
+      -webkit-transition: margin .2s;
+      -o-transition: margin .2s;
+      transition: margin .2s; }
+    .content__attach-messege .trigger .trigger_yes {
+      padding-left: 4px; }
+    .content__attach-messege .trigger .trigger_circle {
+      width: 15px;
+      height: 15px;
+      border-radius: 50%;
+      background: #fff;
+      margin-top: 2px; }
+  .content__attach-messege .trigger-active {
+    background: var(--green);
+    -webkit-transition: background-color .2s;
+    -o-transition: background-color .2s;
+    transition: background-color .2s; }
+    .content__attach-messege .trigger-active .trigger_no {
+      margin-left: -27px; }
+
+.skins-items {
+  display: none;
+  border-radius: 7px;
+  overflow: hidden; }
+  .skins-items .skins__item {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    margin-bottom: 1px; }
+    .skins-items .skins__item:last-child {
+      margin-bottom: 0; }
+    .skins-items .skins__item:focus * {
+      background: var(--green-lighting); }
+    .skins-items .skins__item * {
+      height: 41px;
+      line-height: 42px;
+      background: #f7f7f7;
+      cursor: pointer; }
+    .skins-items .skins__item span {
+      width: 200px;
+      margin-right: 1px;
+      padding-left: 17px;
+      font-size: 14px;
+      font-family: 'SegoeUIBold', sans-serif;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      -webkit-box-sizing: border-box;
+      box-sizing: border-box; }
+    .skins-items .skins__item a {
+      width: 49px;
+      text-align: center;
+      font-size: 11px;
+      color: var(--blue); }
+
+.content__feedback-simple {
+  padding-top: 100px;
+  text-align: center; }
+  .content__feedback-simple h5 {
+    font-size: 24px;
+    margin-bottom: 12px; }
+  .content__feedback-simple .score {
+    font-size: 14px;
+    margin-bottom: 18px;
+    text-transform: uppercase; }
+    .content__feedback-simple .score .balance {
+      font-family: 'SegoeUIBold', sans-serif; }
+  .content__feedback-simple .copy_link {
+    margin-bottom: 38px; }
+    .content__feedback-simple .copy_link p {
+      font-size: 12px;
+      color: var(--blue);
+      margin-bottom: 18px; }
+  .content__feedback-simple .buttons {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-pack: center;
+    -ms-flex-pack: center;
+    justify-content: center;
+    -ms-flex-wrap: wrap;
+    flex-wrap: wrap;
+    margin: -6px 16px; }
+    .content__feedback-simple .buttons .btn-copy {
+      width: 96px;
+      margin-top: 6px;
+      margin-bottom: 6px;
+      -webkit-box-sizing: border-box;
+      box-sizing: border-box;
+      background: none; }
+    .content__feedback-simple .buttons .btn-qr {
+      letter-spacing: 1px; }
+      .content__feedback-simple .buttons .btn-qr img {
+        width: 21px;
+        margin-left: 9px; }
+  .content__feedback-simple .caption {
+    margin: 28px 0 18px;
+    text-align: left;
+    font: 16px/1 'SegoeUIRegular', sans-serif;
+    color: #94969d; }
+  .content__feedback-simple .number-of-wallets {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-pack: justify;
+    -ms-flex-pack: justify;
+    justify-content: space-between;
+    padding: 0 3px;
+    margin-bottom: 24px; }
+    .content__feedback-simple .number-of-wallets .input {
+      width: 74px;
+      margin-right: 8px;
+      margin-bottom: 0;
+      padding: 0 0 8px 4px;
+      font: 16px/1 'SegoeUIRegular', sans-serif;
+      color: var(--prim-color); }
+    .content__feedback-simple .number-of-wallets .btn {
+      width: 71px;
+      height: 26px;
+      padding-bottom: 0;
+      border: 2px solid var(--blue);
+      border-radius: 4px;
+      font-size: 14px;
+      line-height: 1;
+      color: var(--blue);
+      background: none; }
+    .content__feedback-simple .number-of-wallets .unlim {
+      padding: 0; }
+      .content__feedback-simple .number-of-wallets .unlim img {
+        margin-left: 4px; }
+  .content__feedback-simple .input {
+    font: 16px/1 'SegoeUIRegular', sans-serif;
+    color: #94969d; }
+  .content__feedback-simple .target {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    margin: 8px 0 32px;
+    padding: 6px 8px;
+    -webkit-box-pack: justify;
+    -ms-flex-pack: justify;
+    justify-content: space-between;
+    font-size: 16px;
+    color: #94969d;
+    border: 1px solid #dcdcdc;
+    border-radius: 1px;
+    background: #f6f6f6; }
+    .content__feedback-simple .target .more-about {
+      font-size: 16px;
+      margin-bottom: 0; }
+  .content__feedback-simple .skins {
+    margin-top: -12px; }
+  .content__feedback-simple .text-wrap {
+    margin-bottom: 32px; }
+  .content__feedback-simple .btn {
+    background: var(--pink); }
+
+.content__campaing-wallet {
+  padding-top: 100px;
+  text-align: center; }
+  .content__campaing-wallet h5 {
+    font-size: 24px;
+    margin-bottom: 12px; }
+  .content__campaing-wallet .score {
+    font-size: 14px;
+    margin-bottom: 18px;
+    text-transform: uppercase; }
+    .content__campaing-wallet .score .balance {
+      font-family: 'SegoeUIBold', sans-serif; }
+  .content__campaing-wallet .copy_link {
+    margin-bottom: 38px; }
+    .content__campaing-wallet .copy_link p {
+      font-size: 12px;
+      color: var(--blue);
+      margin-bottom: 18px; }
+  .content__campaing-wallet .buttons {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-pack: center;
+    -ms-flex-pack: center;
+    justify-content: center;
+    -ms-flex-wrap: wrap;
+    flex-wrap: wrap;
+    margin: -6px 16px; }
+    .content__campaing-wallet .buttons .btn-copy {
+      width: 96px;
+      margin-top: 6px;
+      margin-bottom: 6px;
+      -webkit-box-sizing: border-box;
+      box-sizing: border-box;
+      background: none; }
+    .content__campaing-wallet .buttons .btn-qr {
+      letter-spacing: 1px; }
+      .content__campaing-wallet .buttons .btn-qr img {
+        width: 21px;
+        margin-left: 9px; }
+  .content__campaing-wallet .info {
+    text-align: left;
+    font-size: 16px;
+    color: #94969d; }
+    .content__campaing-wallet .info p {
+      margin-bottom: 24px; }
+    .content__campaing-wallet .info span {
+      color: var(--prim-color);
+      font-family: 'SegoeUISemiBold', sans-serif; }
+    .content__campaing-wallet .info ul {
+      margin: -18px 0 20px; }
+    .content__campaing-wallet .info li {
+      font: 10px/1.4 'SegoeUIBold', sans-serif;
+      color: var(--prim-color);
+      text-transform: uppercase;
+      letter-spacing: 0.5px; }
+    .content__campaing-wallet .info .task {
+      position: relative;
+      margin-top: -18px;
+      font: 14px/1.2 'SegoeUISemiBold', sans-serif;
+      color: var(--prim-color); }
+      .content__campaing-wallet .info .task img {
+        position: absolute;
+        top: -20px;
+        right: 12px; }
+  .content__campaing-wallet h6 {
+    font-size: 16px;
+    margin-bottom: 12px; }
+  .content__campaing-wallet .buttons {
+    margin-bottom: 12px; }
+  .content__campaing-wallet .send-emails,
+  .content__campaing-wallet .to-account {
+    width: 208px;
+    height: 32px;
+    border-radius: 18px;
+    font-size: 16px;
+    line-height: 1; }
+  .content__campaing-wallet .send-emails {
+    width: 208px;
+    height: 32px;
+    border-radius: 18px;
+    font-size: 16px;
+    line-height: 1;
+    color: var(--blue);
+    background: var(--green-lighting);
+    margin-bottom: 12px; }
+  .content__campaing-wallet .to-account {
+    width: 208px;
+    height: 32px;
+    border-radius: 18px;
+    font-size: 16px;
+    line-height: 1;
+    color: #fff;
+    background: var(--blue);
+    margin-bottom: 48px; }
+  .content__campaing-wallet .close {
+    font-size: 16px;
+    line-height: 1.2;
+    background: var(--pink); }
+  .content__campaing-wallet .link {
+    display: inline-block;
+    font-size: 16px;
+    color: var(--blue);
+    border-bottom: 1px solid var(--blue);
+    margin-bottom: 18px; }
+
+.content__personal-area {
+  padding-top: calc(50% - 180px);
+  padding-top: calc(50vh - 180px);
+  text-align: center; }
+  .content__personal-area .capaing-info {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    margin-bottom: 24px; }
+    .content__personal-area .capaing-info .campaing-logo {
+      width: 78px;
+      height: 78px;
+      border: 1px solid #dcdcdc;
+      -webkit-box-flex: 0;
+      -ms-flex: none;
+      flex: none;
+      background: #f6f6f6;
+      margin-right: 21px; }
+      .content__personal-area .capaing-info .campaing-logo a {
+        font-size: 16px;
+        margin-top: 26px; }
+    .content__personal-area .capaing-info .input {
+      width: 100%;
+      font: 16px/1 "SegoeUIRegular", sans-serif;
+      color: var(--prim-color);
+      border: none;
+      padding-bottom: 8px;
+      border-bottom: 1px solid #dcdcdc;
+      margin-bottom: 18px; }
+      .content__personal-area .capaing-info .input:last-child {
+        margin-bottom: 0; }
+  .content__personal-area .internal {
+    background: #000; }
+  .content__personal-area .caption {
+    font-size: 12px;
+    color: #8a8a8a;
+    font-family: 'SegoeUIRegular', sans-serif;
+    text-align: left;
+    margin-left: 6px; }
+  .content__personal-area .campaings-items {
+    border-radius: 7px;
+    overflow: hidden;
+    margin-bottom: 24px; }
+    .content__personal-area .campaings-items .campaings__item {
+      display: -webkit-box;
+      display: -ms-flexbox;
+      display: flex;
+      margin-bottom: 1px; }
+      .content__personal-area .campaings-items .campaings__item:last-child {
+        margin-bottom: 0; }
+      .content__personal-area .campaings-items .campaings__item * {
+        height: 41px;
+        line-height: 42px;
+        background: #f7f7f7; }
+      .content__personal-area .campaings-items .campaings__item .name {
+        width: 159px;
+        margin-right: 1px;
+        padding-left: 12px;
+        font-size: 14px;
+        text-align: left;
+        -webkit-box-sizing: border-box;
+        box-sizing: border-box;
+        color: var(--blue); }
+      .content__personal-area .campaings-items .campaings__item .date {
+        width: 90px;
+        font-size: 14px;
+        color: #8a8a8a; }
+    .content__personal-area .campaings-items .completed .name {
+      color: var(--pink); }
+  .content__personal-area h5 {
+    font-size: 24px;
+    margin-bottom: 4px; }
+  .content__personal-area .more-about {
+    margin-bottom: 18px; }
+  .content__personal-area .btn {
+    display: inline-block;
+    background: var(--blue);
+    margin-bottom: 8px; }
+  .content__personal-area #simple img {
+    margin-right: 18px;
+    margin-left: -36px;
+    margin-bottom: -3px; }
+  .content__personal-area #feedback img {
+    margin-right: 19px;
+    margin-left: -8px;
+    margin-bottom: -7px; }
+  .content__personal-area #action img {
+    margin-right: 18px;
+    margin-left: -38px;
+    margin-bottom: -3px; }
+
+.main-logo {
+  padding-top: 24px; }
+  .main-logo #main-logo {
+    display: block;
+    width: 60px;
+    height: 60px;
+    margin: 0 auto 6px; }
+  .main-logo .main-brand {
+    color: #6f6f6f;
+    font-size: 14px;
+    margin-bottom: 24px; }
+    .main-logo .main-brand span {
+      font-family: 'SegoeUIBold', sans-serif; }
+
+.statistics {
+  width: 500px;
+  margin: 0 auto;
+  padding: 12px;
+  font-size: 14px; }
+  .statistics p {
+    margin-bottom: 12px; }
+    .statistics p span {
+      font-family: 'SegoeUIBold', sans-serif; }
+  .statistics ul {
+    margin-bottom: 24px; }
+    .statistics ul li {
+      margin-bottom: 4px; }
+      .statistics ul li:nth-child(2) span {
+        color: #909924; }
+      .statistics ul li:nth-child(3) span {
+        color: #74b1b5; }
+      .statistics ul li:nth-child(4) span {
+        color: #64a048; }
+  .statistics table {
+    width: 100%; }
+    .statistics table .first-tr td {
+      font-family: 'SegoeUIBold', sans-serif; }
+    .statistics table td {
+      padding: 12px 24px 12px 0; }
+  .statistics .center {
+    text-align: center; }
+    .statistics .center span {
+      padding: 2px 8px 4px;
+      border-radius: 14px; }
+  .statistics .not-sent {
+    background: #e9e9e9; }
+  .statistics .sent {
+    background: #f8fed3; }
+  .statistics .opened {
+    background: #defcfe; }
+  .statistics .activated {
+    background: #dffed7; }
