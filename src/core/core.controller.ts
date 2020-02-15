@@ -309,7 +309,6 @@ export class CoreController {
           text: `${wallet.wallet} - ${walletData.reply}`,
         });
       }
-
     }
 
     return globalResult;

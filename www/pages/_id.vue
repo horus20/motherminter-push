@@ -731,7 +731,7 @@
           return false
         }
         // send reply to company
-        const afterActivateResponse = await axios.post(`${BACKEND_BASE_URL}/api/${this.uid}/reply`, {
+        let afterActivateResponse = await axios.post(`${BACKEND_BASE_URL}/api/${this.uid}/reply`, {
           mxaddress: this.address,
           reply: this.replyMsg,
         })
@@ -740,6 +740,25 @@
 
         if (afterActivateResponse.status === 200 && afterActivateResponse.data && afterActivateResponse.data.status === 'ok') {
           this.isBalanceEmpty = true;
+
+          try {
+            afterActivateResponse = await axios.post(`${BACKEND_BASE_URL}/api/${this.uid}/after`, {
+              mxaddress: this.address,
+              custom: this.isCustomWallet,
+            })
+
+            if (afterActivateResponse.status === 200 && afterActivateResponse.data) {
+              this.companyMsg = afterActivateResponse.data.msg ?? ''
+              this.skin = afterActivateResponse.data.skin ?? ''
+              this.spendChecks = afterActivateResponse.data.spends ?? []
+
+              if (this.skin !== '') {
+                this.loadSkin(this.skin)
+              }
+            }
+          } catch (error) {
+            console.log(error)
+          }
           this.openMainPage()
 
           const self = this
