@@ -1,12 +1,89 @@
+<img style="width:10px !important; max-width: none;" src="https://github.com/MotherMinter/Push/blob/master/www/static/push_logo.svg" alt="Push.">
+
 # Push.
-Send, receive and spend Minter coins with ease.
+Send, receive and spend Minter coins with ease. Powered by <a href="https://github.com/MinterTeam" target="_blank">Minter blockchain</a>.
 
 ## Description
 
-Minter Push wallet - simple light wallet with backend part.
+Push is a light web-app wallet accessed by a unique URL address, also called a link-wallet. The main advantage of a link-wallet is the ease of getting entrance to it and ability spending balance with no sign-up, no login, no registration, no password or whatever. Although the link-wallet app has advanced options for users that wish to create multiple wallets and run commercial campaigns. The app offers users different modes and scenarios that could be applied to a big variety of private and commercial cases with excellent customization abilities and API methods.
+
+## Modes and usage scenarios
+
+### One wallet mode
+
+<b>`Simple.`</b> The app creates a unique URL-wallet for a user. Anyone who knows the URL gets access to a balance. The user is able to attach a message or set a password to the link-wallet if they want. In this case, a recipient will need to know the URL and the password. Also, a user may customize the wallet by picking an envelope for it from the preset skins. All modes contain easy and wide sharing options.
+
+<b>`Feedback.`</b> The scenario in which the wallet user, before gaining access to it, must leave some kind of feedback: review, opinion, suggestion, recommendation, consultation or other valuable information. After filling out the form and submitting it, the user gets access to the balance. The user's feedback is sent to the creator email 
+address.
+
+<b>`Action.`</b> In this scenario, the user must complete a task and fill out a form with proof of its completion before accessing the link-wallet. The task to be performed is described by the creator in the step of wallet generation. For example repost, like, comment, or other action. The result of the user’s action is sent to the creator's email address.
+
+* In One wallet mode, a link-wallet is sent from one user to another (one-to-one), which most likely implies the presence of acquaintance between the participants in the process, or the presence of a basic level of trust. Obviously, these cases do not require an advanced level of validation of actions, a useful action will be performed efficiently due to the mutual interest of the parties.
+
+<b>One wallet mode functionality</b>
+
+* Balance auto check & load
+* Deeplink transaction functionality 
+* Link-wallet password protection
+* Customization skins
+* Localization (languages, currencies)
+* Extensive share options: native, QRs, copy buffer, direct target spending links, shares & QRs
+* Balance spend: top-up mobile (<a href="https://biptophone.ru/apiuser.php" target="_blank">api options</a>), Time Loop game, charity fund
+* Balance transfer (other addresses)
+* Balance forwarding (new wallet-link generation) 
+
+
+### Multiple wallet mode
+
+A user has to sign-up and login to an account to be able to create multiple wallet campaigns. 
+They will be offered to specify:
+
+* A number of wallets to generate (fixed or unlimited)
+* Upload campaign logo (white label option)
+* Specify a sender
+* Indicate one wallet balance 
+* Indicate target spending (completely flexible)
+* Attach message (in simple mode)
+* Attach feedback request (in feedback mode)
+* Pick up skins (in simple mode)
+* Import email database to generate wallets for it
+* Send wallets to imported email database
+* Export or copy a generated list of link-wallets
+* Track statistics
+
+<b>Unlimited wallets:</b> 
+This option allows a user to create an unlimited number of wallets through an API method:
+
+`/api/company/uid/get_wallet?count=N` 
+
+API request generates N number of wallets and returns them in JSON format. Please note, newly created wallets will have zero balances by default and will be credited only after a recipient's first visit.
+
+<b>There are two scenarios to create multiple wallet campaigns:</b> 
+
+<b>`Simple.`</b> Unique URL-wallets with easy access to them, just by clicking the link.
+
+<b>`Feedback.`</b> Before accessing, users must leave feedback. For validation purposes, our solution has a developed api method, please check <a href="https://github.com/MotherMinter/Push#5-beforeafter-activation">5 of an api description section</a>
+
+* Please note the mechanics of creating an array of wallets that have been implemented.
+The funds sent to deposit a campaign are initially credited to an intermediate address. The activation of individual wallets  (meaning depositing funds to the wallets) occurs only after a user visits a wallet link. This provides an ability to return unused funds to the campaign creator.
+
+## Security
+
+The wallet app is implemented using light client technology, this approach ensures that a private key (and seed phrase) never leaves the user's end-device. The process of transaction creation and signing takes place in the application, after which the formed transactions are sent to the network through the server. A password that the user inputs during wallet creation is involved in private key generation, and not transmitted outside the application in an open way.
+
+## UX & UI
+
+For developing the app a clear and light design approach was adopted. 
+
+* Clean modern design
+* No visual barriers or distractions
+* All app interface scenarios are decorated with meta-data, modal windows with prompts, place holders with examples to facilitate user navigation and interaction with the application
+* Short link-wallets (6 characters, apart from a domain name)
+
+## Customization
 
 ## Backend part
-Deploy you copy on server or use our public api - `https://p.motherminter.org/api/`<br>
+Deploy your copy on a server or use our public api - `https://p.motherminter.org/api/`<br>
 Backend - is'a <a href=https://nestjs.com/>NestJS</a> app starting on **3048** port <br>
 
 ### Installation and running
@@ -49,9 +126,9 @@ pm2 start npm --name "nuxt" -- start
 
 ## API Description
 Project exists Swagger api doc on `https://<your_host>:3048/docs/` . 
-You may use it for test you backend.
+You may use it for test of your backend.
 
-##### 1. Create company
+#### 1. Create a campaign
 ```
 POST /api/company
 
@@ -78,21 +155,21 @@ protected - flag - True if wallet have a password
 callback_link - used for feedback|action company
 ``` 
 
-##### 2. "One more wallet" link for Unlim company
+#### 2. "One more wallet" link for an Unlimited campaign
 ```
 GET /api/company/{company_uid}/get_wallet?count=N
 
 N - count of new wallet you need
 ```
 
-##### 3. Get wallet information
-Check if wallet exist and return info and status (need activate, need password)
+#### 3. Get wallet information
+Check if wallet exists and returns info and status (need activation, need password)
 ```
 GET /api/{wallet_uid}
 ```
 
-##### 4. Try login or activate wallet
-Wallet interface calculate address from (uid and password if exist) and send it to back, server check it and return success or fail.
+#### 4. Try to login or activate a wallet
+Wallet interface calculates an address from (uid and password if exists) and sends it back, server checks it and returns: success or fail.
 
 ```
 POST /api/{wallet_uid}
@@ -106,7 +183,7 @@ Params
 custom - flag if it address is custom type 
 ``` 
 
-##### 5. Before/After activate
+#### 5. Before/After activation
 This request's used for feedback/action wallet type
 ```
 POST /api/{wallet_uid}/complex
@@ -130,8 +207,8 @@ Params
 Return message to user
 ```
 
-##### 6. Send reply for complex type
-Store user reply to DB and activate wallet if need
+#### 6. Send reply for complex type
+Store user reply to DB and activate wallet if needed
 
 ```
 POST /api/{wallet_uid}/reply
@@ -143,8 +220,8 @@ Params
 }
 ``` 
 
-##### 7. Send signed raw transaction to network
-All transaction created and signed in wallet interface (on client side)
+#### 7. Send signed raw transaction to the network
+All transaction created and signed in a wallet interface (on a client side)
 
 ```
 POST /api/{wallet_uid}/send

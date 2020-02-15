@@ -90,8 +90,6 @@
           <transition name="fade">
           <div v-if="step === 3" class="content__item content__attach-messege content__item-active">
             <form>
-
-
               <p>{{ $t('create.putMoney') }}?</p>
               <div class="trigger trigger-01" v-bind:class="{ 'trigger-active': isActiveTrigger01 }" v-on:click="isActiveTrigger01 = !isActiveTrigger01">
                 <span class="trigger_no">{{ $t('NO') }}</span><span class="trigger_circle"></span><span class="trigger_yes">{{ $t('YES') }}</span>
@@ -352,7 +350,7 @@
     <!--  -->
     <!-- / -->
     <!-- Footer -->
-    <footer v-bind:class="{ 'fixed-footer': step === 1 }">
+    <footer :class="{'footer-static': footerStatic}">
       <a href="https://www.minter.network/" target="_blank" class="copy">Powered by <span>Minter</span></a>
     </footer>
     <!-- /Footer -->
@@ -632,6 +630,9 @@
           return createDeepLink(this.addressForFilling, this.minNewBalance)
         }
         return ''
+      },
+      footerStatic() {
+        return this.step === 3 || this.step === 4
       }
     },
     // method
@@ -1204,6 +1205,13 @@
   }
   .lds-ripple div:nth-child(2) {
     animation-delay: -0.5s;
+  }
+  .footer-static {
+    position: static;
+    margin-top: auto;
+    height: 138px;
+    display: flex;
+    align-items: flex-end;
   }
   @keyframes lds-ripple {
     0% {

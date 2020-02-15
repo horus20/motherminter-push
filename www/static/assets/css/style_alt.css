@@ -450,8 +450,8 @@ header {
   display: block; }
 
 .content__start {
-  padding-top: calc(50% - 122px);
-  padding-top: calc(50vh - 122px); }
+  /*padding-top: calc(50% - 122px);*/
+  padding-top: calc(50vh - 162px); }
   .content__start h1 {
     font: 48px/1.2 "SegoeUISemiBold", sans-serif;
     margin-left: -2px;
