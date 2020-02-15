@@ -18,7 +18,7 @@ export default {
     ]
   },
   server: {
-    port: 40480,
+    port: 30480,
     host: 'localhost'
   },
   /*
