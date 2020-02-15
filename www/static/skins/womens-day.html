@@ -336,13 +336,17 @@
             rid = null;
           }
           m = points[frames];
+          console.log(m);
           let n = 2 + ~~(Math.random() * 4);
           scale = ~~(Math.random() * 12) + 3;
 
-          let flower = new Flower(n, { x: m.x, y: m.y }, scale, svg);
-          setTimeout(() => {
-            flower.G.setAttribute("class", `_${flower.n}`);
-          }, 50);
+          try {
+            let flower = new Flower(n, { x: m.x, y: m.y }, scale, svg);
+            setTimeout(() => {
+              flower.G.setAttribute("class", `_${flower.n}`);
+            }, 50);
+          }catch(e) {}
+
 
           frames++;
         }
