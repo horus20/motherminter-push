@@ -1,11 +1,11 @@
-<img style="width:10px !important; max-width: none;" src="https://github.com/MotherMinter/Push/blob/master/www/static/push_logo.svg" alt="Push.">
+<img src="https://github.com/MotherMinter/Push/blob/master/www/static/push_logo.svg" alt="Push.">
 
 # Push.
 Send, receive and spend Minter coins with ease. Powered by <a href="https://github.com/MinterTeam" target="_blank">Minter blockchain</a>.
 
 ## Description
 
-Push is a light web-app wallet accessed by a unique URL address, also called a link-wallet. The main advantage of a link-wallet is the ease of getting access to it and ability spending balance with no sign-up, no login, no registration, no password or whatever. Although the link-wallet app has advanced options for users that wish to create multiple wallets and run commercial campaigns. The app offers users different modes and scenarios that could be applied to a big variety of private and commercial cases with excellent customization abilities and API methods.
+Push is a light web-app wallet accessed by a unique URL address. Just by clicking a link a user obtains the ability to spend wallet's balance with no sign-up, no login, no registration, no password or whatever. Although the link-wallet app has advanced options for users that wish to create multiple wallets and run commercial campaigns. The app offers users different modes and scenarios that could be applied to a big variety of private and commercial cases with excellent customization abilities and API methods.
 
 ## Modes and usage scenarios
 
@@ -89,6 +89,7 @@ For developing the app a clear and light design approach was adopted.
 * No visual barriers or distractions
 * All app interface scenarios are decorated with meta-data, modal windows with prompts, place holders with examples to facilitate user navigation and interaction with the application
 * Short link-wallets (6 characters, apart from a domain name)
+* <a href="https://github.com/MotherMinter/Push/blob/master/www/static/Block_diagram_full.jpg" target="_blank">Full UI-design</a>
 
 ## Customization
 
@@ -100,7 +101,7 @@ There are two main directions for app customization, both of them are implemente
 
 <b>Adding new skins</b>
 
-1 Add skin stiles to `/www/pages/skin.js`
+<b>1.</b> Add skin stiles to `/www/pages/skin.js`
 ```
 {
     id: 'starwars',
@@ -110,7 +111,7 @@ There are two main directions for app customization, both of them are implemente
 },
 ``` 
 
-2 Create skin html. Template - `/www/static/skins/_skin-template.html`
+<b>2.</b> Create skin html. Template - `/www/static/skins/_skin-template.html`
 Skin have to consist from - html, css, js.
 
 ## Backend part
