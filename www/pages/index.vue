@@ -447,8 +447,14 @@
               <template v-if="typeof addressForFilling !== 'undefined' && addressForFilling.length > 10">
                 <h5>{{ $t('compaingWallet') }}</h5>
                 <div class="score">
-                  <p class="balance" v-for="balance in balances">{{ prettyFormat(balance.amount) }} {{ balance.coin }}</p>
-                  <span class="currency">~{{ balanceSum }}</span>
+                  <p class="balance" >
+                    <template v-for="balance in balances">
+                      {{ prettyFormat(balance.amount) }} {{ balance.coin }}
+                    </template>
+                    <span class="currency">~{{ balanceSum }}</span>
+                  </p>
+
+                  <p v-if="this.isBalanceGreatThenZero">{{ $t('create.plzFillPart1') }} <span v-on:click="copyToClipboard(minNewBalance)">{{ minNewBalance }} {{ $t('create.minBalanceCoin')}}</span> {{ $t('create.plzFillPart2') }}</p>
                 </div>
                 <div class="copy_link">
                   <p :class="{'active-copy' : isCopiededSuccess}">{{ addressForFilling }}</p>

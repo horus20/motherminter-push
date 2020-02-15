@@ -53,7 +53,7 @@ export class CoreController {
       }
     }
 
-    return this.companyService.create(company);
+    return this.companyService.create(company, account);
   }
 
   @Get('company/:id')
