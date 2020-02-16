@@ -238,6 +238,7 @@ export function createDeepLink ({
   const chex = encode([
     TX_TYPE.SEND,
     txData.serialize(),
+    toBuffer(''),
   ])
   const hex = Buffer.from(chex.buffer).toString('hex')
   const prefix = isMobile ? 'minter://' : 'https://bip.to'
