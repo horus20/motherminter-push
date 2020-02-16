@@ -652,7 +652,7 @@
         this.isNeedAction = false
 
         await this.loadAdditionalInfo()
-        // this.loadCoins()
+        await this.loadCoins()
         this.updateBalance()
       },
       checkAuth: async function () {

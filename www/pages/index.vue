@@ -1310,7 +1310,7 @@
       loadAdditionalInfo: async function () {
         this.bipToUSD = await getBipPrice()
         this.fiat = await getFiatExchangeList()
-        // this.coins = getCoinExchangeList()
+        this.coins = getCoinExchangeList()
       },
       startCreateSuccess: async function (showError = true) {
         if (!this.isAddressFilling) {

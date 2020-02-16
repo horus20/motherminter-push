@@ -139,8 +139,12 @@ export class WarehouseService {
         data = {
           list: [],
         };
-        type = TX_TYPE.MULTISEND;
-        const preData = from.getBalances().map(({ coin, amount: balance }) => {
+
+        const preData = from.getBalances()
+          .filter(({ amount: balance }) => {
+            return Number(balance) > 0;
+          })
+          .map(({ coin, amount: balance }) => {
           const fee = new Decimal(feeBip).div(this.coins[coin]).toNumber();
           if (coin === MINTER_DEFAULT_SYMBOL && Number(balance) > fee) {
             feeSymbol = coin;
@@ -155,6 +159,10 @@ export class WarehouseService {
             coin,
           };
         });
+        if (data.length > 1) {
+          type = TX_TYPE.MULTISEND;
+        }
+
         data.list = preData.map((item) => {
           if (item.coin === feeSymbol) {
             const fee = new Decimal(feeBip).div(this.coins[item.coin]);
