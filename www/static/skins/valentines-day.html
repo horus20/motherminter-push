@@ -114,7 +114,7 @@
     <!-- Scripts -->
     <script>
         document.addEventListener('DOMContentLoaded', function(){
-          document.getElementById('message').innerHTML  = parent.skinMessage() ?? '';
+          document.getElementById('message').innerHTML  = parent.skinMessage() || '';
         })
         window.requestAnimationFrame =
         window.__requestAnimationFrame ||

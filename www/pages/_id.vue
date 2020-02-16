@@ -73,7 +73,37 @@
           <p class="balance" v-for="balance in balances">{{ balance.amount }} {{ balance.coin }}</p>
           <p class="currency">~{{ balanceSum }}</p>
 
-          <template  v-if="(spendChecks.includes('transfer') || spendChecks.includes('yourWallet') || spendChecks.includes('fund')) || spendChecks.length === 0">
+          <template  v-if="(spendChecks.includes('games') || spendChecks.includes('phone') || spendChecks.includes('fuel') || spendChecks.includes('transfer') || spendChecks.includes('yourWallet') || spendChecks.includes('fund')) || spendChecks.length === 0">
+            <p class="transfer">{{ $t('main.transferSection') }}</p>
+            <div class="transfer-items">
+              <a class="transfer__item" v-on:click="showTransfer()" v-if="spendChecks.includes('transfer') || spendChecks.length === 0">
+                <img src="assets/img/svg/person.svg" alt="">
+                <p v-html="newLineLabel($t('main.anotherPerson'))"></p>
+              </a>
+              <a class="transfer__item" v-on:click="showMyTransfer()" v-if="spendChecks.includes('yourWallet') || spendChecks.length === 0">
+                <img src="assets/img/svg/wallet.svg" alt="">
+                <p v-html="newLineLabel($t('main.youWallet'))"></p>
+              </a>
+              <a class="transfer__item" v-on:click="showFund()" v-if="spendChecks.includes('fund') || spendChecks.length === 0">
+                <img src="assets/img/svg/charity.svg" alt="">
+                <p v-html="newLineLabel($t('main.charityFund'))"></p>
+              </a>
+              <a class="transfer__item" v-on:click="showMobile()" v-if="spendChecks.includes('phone') || spendChecks.length === 0">
+                <img src="assets/img/svg/services.svg" alt="">
+                <p v-html="newLineLabel($t('main.mobileService'))"></p>
+              </a>
+              <a class="transfer__item" v-on:click="showGames()" v-if="spendChecks.includes('games') || spendChecks.length === 0">
+                <img src="assets/img/svg/games.svg" alt="">
+                <p v-html="newLineLabel($t('main.games'))"></p>
+              </a>
+              <span class="transfer__item" v-on:click="showFuel()" v-if="spendChecks.includes('fuel') || spendChecks.length === 0">
+                  <img src="assets/img/svg/fuel.svg" alt="" v-on:click="showFood()">
+                  <p v-html="newLineLabel($t('main.foodDelivery'))"></p>
+                </span>
+            </div>
+          </template>
+
+          <!--<template  v-if="(spendChecks.includes('transfer') || spendChecks.includes('yourWallet') || spendChecks.includes('fund')) || spendChecks.length === 0">
             <p class="transfer">{{ $t('main.transferSection') }}</p>
             <div class="transfer-items">
               <a class="transfer__item" v-on:click="showTransfer()" v-if="spendChecks.includes('transfer') || spendChecks.length === 0">
@@ -107,7 +137,7 @@
                   <p v-html="newLineLabel($t('main.foodDelivery'))"></p>
                 </span>
             </div>
-          </template>
+          </template>-->
           <!--                <button class="btn btn-more">More info</button>-->
 
           <template v-if="isCustomWallet">

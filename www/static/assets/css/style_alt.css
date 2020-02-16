@@ -516,9 +516,12 @@ header {
       animation: img_04 8s reverse infinite; }
 
 .content__start .advanced {
-    display: block;
-    width: 140px;
-    margin: 24px auto 0;
+    display: inline-block;
+    width: auto;
+    margin: 24px 0 0px 0;
+    position: relative;
+    left: 50%;
+    transform: translateX(-50%);
     text-align: center;
     color: var(--blue);
     border-bottom: 1px solid #c4c2fe;
@@ -677,6 +680,8 @@ header {
     }
 
 .skins-items {
+  width: 100%;
+  text-align: center;
   display: none;
   border-radius: 7px;
   overflow: hidden; }
@@ -702,6 +707,7 @@ header {
       -webkit-box-sizing: border-box;
       box-sizing: border-box; }
     .skins-items .skins__item a {
+      display: none;
       width: 49px;
       text-align: center;
       font-size: 11px;
@@ -1244,10 +1250,10 @@ header {
     display: -webkit-box;
     display: -ms-flexbox;
     display: flex;
-    -webkit-box-pack: justify;
-    -ms-flex-pack: justify;
-    justify-content: space-between; }
+    flex-wrap: wrap;
+    justify-content: center; }
     .main .transfer-items .transfer__item {
+      width: 33%;
       margin: 22px 0; }
     .main .transfer-items p {
       font: 10px/1.2 "SegoeUIBold", sans-serif;
@@ -2127,7 +2133,7 @@ footer {
       background: #f7f7f7;
       cursor: pointer; }
     .skins-items .skins__item span {
-      width: 200px;
+      width: 100%;
       margin-right: 1px;
       padding-left: 17px;
       font-size: 14px;
@@ -2376,6 +2382,9 @@ footer {
       background-color: transparent;
       font-weight: bold;
     }
+    .personal-data {
+      width: 100%;
+    }
     .content__personal-area .capaing-info .input {
       width: 100%;
       font: 16px/1 "SegoeUIRegular", sans-serif;
@@ -2498,3 +2507,10 @@ footer {
     background: #defcfe; }
   .statistics .activated {
     background: #dffed7; }
+.body-overflow {
+  overflow: hidden;
+  -webkit-overflow-scrolling:touch;
+}
+.activeTab__ {
+  background: #d2fed6 !important;
+}
