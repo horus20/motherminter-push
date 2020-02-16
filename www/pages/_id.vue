@@ -890,15 +890,16 @@
           this.fiat = await getFiatExchangeList()
         }
       },
-      loadCoins: function () {
-        this.isShowLoader = true
+      loadCoins: async function () {
+        /*this.isShowLoader = true
         if (this.coins.length === 0) {
           getCoinExchangeList()
             .then((coins) => {
               this.coins = coins
               this.isShowLoader = false
             })
-        }
+        }*/
+        this.coins = await getCoinExchangeList()
       },
       // application
       showTransfer: function () {
