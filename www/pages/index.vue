@@ -168,7 +168,7 @@
               <transition name="fadeDown">
                 <div class="skins-items" id="skins" v-if="isActiveTrigger04"  style="display: block">
                   <div v-for="skin in skins" class="skins__item tab__" tabindex="0" @click="isActiveTab($event)">
-                    <span v-on:click="createParamSkin = skin.id">{{ skin.label }}</span><a v-on:click="showSkinPreviewModal(skin)">{{ $t('Prev') }}</a>
+                    <span v-show="skin.id != 'mday'" v-on:click="createParamSkin = skin.id">{{ skin.label }}</span><a v-on:click="showSkinPreviewModal(skin)">{{ $t('Prev') }}</a>
                   </div>
                 </div>
               </transition>
@@ -802,7 +802,7 @@
           <div class="skins-items" id="skins">
 
             <div v-for="skin in skins" class="skins__item" tabindex="0" >
-              <span v-on:click="createParamSkin = skin.id">{{ skin.label }}</span><a v-on:click="showSkinPreviewModal(skin)">{{ $t('Prev') }}</a>
+              <span v-show="skin.id != 'mday'" v-on:click="createParamSkin = skin.id">{{ skin.label }}</span><a v-on:click="showSkinPreviewModal(skin)">{{ $t('Prev') }}</a>
             </div>
 
           </div>
