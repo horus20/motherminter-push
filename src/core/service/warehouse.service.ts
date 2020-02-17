@@ -35,13 +35,19 @@ export class WarehouseService {
     this.minterApi = new MinterApi(options);
     this.explorerURL = this.configService.get<string>('MINTER_EXPLORER_URL');
     this.loadCoins();
+
+    setInterval(() => {
+      // reload coin list
+      this.loadCoins();
+    }, 60 * 60 * 1000);
   }
 
   async loadCoins() {
-    this.coins = [];
     try {
       const response = await axios.get(`${this.explorerURL}/api/v1/coins`);
       if (response.data && response.data.data) {
+        this.coins = [];
+
         response.data.data.map((coin) => {
           // Given a coin supply (s), reserve balance (r), CRR (c) and a sell amount (a),
           // calculates the return for a given conversion
@@ -56,9 +62,11 @@ export class WarehouseService {
 
             this.coins[coin.symbol] = new Decimal(coin.reserveBalance)
               .mul(new Decimal(1).minus(as1c1))
-              .mul(100).toNumber();
+              .mul(99.8).toNumber();
           }
         });
+
+        global.console.log('reload coins list', this.coins.length);
       }
     } catch (error) {
       global.console.error(error);

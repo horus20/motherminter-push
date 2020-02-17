@@ -105,7 +105,7 @@ export async function getCoinExchangeList () {
 
           coins[coin.symbol] = new Decimal(coin.reserveBalance).mul(
             new Decimal(1).minus(as1c1)
-          ).mul(100)
+          ).mul(99.8)
         }
       })
 
