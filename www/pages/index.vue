@@ -500,9 +500,9 @@
                   <h6 v-if="createParamIsFixed" class="share">{{ $t('create.walletList') }}:</h6>
                   <h6 v-if="!createParamIsFixed" class="share">{{ $t('create.grabApi') }}:</h6>
 
-                  <div class="buttons">
+                  <div class="buttons grab">
                     <button v-if="createParamIsFixed" id="send" class="btn btn-copy" v-on:click="sendListToEmail($event)">{{ $t('create.sendEmail') }}
-                      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="16" viewBox="0 0 20 16">
+                      <!--<svg xmlns="http://www.w3.org/2000/svg" width="20" height="16" viewBox="0 0 20 16">
                         <defs>
                           <style>
                             .cls-1 {
@@ -512,9 +512,11 @@
                           </style>
                         </defs>
                         <path id="Forma_1" data-name="Forma 1" class="cls-1" d="M1894.63,3187h-15.26a2.313,2.313,0,0,0-2.37,2.25v11.5a2.313,2.313,0,0,0,2.37,2.25h15.26a2.32,2.32,0,0,0,2.37-2.25v-11.5A2.32,2.32,0,0,0,1894.63,3187Zm0,14.01h-15.26a0.331,0.331,0,0,1-.36-0.26v-10.11l6.9,5.75a0.775,0.775,0,0,0,.51.18h1.16a0.775,0.775,0,0,0,.51-0.18l6.9-5.75v10.11A0.331,0.331,0,0,1,1894.63,3201.01Zm-7.63-6.41-6.71-5.61h13.42Z" transform="translate(-1877 -3187)"/>
-                      </svg></button>
+                      </svg>-->
+                      <img src="/assets/img/svg/email-2.svg" alt="">
+                      </button>
                     <button v-if="!createParamIsFixed" id="send" class="btn btn-copy" v-on:click="sendLinkToEmail($event)">{{ $t('create.sendApiEmail') }}
-                      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="16" viewBox="0 0 20 16">
+                      <!--<svg xmlns="http://www.w3.org/2000/svg" width="20" height="16" viewBox="0 0 20 16">
                         <defs>
                           <style>
                             .cls-1 {
@@ -524,10 +526,12 @@
                           </style>
                         </defs>
                         <path id="Forma_1" data-name="Forma 1" class="cls-1" d="M1894.63,3187h-15.26a2.313,2.313,0,0,0-2.37,2.25v11.5a2.313,2.313,0,0,0,2.37,2.25h15.26a2.32,2.32,0,0,0,2.37-2.25v-11.5A2.32,2.32,0,0,0,1894.63,3187Zm0,14.01h-15.26a0.331,0.331,0,0,1-.36-0.26v-10.11l6.9,5.75a0.775,0.775,0,0,0,.51.18h1.16a0.775,0.775,0,0,0,.51-0.18l6.9-5.75v10.11A0.331,0.331,0,0,1,1894.63,3201.01Zm-7.63-6.41-6.71-5.61h13.42Z" transform="translate(-1877 -3187)"/>
-                      </svg></button>
+                      </svg>-->
+                      <img src="/assets/img/svg/email-2.svg" alt="">
+                      </button>
 
                     <button v-if="createParamIsFixed" id="save" class="btn btn-copy" v-on:click="copyList($event)">{{ $t('create.copyList') }}
-                      <svg xmlns="http://www.w3.org/2000/svg" width="18" height="22" viewBox="0 0 18 22">
+                      <!--<svg xmlns="http://www.w3.org/2000/svg" width="18" height="22" viewBox="0 0 18 22">
                         <defs>
                           <style>
                             .cls-1 {
@@ -537,10 +541,11 @@
                           </style>
                         </defs>
                         <path id="Rounded_Rectangle_6" data-name="Rounded Rectangle 6" class="cls-1" d="M860,2138h-2v2a2,2,0,0,1-2,2H846a2,2,0,0,1-2-2v-14a2,2,0,0,1,2-2h2v-2a2,2,0,0,1,2-2h10a2,2,0,0,1,2,2v14A2,2,0,0,1,860,2138Zm-12-2v-10h-1a1,1,0,0,0-1,1v12a1,1,0,0,0,1,1h8a1,1,0,0,0,1-1v-1h-6A2,2,0,0,1,848,2136Zm12-13a1,1,0,0,0-1-1h-8a1,1,0,0,0-1,1v12a1,1,0,0,0,1,1h8a1,1,0,0,0,1-1v-12Z" transform="translate(-844 -2120)"/>
-                      </svg>
+                      </svg>-->
+                      <img src="/assets/img/svg/copy.svg" alt="">
                     </button>
                     <button v-if="!createParamIsFixed" id="copy" class="btn btn-copy" v-on:click="copyUrlSuccess($event)">{{ $t('create.copyLink') }}
-                      <svg xmlns="http://www.w3.org/2000/svg" width="18" height="22" viewBox="0 0 18 22">
+                      <!--<svg xmlns="http://www.w3.org/2000/svg" width="18" height="22" viewBox="0 0 18 22">
                         <defs>
                           <style>
                             .cls-1 {
@@ -550,12 +555,13 @@
                           </style>
                         </defs>
                         <path id="Rounded_Rectangle_6" data-name="Rounded Rectangle 6" class="cls-1" d="M860,2138h-2v2a2,2,0,0,1-2,2H846a2,2,0,0,1-2-2v-14a2,2,0,0,1,2-2h2v-2a2,2,0,0,1,2-2h10a2,2,0,0,1,2,2v14A2,2,0,0,1,860,2138Zm-12-2v-10h-1a1,1,0,0,0-1,1v12a1,1,0,0,0,1,1h8a1,1,0,0,0,1-1v-1h-6A2,2,0,0,1,848,2136Zm12-13a1,1,0,0,0-1-1h-8a1,1,0,0,0-1,1v12a1,1,0,0,0,1,1h8a1,1,0,0,0,1-1v-12Z" transform="translate(-844 -2120)"/>
-                      </svg>
+                      </svg>-->
+                      <img src="/assets/img/svg/copy.svg" alt="">
                     </button>
 
-                    <button v-if="createParamIsFixed" id="share" class="btn btn-copy" v-on:click="startShareList($event)">{{ $t('create.shareList') }}<img src="/assets/img/svg/share.svg" alt="">
+                    <button v-if="createParamIsFixed" id="share" class="btn btn-copy" v-on:click="startShareList($event)">{{ $t('create.shareList') }}<!--<img src="/assets/img/svg/share.svg" alt="">--><img src="/assets/img/svg/share-2.svg" alt="">
                     </button>
-                    <button v-if="!createParamIsFixed" id="share" class="btn btn-copy" v-on:click="startShare(companyLink, 'Wallet api link', '', $event)">{{ $t('create.shareApiLink') }}<img src="/assets/img/svg/share.svg" alt="">
+                    <button v-if="!createParamIsFixed" id="share" class="btn btn-copy" v-on:click="startShare(companyLink, 'Wallet api link', '', $event)">{{ $t('create.shareApiLink') }}<!--<img src="/assets/img/svg/share.svg" alt="">--><img src="/assets/img/svg/share-2.svg" alt="">
                     </button>
                   </div>
                   <button v-if="createParamIsFixed" class="btn send-emails" v-on:click="sendWalletToUser()">{{$t('create.emailWallets')}}</button>
