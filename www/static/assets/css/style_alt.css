@@ -2370,7 +2370,9 @@ footer {
     background: none;
     width: auto;
     height: auto;
-    margin: 0 12px; }
+    margin: 0 12px;
+    border: none;
+}
 
 .content__personal-area {
   padding-top: calc(50% - 180px);
