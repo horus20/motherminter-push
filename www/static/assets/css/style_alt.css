@@ -2532,3 +2532,15 @@ footer {
 .activeTab__ {
   background: #d2fed6 !important;
 }
+
+.rus-lang #feedback img {
+    margin-right: 19px;
+    margin-left: -26px;
+    margin-bottom: -7px;
+}
+
+.rus-lang #action img {
+    margin-right: 18px;
+    margin-left: -6px;
+    margin-bottom: -3px;
+}
