@@ -2051,7 +2051,7 @@ footer {
     margin-top: 12px; }
     .content__choose-wallet-new #multiple img {
       margin-right: 14px;
-      margin-left: 0;
+      margin-left: -28px;
       margin-bottom: -9px; }
 
 .content__attach-messege {
@@ -2543,4 +2543,8 @@ footer {
     margin-right: 18px;
     margin-left: -6px;
     margin-bottom: -3px;
+}
+
+.rus-lang #multiple img {
+  margin-left: 0;
 }
