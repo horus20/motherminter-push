@@ -15,6 +15,9 @@ export default {
   Send: 'Отправить',
   Settings: 'Настройки',
   compaingWallet: 'Кошелек кампании',
+  goToAcc: 'Обратно в аккаунт',
+  Example: 'Пример',
+  Import: 'Импортировать',
   index: {
     preTitle: 'Отправляй монеты с легкостью.',
     title: 'Быстро. Надежно.',
@@ -82,6 +85,11 @@ export default {
     launch: 'Запустить кампанию',
     compainInfo: 'Инфо о кампании',
     yourMoneyCountHere: 'Любую сумму 5, 10, 5000 ...',
+    emailWallets: 'Сделать рассылку',
+    feedbackTask: 'Задача фидбэка',
+    closeCompany: 'Остановить кампанию и вернуть баланс',
+    emailLinkText: 'Пожалуйста, вставьте ссылку на Google таблицу с вашей email-базой. Убедитесь, что доступ открыт.',
+    emailLink: 'Ссылка на таблицу',
   },
   password: {
     havePassword: 'Вы ввели пароль?',

@@ -100,7 +100,8 @@ export default {
     feedbackTask: 'Feedback task',
     emailWallets: 'Send wallets to emails',
     createTxt: 'Advanced mode',
-    multipleBtn: 'Multiple'
+    multipleBtn: 'Multiple',
+    closeCompany: 'Close the campaign and return the balance'
   },
   password: {
     password: 'Password',

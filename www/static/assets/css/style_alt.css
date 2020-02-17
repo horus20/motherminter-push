@@ -2359,6 +2359,7 @@ footer {
   .content__campaing-wallet .close {
     font-size: 16px;
     line-height: 1.2;
+    padding: 0 36px;
     background: var(--pink); }
   .content__campaing-wallet .link {
     display: inline-block;
@@ -2367,11 +2368,13 @@ footer {
     border-bottom: 1px solid var(--blue);
     margin-bottom: 18px; }
 .content__campaing-wallet .grab .btn {
+    font-size: 0;
     background: none;
     width: auto;
     height: auto;
-    margin: 0 12px;
+    margin: 9px 0px;
     border: none;
+    padding-bottom: 0;
 }
 
 .content__personal-area {

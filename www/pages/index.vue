@@ -569,7 +569,7 @@
                   <!--<a href="" class="link">Statistics</a>-->
 
                   <button class="btn to-account" v-on:click="step = 21">{{$t('goToAcc')}}</button>
-                  <button class="btn close" v-on:click="closeCompany()">Close the campaign<br>and return the balance</button>
+                  <button class="btn close" v-on:click="closeCompany()">{{ $t('create.closeCompany') }}</button>
                 </template>
 
               </template>
