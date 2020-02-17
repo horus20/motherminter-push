@@ -2326,7 +2326,8 @@ footer {
     height: 32px;
     border-radius: 18px;
     font-size: 16px;
-    line-height: 1; }
+    line-height: 1;
+    padding-bottom: 3px; }
   .content__campaing-wallet .send-emails {
     width: 208px;
     height: 32px;
