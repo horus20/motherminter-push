@@ -2366,6 +2366,11 @@ footer {
     color: var(--blue);
     border-bottom: 1px solid var(--blue);
     margin-bottom: 18px; }
+.content__campaing-wallet .grab .btn {
+    background: none;
+    width: auto;
+    height: auto;
+    margin: 0 12px; }
 
 .content__personal-area {
   padding-top: calc(50% - 180px);
