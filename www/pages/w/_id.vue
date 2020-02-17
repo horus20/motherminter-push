@@ -1,5 +1,5 @@
 <template>
-  <div class="container">
+  <div class="container-medium">
     <div class="row header-section">
       <div class="col-2"><b-img src="/minter-logo-circle.png" fluid alt="" style="max-width: 36px; margin-top: 3px;"></b-img></div>
       <div class="col-7 text-center" style="padding-top: 8px;"><span class="font-weight-bold">#{{ uid }}</span></div>
