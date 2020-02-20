@@ -163,7 +163,7 @@
             <textarea id="ta" v-model="replyMsg" maxlength="140" v-if="isFeedback" v-bind:placeholder="$t('action.placeholder')"></textarea>
             <textarea id="ta" v-model="replyMsg" maxlength="140" v-if="!isFeedback" v-bind:placeholder="$t('action.placeholderActive')"></textarea>
             <div class="max-lenght" v-if="isFeedback">
-              <span v-if="msgSize === maxLen">min {{ minLen }}/ max {{ maxLen }}</span>
+              <span v-if="msgSize === maxLen">min {{ minLen }} / max {{ maxLen }}</span>
               <span v-if="msgSize !== maxLen">{{ msgSize }}</span>
               <img v-if="isMinMsgSize" src="/assets/img/svg/like.svg" alt="">
               <img v-if="!isMinMsgSize" src="/assets/img/svg/action_grey.svg" alt="">
@@ -266,7 +266,7 @@
           <p class="insert">{{ $t('main.mobileTitle') }}:</p>
           <input id="phone" type="text" v-model="transfer.address" placeholder="+7 9...">
           <p class='recevie'>{{ $t('main.mobileRecv') }}:<br>
-            <span>~{{ balanceSum }}</span>
+            <span>~{{ balanceSumMobile }}</span>
             <!--<span>~0.01 KZT</span>
             <span>~0.01 UAH</span>
             <span>~0.01 BYN</span>-->
@@ -603,6 +603,17 @@
           return `${this.balanceSumUSD.toFixed(2)} $`
         }
         return `${this.balanceSumFiat.toFixed(2)} ${fiatSymbol}`
+      },
+      balanceSumMobile() {
+        const fiatVal = getFiatByLocale(this.currentLang)
+        const fiatSymbol = fiatVal ? fiatVal.symbol : ''
+        const discount = new Decimal(0.8);
+        if (this.currentLang === 'en') {
+          const sum = new Decimal(this.balanceSumUSD).mul(discount)
+          return `${sum.toFixed(2)} $`
+        }
+        const sum = new Decimal(this.balanceSumFiat).mul(discount)
+        return `${sum.toFixed(2)} ${fiatSymbol}`
       }
     },
     // method
@@ -662,7 +673,8 @@
           response = await axios.get(`${BACKEND_BASE_URL}/api/${this.uid}`)
           if (response && response.status === 200) {
             if (response.data.status === 70 || response.data.status === 71) { // new
-              this.isFeedback = (response.data.status === 70)
+              // this.isFeedback = (response.data.status === 70)
+              this.isFeedback = true
               this.isNeedAction = true
               this.screenPassword = false
               this.screenStart = false
