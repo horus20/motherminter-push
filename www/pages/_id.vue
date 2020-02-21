@@ -440,7 +440,7 @@
     <!-- /Direct Links -->
 
     <!-- Footer -->
-    <footer>
+    <footer class="fixed-footer">
       <a href="https://www.minter.network/" target="_blank" class="copy">Powered by <span>Minter</span></a>
     </footer>
     <!-- /Footer -->
