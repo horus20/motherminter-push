@@ -342,7 +342,12 @@
     <div v-if="step === 200" class="modal-alert" v-bind:class="{ 'modal-activation-error': (step === 200) }">
       <img v-bind:src="successIcon" alt="">
       <p class="yipe">Yippee!</p>
-      <p>{{ transfer.value }} {{ transfer.symbol }}<br>
+      <p>
+        {{ transfer.value }} {{ transfer.symbol }}
+      </p>
+      <p class="currency" v-if="!isShowMobile">~{{ balanceSum }}</p>
+      <p class="currency" v-if="isShowMobile">~{{ balanceSumMobile }}</p>
+      <p>
         {{ $t('main.successSent') }}
         <template v-if="isDobro">
           <br><template v-html="newLineLabel($t('dobroSuccess'))"></template>
@@ -353,6 +358,8 @@
         <a v-bind:href="successLink" target="_blank" class="link">{{ successLink }}</a>
         <a v-bind:href="successLink" class="btn btn-link" target="_blank">{{ $t('playNow') }}</a>
       </template>
+
+      <a class="btn btn-more btn-back" v-on:click="goToMain()"><img src="/assets/img/svg/back.svg" alt="">{{ $t('back') }}</a>
     </div>
     <!-- /Modal -->
 
@@ -533,6 +540,7 @@
         balanceSumBIP: 0,
         balanceSumFiat: 0,
         isBalanceUpdated: false,
+        isShowMobile: false,
 
         maxLen: 140,
         minLen: 100,
@@ -618,6 +626,11 @@
     },
     // method
     methods: {
+      goToMain: function () {
+        this.isShowMobile = false
+        this.step = 1
+        this.prevStep = []
+      },
       goBack: function () {
         this.step = this.prevStep.pop()
         return false
@@ -998,6 +1011,7 @@
       showMobile: function () {
         this.prevStep.push(this.step)
         this.step = 4
+        this.isShowMobile = true
       },
       showMobileRun: async function () {
         // send to bipToPhone
