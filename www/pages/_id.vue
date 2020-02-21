@@ -1341,4 +1341,9 @@
     clear: both;
     padding-top: 20px;
   }
+  @media screen and (width: 320px) and (height: 420px) {
+    footer {
+      position: static !important;
+    }
+  }
 </style>
