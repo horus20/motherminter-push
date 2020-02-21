@@ -36,7 +36,7 @@
         <div class="louder-wrap"><div class="lds-ripple"><div></div><div></div></div></div>
       </div>
 
-      <div class="container">
+      <div class="container-medium">
         <div class="conten-items">
 
           <!-- Content Start -->
