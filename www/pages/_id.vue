@@ -67,7 +67,7 @@
 
       </template>
       <!-- Main -->
-      <div v-show="step === 1" class="container">
+      <div v-show="step === 1" class="container-medium">
         <div class="main common-wrap">
           <h1>{{ $t('main.youBalance') }}:</h1>
           <p class="balance" v-for="balance in balances">{{ balance.amount }} {{ balance.coin }}</p>
