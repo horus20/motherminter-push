@@ -440,7 +440,7 @@
     <!-- /Direct Links -->
 
     <!-- Footer -->
-    <footer class="fixed-footer">
+    <footer :class="{'footer-static': step === 4}" class="fixed-footer">
       <a href="https://www.minter.network/" target="_blank" class="copy">Powered by <span>Minter</span></a>
     </footer>
     <!-- /Footer -->
@@ -1342,7 +1342,7 @@
     padding-top: 20px;
   }
   @media screen and (min-height: 410px) {
-    footer {
+    .footer-static {
       position: static !important;
     }
   }
