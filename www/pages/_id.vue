@@ -1341,7 +1341,7 @@
     clear: both;
     padding-top: 20px;
   }
-  @media screen and (width: 320px) and (height: 420px) {
+  @media screen and (min-height: 410px) {
     footer {
       position: static !important;
     }
