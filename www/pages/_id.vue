@@ -1335,6 +1335,7 @@
     padding-bottom: 50px;
   }
   footer {
+    display: none;
     position: relative;
     margin-top: -50px;
     height: 50px;
