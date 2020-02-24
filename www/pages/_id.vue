@@ -67,7 +67,7 @@
 
       </template>
       <!-- Main -->
-      <div v-show="step === 1" class="container">
+      <div v-show="step === 1" class="container-medium">
         <div class="main common-wrap">
           <h1>{{ $t('main.youBalance') }}:</h1>
           <p class="balance" v-for="balance in balances">{{ balance.amount }} {{ balance.coin }}</p>
@@ -447,7 +447,7 @@
     <!-- /Direct Links -->
 
     <!-- Footer -->
-    <footer>
+    <footer :class="{'footer-static': step === 4}" class="fixed-footer">
       <a href="https://www.minter.network/" target="_blank" class="copy">Powered by <span>Minter</span></a>
     </footer>
     <!-- /Footer -->
@@ -1349,10 +1349,16 @@
     padding-bottom: 50px;
   }
   footer {
+    display: none;
     position: relative;
     margin-top: -50px;
     height: 50px;
     clear: both;
     padding-top: 20px;
+  }
+  @media screen and (min-height: 410px) {
+    .footer-static {
+      position: static !important;
+    }
   }
 </style>

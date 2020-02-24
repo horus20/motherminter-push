@@ -589,7 +589,7 @@
     <!--  -->
     <!-- / -->
     <!-- Footer -->
-    <footer v-bind:class="{ 'fixed-footer': step === 1, 'footer-static': footerStatic }">
+    <footer v-if="step === 1" v-bind:class="{ 'fixed-footer': step === 1, 'footer-static': footerStatic, 'fixed-footer': !footerStatic}">
       <a href="https://www.minter.network/" target="_blank" class="copy">Powered by <span>Minter</span></a>
     </footer>
     <!-- /Footer -->
