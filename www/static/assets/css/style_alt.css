@@ -2548,16 +2548,17 @@ footer {
   margin-top: 0;
   margin-bottom: 6px;
 }
+
 .main .transfer-items {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
-  -webkit-box-pack: center;
-      -ms-flex-pack: center;
-          justify-content: center;
+  width: 312px;
+  margin: 0 auto;
   -ms-flex-wrap: wrap;
       flex-wrap: wrap;
 }
+
 .main .transfer-items .transfer__item {
   width: 126px;
   height: 126px;
@@ -2688,18 +2689,52 @@ footer {
   background: #d34c47;
 }
 
-@media (max-width: 374px) {
-  .main .transfer-items .transfer__item {
-    width: 114px;
-    height: 114px;
-    margin: 4px;
-  }
+.main #hoff {
+  background: #cd352a;
 }
+.main #dynatone img {
+  width: 90%;
+}
+.main #korablik img {
+  width: 70%;
+}
+.main #modis {
+  background: #0093d3;
+}
+.main #modis img {
+  width: 90%;
+}
+.main #okko {
+  background: #000;
+}
+.main #okko img {
+  width: 98%;
+}
+.main #black_star img {
+  width: 98%;
+}
+.main #lush {
+  background: #1f191a;
+}
+.main #zoozavr {
+  background: #e5e700;
+}
+.main #world_of_tanks {
+  background: #1f191a;
+}
+.main #detskiy_mir {
+  background: #0073e6;
+}
+.main #adamas {
+  background: #00968a;
+}
+
 @media (max-width: 360px) {
   .main #dochki-sinochk img {
     width: 100px;
   }
 }
+
 @media (max-height: 650px) {
   .main {
     padding-top: calc(50% - 170px);
