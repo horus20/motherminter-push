@@ -2542,17 +2542,6 @@ footer {
   padding-top: calc(50vh - 220px);
   text-align: center;
 }
-.main:after {
-  display: block;
-  content: "";
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  background: #f6fbfb;
-  z-index: -1;
-}
 .main .transfer {
   font-size: 14px;
   color: #989ba9;
