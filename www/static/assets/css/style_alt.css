@@ -429,6 +429,44 @@ header {
   .lang-block .lang-active {
     opacity: 1; }
 
+.second-header {
+  display: none;
+  padding: 12px 38px 0;
+  -webkit-box-pack: end;
+      -ms-flex-pack: end;
+          justify-content: flex-end;
+}
+.second-header .message {
+  width: 32px;
+  height: 26px;
+  position: absolute;
+  top: 18px;
+  left: 38px;
+}
+.second-header .hamburger {
+  margin-top: 12px;
+}
+.second-header .logo {
+  width: auto;
+  position: absolute;
+  top: 12px;
+  left: calc(50vw - 65px);
+  color: #6f6f6f;
+  font: 14px/1 "SegoeUIRegular", sans-serif;
+  -webkit-transform: rotate(0);
+      -ms-transform: rotate(0);
+          transform: rotate(0);
+  margin-left: 0;
+  text-align: center;
+}
+.second-header .logo img {
+  width: 60px;
+  margin-bottom: 6px;
+}
+.second-header .logo span {
+  font-family: "SegoeUIBold", sans-serif;
+}
+
 .conten-items {
   display: -webkit-box;
   display: -ms-flexbox;
@@ -2498,3 +2536,201 @@ footer {
     background: #defcfe; }
   .statistics .activated {
     background: #dffed7; }
+
+.main {
+  padding-top: calc(50% - 220px);
+  padding-top: calc(50vh - 220px);
+  text-align: center;
+}
+.main:after {
+  display: block;
+  content: "";
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: #f6fbfb;
+  z-index: -1;
+}
+.main .transfer {
+  font-size: 14px;
+  color: #989ba9;
+  margin-top: 0;
+  margin-bottom: 6px;
+}
+.main .transfer-items {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -ms-flex-wrap: wrap;
+      flex-wrap: wrap;
+}
+.main .transfer-items .transfer__item {
+  width: 126px;
+  height: 126px;
+  margin: 15px;
+  padding-top: 20px;
+  border-radius: 10px;
+  cursor: pointer;
+  overflow: hidden;
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
+  -webkit-box-shadow: 0 10px 22px 0 rgba(184, 195, 212, 0.4);
+          box-shadow: 0 10px 22px 0 rgba(184, 195, 212, 0.4);
+}
+.main .transfer-items .transfer__item .text__item {
+  font: 12px/1.2 "SegoeUIBold", sans-serif;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: #fff;
+  margin-top: 8px;
+}
+.main .transfer-items .transfer__item-img {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  padding-top: 0;
+}
+.main p {
+  font-size: 18px;
+  line-height: 1.4;
+}
+.main .title {
+  font: 14px/1 "SegoeUIBold", sans-serif;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: 14px;
+}
+.main .balance {
+  font-size: 24px;
+  font-family: "SegoeUIBlack", sans-serif;
+  text-transform: uppercase;
+  color: #000;
+}
+.main .currency {
+  font-size: 14px;
+  font-family: "SegoeUISemiBold", sans-serif;
+  color: #6f6f6f;
+  margin-bottom: 18px;
+}
+.main #another-person {
+  background: #58e1c7;
+}
+.main #another-person img {
+  width: 46px;
+}
+.main #your-wallet {
+  background: #ffd753;
+  padding-top: 22px;
+}
+.main #your-wallet img {
+  width: 51px;
+}
+.main #your-wallet .text__item {
+  color: var(--prim-color);
+}
+.main #charity-fund {
+  background: #f2093d;
+}
+.main #charity-fund img {
+  width: 50px;
+}
+.main #mobile-services {
+  background: #ff71a9;
+  padding-top: 17px;
+}
+.main #mobile-services img {
+  width: 42px;
+  margin-left: -12px;
+}
+.main #steam {
+  background: #1f191a;
+}
+.main #sport-master {
+  background: #003295;
+}
+.main #dochki-sinochk {
+  background: #f6dc34;
+}
+.main #dochki-sinochk img {
+  width: 112px;
+}
+.main #litres {
+  background: #efeee9;
+}
+.main #apple {
+  background: #1f191a;
+}
+.main #svayznoy {
+  background: #4c1e87;
+}
+.main #decathlon {
+  background: #1482c2;
+}
+.main #modi {
+  background: #fff;
+}
+.main #modi img {
+  width: 90%;
+}
+.main #enaza {
+  background: #c62525;
+}
+.main #enaza img {
+  width: 90%;
+}
+.main #togas {
+  background: #1f191a;
+}
+.main #amediateka {
+  background: #1f191a;
+}
+.main #sunlight {
+  background: #d34c47;
+}
+
+@media (max-width: 374px) {
+  .main .transfer-items .transfer__item {
+    width: 114px;
+    height: 114px;
+    margin: 4px;
+  }
+}
+@media (max-width: 360px) {
+  .main #dochki-sinochk img {
+    width: 100px;
+  }
+}
+@media (max-height: 650px) {
+  .main {
+    padding-top: calc(50% - 170px);
+    padding-top: calc(50vh - 170px);
+  }
+}
+.main-logo {
+  padding-top: 24px;
+}
+.main-logo #main-logo {
+  display: block;
+  width: 60px;
+  height: 60px;
+  margin: 0 auto 6px;
+}
+.main-logo .main-brand {
+  color: #6f6f6f;
+  font-size: 14px;
+  margin-bottom: 24px;
+}
+.main-logo .main-brand span {
+  font-family: "SegoeUIBold", sans-serif;
+}
