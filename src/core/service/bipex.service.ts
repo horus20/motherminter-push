@@ -46,7 +46,11 @@ export class BipexService {
 
     sumBip = amountBTC.div(maxPrice);
     // return it
-    return sumBip.toNumber();
+    return {
+      amountBTC,
+      amountBIP: sumBip,
+      price: maxPrice,
+    };
   }
 
   async createBuyOrder(amountBIP: Decimal, priceBTC: Decimal, symbol: string = 'BTC') {

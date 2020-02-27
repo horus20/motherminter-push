@@ -164,6 +164,9 @@ export default {
     errorLogin: 'Error on login to account, check email and password.',
     importError: 'Error of importing the spreadsheet.',
     closeError: 'Error on trying to close the campaign.',
+    internalServerError: 'Error on server, plz try later',
+    priceError: 'Sorry, price for this item is empty, try later',
+    smallBalanceError: 'Error. Insufficient funds',
   },
   successMsg: {
     successSend: 'Success of sending to email.',

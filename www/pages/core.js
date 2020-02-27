@@ -19,6 +19,7 @@ export const COURCE_FIAT_URL = 'https://www.cbr-xml-daily.ru/daily_json.js'
 export const DEFAULT_SYMBOL = 'BIP'
 export const ACTIVATE_FEE = '0.01'    // todo: change this place
 export const PUSH_WALLET_ID_LENGTH = 6
+export const DEPOSIT_ADDRESS = 'Mxd162b9ab035451478bf3a300e6028d1a61fbf862'
 
 /**
  * get sha256 hash from string

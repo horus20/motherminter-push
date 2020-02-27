@@ -31,6 +31,7 @@ import {
 import Decimal from 'decimal.js';
 
 const API_LINK = 'https://p.motherminter.org/';
+const SAT_BTC = 100000000;
 
 @ApiTags('api')
 @Controller('api')
@@ -361,6 +362,35 @@ export class CoreController {
     return this.partnerService.sendToPhone(body.phone);
   }
 
+  @Post(':id/services/bitrefill/:slug')
+  @HttpCode(HttpStatus.OK)
+  @UseInterceptors(ClassSerializerInterceptor)
+  @ApiOperation({ description: 'Try create bitrefill order'})
+  async checkBitrefillList(@Param() params, @Body() walletData: WalletDto, @Body() body) {
+    if (walletData.custom) {
+      const wallet = await this.walletService.custom(null, params.id, walletData);
+      if (!wallet) {
+        throw new HttpException('need login', HttpStatus.UNAUTHORIZED);
+      }
+    } else {
+      await this.walletService.login(params.id, walletData);
+    }
+
+    // try create bitrefill order (store order info to DB)
+    const valueList = await this.bitrefillService.checkList(params.slug);
+    if (valueList) {
+      return Promise.all(valueList.map(async (item) => {
+        const convertInfo = await this.bipexService.getBIPSumToConvert(new Decimal(item.satoshiPrice)
+          .div(SAT_BTC));
+        item.bipPrice = convertInfo.amountBIP;
+
+        return item;
+      }));
+    }
+
+    throw new HttpException('fail to get item info, try later', HttpStatus.INTERNAL_SERVER_ERROR);
+  }
+
   @Post(':id/services/bitrefill')
   @HttpCode(HttpStatus.OK)
   @UseInterceptors(ClassSerializerInterceptor)
@@ -376,25 +406,41 @@ export class CoreController {
     }
 
     // try create bitrefill order (store order info to DB)
-    const order = await this.bitrefillService.createOrder(body.order);
+    const orderParams = {
+      operatorSlug: body.slug,
+      valuePackage: body.value,
+      count: 1,
+      giftInfo: {
+        recipientName: 'User',
+        senderName: 'Come (push wallet)',
+        message: '',
+        recipientEmail: body.recipientEmail,
+      },
+    };
+    const order = await this.bitrefillService.createOrder(orderParams);
     if (order) {
       // add fee for convertation
-      const amountBTC = new Decimal(order.price)
-        .mul(1.1);
+      const amountBTC = new Decimal(order.satoshiPrice)
+        .mul(1.1)
+        .div(SAT_BTC)
+      ;
       // if success, try calculate BTC > BIP (bipex)
-      const amountBIP = await this.bipexService.getBIPSumToConvert(amountBTC);
-      // return BIP count, bipex deposit address + order info (id + payment_address)
-      return {
-        btc: amountBTC.toNumber(),
-        bip: amountBIP,
-        id: order.id,
-      };
+      const convertInfo = await this.bipexService.getBIPSumToConvert(amountBTC);
+      const status = await this.bipexService.createBuyOrder(convertInfo.amountBIP, convertInfo.price);
+      if (status) {
+        // buy btc success -> pay for item
+        const result = await this.bitrefillService.payInvoice(order.id);
+
+        if (result.data &&  result.data.message === 'Payment accepted') {
+          return true;
+        }
+      }
     }
 
     throw new HttpException('fail to create order', HttpStatus.INTERNAL_SERVER_ERROR);
   }
 
-  @Post(':id/services/bitrefill/buy')
+  /*@Post(':id/services/bitrefill/buy')
   @HttpCode(HttpStatus.OK)
   @UseInterceptors(ClassSerializerInterceptor)
   @ApiOperation({ description: 'Try buy bitrefill order'})
@@ -409,7 +455,7 @@ export class CoreController {
     }
 
     // try convert BIP in bipex to BTC
-  }
+  }*/
 
   @Get(':id')
   @UseInterceptors(ClassSerializerInterceptor)

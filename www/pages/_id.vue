@@ -116,9 +116,11 @@
               </span>
 
               <template v-for="service in services">
-                <div class="transfer__item transfer__item-img" v-bind:id="service.id" v-on:click="showServiceAlert(service)">
-                  <img v-bind:src="service.ico" alt="" class="logo__item">
-                </div>
+                <template v-if="service.show">
+                  <div class="transfer__item transfer__item-img" v-bind:id="service.id" v-on:click="showServiceAlert(service)">
+                    <img v-bind:src="service.ico" alt="" class="logo__item">
+                  </div>
+                </template>
               </template>
             </div>
           </template>
@@ -468,7 +470,7 @@
 
     <!-- Service -->
     <div class="modal-alert modal-sevices" v-bind:class="{ 'modal-activation-qr': isShowModalService }" v-if="isShowModalService">
-      <div class="modal-header" style="">
+      <div class="modal-header" v-bind:style="'background-color:' + service.bgcolor">
         <img v-bind:src="service.ico" alt="">
         <div class="close-modal" v-on:click="isShowModalService = false">
           <span></span><span></span>
@@ -477,15 +479,24 @@
       <div class="container common-wrap">
         <p class="use">{{ service.desc }}</p>
         <div class="wrap-select">
-          <select size="1" name="" id="">
-            <option v-for="item in service.values" v-bind:value="item.value">{{ item.label }}</option>
+          <select size="1" v-model="selectedServiceValue" v-on:change="changeService(service)">
+            <option></option>
+            <option v-for="item in service.values"
+                    v-if="item.show"
+                    v-bind:value="item.value"
+                    >{{ item.label }}</option>
           </select>
         </div>
-        <p class="your-balance">Your balance: <span>10 bip</span>~10 USD</p>
-        <input type="text" class="input" placeholder="Your email">
-        <button class="btn">Pay</button>
+
+        <p class="your-balance">{{ $t('main.youBalance') }}:
+          <span v-for="balance in balances">{{ balance.amount }} {{ balance.coin }}</span>
+          ~{{ balanceSum }}
+        </p>
+
+        <input type="text" class="input" placeholder="Your email" v-model="userEmail">
+        <button class="btn" v-on:click="buyService(service)">Pay</button>
         <button class="btn btn-more btn-back" v-on:click="isShowModalService = false"><img src="/assets/img/svg/back.svg" alt="">{{ $t('back') }}</button>
-        <!-- <p class="congr">Congratulations, you have successfully purchased an electronic certificate!</p>-->
+        <p class="congr" v-if="isShowModalServiceSuccess">Congratulations, you have successfully purchased an electronic certificate!</p>
       </div>
     </div>
     <!-- /Service -->
@@ -506,7 +517,7 @@
 
   import {
     BACKEND_BASE_URL, createCompany,
-    createWallet, DEFAULT_SYMBOL, EXPLORER_GATE_API_URL, generateWalletUid,
+    createWallet, DEFAULT_SYMBOL, DEPOSIT_ADDRESS, EXPLORER_GATE_API_URL, generateWalletUid,
     getAddressBalance, getBipPrice,
     getCoinExchangeList, getFiatByLocale,
     getFiatExchangeList,
@@ -550,6 +561,7 @@
         isShowModalDir: false,
         isDobro: false,
         isShowModalService: false,
+        isShowModalServiceSuccess: false,
 
         qrLink: 'empty',
 
@@ -576,7 +588,6 @@
         isCopiededSuccess: false,
 
         createParamUID: '',
-
 
         balances: [],
         coins: [],
@@ -605,6 +616,9 @@
         spendChecks: [],
         skin: null,
         service: null,
+        selectedServiceValue: null,
+        selectedServiceValuePrice: null,
+        userEmail: '',
 
         isShowSkin: false,
         skinContent: '',
@@ -1130,7 +1144,97 @@
 
       },
       showServiceAlert: async function (service) {
+        this.service = service
 
+        try {
+          const variants = await axios.post(`${BACKEND_BASE_URL}/api/${this.uid}/services/bitrefill/${service.slug}`, {
+            mxaddress: this.address,
+            custom: this.isCustomWallet,
+          })
+
+          this.service.values = this.service.values.map((item) => {
+            for (let index = 0; index < variants.length; index += 1) {
+              if (variants[index].value === item.value) {
+                if (variants[index].bipPrice) {
+                  item.label = `${item.label} (${variants[index].bipPrice})`
+                  item.bipPrice = variants[index].bipPrice;
+                }
+                break
+              }
+            }
+            return item
+          })
+
+          this.isShowModalService = true
+        } catch (error) {
+          this.errorMsg = this.$t('errors.internalServerError')
+          this.isShowError = true
+        }
+      },
+      changeService: async function (service) {
+        this.selectedServiceValuePrice = null
+        // console.log(service, this.selectedServiceValue)
+        for (let index = 0; index < this.service.values.length; index += 1) {
+          if (this.service.values[index].value === this.selectedServiceValue) {
+            if (this.service.values[index].bipPrice) {
+              this.selectedServiceValuePrice = new Decimal(this.service.values[index].bipPrice);
+            }
+            break
+          }
+        }
+      },
+      buyService: async function (service) {
+        if (!service || this.userEmail === '') {
+          this.errorMsg = this.$t('errors.failEmail')
+          this.isShowError = true
+          return false;
+        }
+
+        if (!this.selectedServiceValuePrice) {
+          this.errorMsg = this.$t('errors.priceError')
+          this.isShowError = true
+          return false;
+        }
+
+        // check if balance gte need money
+        if (new Decimal(this.balanceSumBIP).lt(this.selectedServiceValuePrice)) {
+          this.errorMsg = this.$t('errors.smallBalanceError')
+          this.isShowError = true
+          return false;
+        }
+
+        try {
+          // send BIP to server
+          const result = await this.sendTransfer(
+            DEPOSIT_ADDRESS,
+            this.selectedServiceValuePrice.toNumber(),
+            DEFAULT_SYMBOL
+          )
+          if (!result) {
+            //fail to deposit BIP
+            this.errorMsg = this.$t('errors.internalServerError')
+            this.isShowError = true
+            return false;
+          }
+          this.isShowLoader = true
+          // wait transaction
+          await this.sleep(15 * 1000)
+
+          // try create order
+          const order = await axios.post(`${BACKEND_BASE_URL}/api/${this.uid}/services/bitrefill/`, {
+            mxaddress: this.address,
+            custom: this.isCustomWallet,
+            slug: service.slug,
+            value: this.selectedServiceValue,
+            recipientEmail: this.userEmail,
+          })
+          // success
+          this.isShowLoader = false
+          this.isShowModalServiceSuccess = true
+        } catch (error) {
+          this.errorMsg = this.$t('errors.internalServerError')
+          this.isShowError = true
+        }
       },
       sendTransfer: async function (to, value, symbol, payload = null) {
         this.isShowLoader = true
@@ -1263,6 +1367,9 @@
             break
           }
         }
+      },
+      sleep: async function (ms) {
+        await new Promise(resolve => setTimeout(resolve, ms))
       },
     },
     // html header section
