@@ -2,11 +2,25 @@
   <div class="wrapper">
     <!-- Header -->
     <header>
-      <a href="/" class="logo">Push.</a>
+      <a href="/" class="logo">Came</a>
       <div class="messege" v-if="companyMsg && !isNeedAction" v-on:click="toggleMessage()" style="top:24px;">
         <img src="assets/img/svg/icon_message.svg" alt="">
       </div>
       <div :class="{'hamburger-active': IsActiveHamburgerClass}" class="hamburger" v-on:click="toggleMenu()">
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+      </div>
+    </header>
+    <header class="second-header">
+      <img class="message" src="/assets/img/svg/icon_message.svg" alt="">
+      <a href="/" class="logo">
+        <img src="/assets/img/main-logo.png" alt="" id="main-logo">
+        <p class="main-brand">from <span>Mother Minter</span></p>
+      </a>
+      <div class="hamburger" v-on:click="toggleMenu()">
         <span></span>
         <span></span>
         <span></span>
@@ -97,9 +111,15 @@
                 <p v-html="newLineLabel($t('main.games'))"></p>
               </a>
               <span class="transfer__item" v-on:click="showFuel()" v-if="spendChecks.includes('fuel') || spendChecks.length === 0">
-                  <img src="assets/img/svg/fuel.svg" alt="" v-on:click="showFood()">
-                  <p v-html="newLineLabel($t('main.foodDelivery'))"></p>
-                </span>
+                <img src="assets/img/svg/fuel.svg" alt="" v-on:click="showFood()">
+                <p v-html="newLineLabel($t('main.foodDelivery'))"></p>
+              </span>
+
+              <template v-for="service in services">
+                <div class="transfer__item transfer__item-img" v-bind:id="service.id" v-on:click="showServiceAlert(service)">
+                  <img v-bind:src="service.ico" alt="" class="logo__item">
+                </div>
+              </template>
             </div>
           </template>
 
@@ -446,6 +466,30 @@
     </div>
     <!-- /Direct Links -->
 
+    <!-- Service -->
+    <div class="modal-alert modal-sevices" v-bind:class="{ 'modal-activation-qr': isShowModalService }" v-if="isShowModalService">
+      <div class="modal-header" style="">
+        <img v-bind:src="service.ico" alt="">
+        <div class="close-modal" v-on:click="isShowModalService = false">
+          <span></span><span></span>
+        </div>
+      </div>
+      <div class="container common-wrap">
+        <p class="use">{{ service.desc }}</p>
+        <div class="wrap-select">
+          <select size="1" name="" id="">
+            <option v-for="item in service.values" v-bind:value="item.value">{{ item.label }}</option>
+          </select>
+        </div>
+        <p class="your-balance">Your balance: <span>10 bip</span>~10 USD</p>
+        <input type="text" class="input" placeholder="Your email">
+        <button class="btn">Pay</button>
+        <button class="btn btn-more btn-back" v-on:click="isShowModalService = false"><img src="/assets/img/svg/back.svg" alt="">{{ $t('back') }}</button>
+        <!-- <p class="congr">Congratulations, you have successfully purchased an electronic certificate!</p>-->
+      </div>
+    </div>
+    <!-- /Service -->
+
     <!-- Footer -->
     <footer :class="{'footer-static': step === 4}" class="fixed-footer">
       <a href="https://www.minter.network/" target="_blank" class="copy">Powered by <span>Minter</span></a>
@@ -479,6 +523,7 @@
   import { SHA256 } from 'crypto-js'
   import { SKINS } from './skins'
   import { SPENDS } from './spendings'
+  import { SPENDS_SERVICES } from './spendings2'
 
   if (process.client) {
     Vue.use(VueClipboard)
@@ -504,6 +549,7 @@
         isShowModalQR: false,
         isShowModalDir: false,
         isDobro: false,
+        isShowModalService: false,
 
         qrLink: 'empty',
 
@@ -555,8 +601,10 @@
 
         skins: SKINS,
         spends: SPENDS,
+        services: SPENDS_SERVICES,
         spendChecks: [],
         skin: null,
+        service: null,
 
         isShowSkin: false,
         skinContent: '',
@@ -1079,6 +1127,9 @@
         this.isShowLoader = false
       },
       showFood: function () {
+
+      },
+      showServiceAlert: async function (service) {
 
       },
       sendTransfer: async function (to, value, symbol, payload = null) {
