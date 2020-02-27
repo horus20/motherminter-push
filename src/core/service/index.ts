@@ -3,3 +3,5 @@ export * from './wallet.service';
 export * from './warehouse.service';
 export * from './partner.service';
 export * from './account.service';
+export * from './bipex.service';
+export * from './bitrefill.service';
