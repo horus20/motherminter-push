@@ -402,13 +402,14 @@ export class CoreController {
   @UseInterceptors(ClassSerializerInterceptor)
   @ApiOperation({ description: 'Try create bitrefill order'})
   async tryCreateBitrefillOrder(@Param() params, @Body() walletData: WalletDto, @Body() body) {
+    let wallet;
     if (walletData.custom) {
-      const wallet = await this.walletService.custom(null, params.id, walletData);
+      wallet = await this.walletService.custom(null, params.id, walletData);
       if (!wallet) {
         throw new HttpException('need login', HttpStatus.UNAUTHORIZED);
       }
     } else {
-      await this.walletService.login(params.id, walletData);
+      wallet = await this.walletService.login(params.id, walletData);
     }
 
     // try create bitrefill order (store order info to DB)
@@ -432,6 +433,20 @@ export class CoreController {
       ;
       // if success, try calculate BTC > BIP (bipex)
       const convertInfo = await this.bipexService.getBIPSumToConvert(amountBTC);
+      // check balans up on bipex for this sum
+      let depositSuccess = false;
+      for (let attempt = 0; attempt < 10; attempt += 1) {
+        depositSuccess = await this.bipexService.checkDepositSum(wallet.mxaddress, convertInfo.amountBIP);
+        if (depositSuccess) {
+          break;
+        }
+        await this.delay(3 * 1000); // 3 sec
+      }
+
+      if (!depositSuccess) {
+        throw new HttpException('fail deposit BIP', HttpStatus.INTERNAL_SERVER_ERROR);
+      }
+
       const status = await this.bipexService.createBuyOrder(convertInfo.amountBIP, convertInfo.price);
       if (status) {
         // buy btc success -> pay for item
@@ -481,5 +496,9 @@ export class CoreController {
       return this.walletService.custom(company, params.id, walletData);
     }
     return this.walletService.login(params.id, walletData);
+  }
+
+  private delay(ms: number) {
+    return new Promise( resolve => setTimeout(resolve, ms) );
   }
 }

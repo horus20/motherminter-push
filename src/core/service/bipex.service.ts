@@ -59,13 +59,52 @@ export class BipexService {
       return null;
     }
 
-    sumBip = amountBTC.div(maxPrice);
+    sumBip = amountBTC
+      .div(maxPrice)
+      .floor()
+    ;
     // return it
     return {
       amountBTC,
       amountBIP: sumBip,
       price: maxPrice,
     };
+  }
+
+  async checkDepositSum(addressFrom: string, amountBIP: Decimal) {
+    // get open order in bipex
+    // calculate sum in BIP
+    try {
+      const bodyFormData = new FormData();
+      bodyFormData.append('getOrders', '1');
+      bodyFormData.append('onlyMy', '1');
+      bodyFormData.append('authkey', this.authKey);
+
+      const response = await this.client.request({
+        data: bodyFormData,
+        headers: bodyFormData.getHeaders(),
+      });
+      if (response.data && response.data.DEPOSIT) {
+        // tslint:disable-next-line:forin
+        for (const key in response.data.DEPOSIT) {
+          const item = response.data.DEPOSIT[key];
+
+          if (item.type === 'deposit') {
+            const depositSum = new Decimal(item.dat);
+            const txResponse = await axios.get(`https://explorer-api.minter.network/api/v1/transactions/${item.tx}`);
+            if (txResponse && txResponse.data) {
+              if (txResponse.data.from === addressFrom && depositSum.gte(amountBIP)) {
+                return true;
+              }
+            }
+          }
+        }
+      }
+    } catch (error) {
+      global.console.error(error);
+    }
+
+    return false;
   }
 
   async createBuyOrder(amountBIP: Decimal, priceBTC: Decimal, symbol: string = 'BTC') {

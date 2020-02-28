@@ -1147,16 +1147,17 @@
         this.service = service
 
         try {
-          const variants = await axios.post(`${BACKEND_BASE_URL}/api/${this.uid}/services/bitrefill/${service.slug}`, {
+          const response = await axios.post(`${BACKEND_BASE_URL}/api/${this.uid}/services/bitrefill/${service.slug}`, {
             mxaddress: this.address,
             custom: this.isCustomWallet,
           })
+          const variants = response.data
 
           this.service.values = this.service.values.map((item) => {
             for (let index = 0; index < variants.length; index += 1) {
               if (variants[index].value === item.value) {
                 if (variants[index].bipPrice) {
-                  item.label = `${item.label} (${variants[index].bipPrice})`
+                  item.label = `${item.label} (${variants[index].bipPrice} BIP)`
                   item.bipPrice = variants[index].bipPrice;
                 }
                 break
