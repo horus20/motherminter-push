@@ -437,7 +437,7 @@ export class CoreController {
         recipientEmail: body.recipientEmail,
       },
     };
-    const order = await this.bitrefillService.createOrder(orderParams);
+    const order = await this.bitrefillService.createPreOrder(orderParams);
     if (order && order.orders && order.orders.length > 0) {
       // add fee for convertation
       const amountBTC = new Decimal(order.satoshiPrice)
@@ -463,7 +463,11 @@ export class CoreController {
       const status = await this.bipexService.createBuyOrder(convertInfo.amountBIP, convertInfo.price);
       if (status) {
         // buy btc success -> pay for item
-        const orderId = order.orders[0].id;
+        const orderId = await this.bitrefillService.createOrder({
+          operatorSlug: body.slug,
+          valuePackage: body.value,
+          email: body.recipientEmail,
+        });
         const result = await this.bitrefillService.paymentOrder(orderId);
 
         if (result) {

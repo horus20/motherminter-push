@@ -11,6 +11,7 @@ export class BitrefillService {
   private authEmail;
   private depositAddress;
   private client;
+  private clientApi;
 
   constructor(
     private readonly configService: ConfigService,
@@ -26,35 +27,17 @@ export class BitrefillService {
         authorization: `Token ${this.authToken}`,
       },
     });
+    this.clientApi = axios.create({
+      baseURL: 'https://api.bitrefill.com/v1/',
+      method: 'POST',
+      auth: {
+        username: this.authKey,
+        password: this.authSecret,
+      },
+    });
   }
 
-  /*async createOrder(params) {
-    if (!params.operatorSlug || !params.valuePackage) {
-      global.console.error('fail to create bitrefill order for', params);
-      return false;
-    }
-
-    try {
-      const response = await this.client.request({
-        url: 'order',
-        method: 'POST',
-        data: params,
-      });
-      global.console.info(response.data);
-
-      if (response.data && response.data.status === 'paid') {
-        // store and return order information
-        return response.data;
-      }
-
-      global.console.error(response.data);
-    } catch (error) {
-      global.console.error(error);
-    }
-    return null;
-  }
-
-  async paymentOrder(params) {
+  /*  async paymentOrder(params) {
     if (!params.operatorSlug || !params.valuePackage) {
       global.console.error('fail to create bitrefill order for', params);
       return false;
@@ -95,7 +78,7 @@ export class BitrefillService {
     return false;
   }
 
-  async createOrder(orderParams) {
+  async createPreOrder(orderParams) {
     try {
       const response = await this.client.request({
         url: 'accounts/invoice',
@@ -118,6 +101,31 @@ export class BitrefillService {
       global.console.error(orderParams, error);
     }
     return false;
+  }
+
+  async createOrder(params) {
+    if (!params.operatorSlug || !params.valuePackage) {
+      global.console.error('fail to create bitrefill order for', params);
+      return false;
+    }
+
+    try {
+      const response = await this.clientApi.request({
+        url: 'order',
+        data: params,
+      });
+      global.console.info(response.data);
+
+      if (response.data && response.data.status === 'unpaid') {
+        // store and return order information
+        return response.data.id;
+      }
+
+      global.console.error(response.data);
+    } catch (error) {
+      global.console.error(error);
+    }
+    return null;
   }
 
   /*async payInvoice(orderId) {
@@ -147,21 +155,13 @@ export class BitrefillService {
       return false;
     }
 
-    let response;
     try {
-      response = await axios.post(
-        `https://api.bitrefill.com/v1/order/${orderId}/purchase`,
-        {},
-        {
-          auth: {
-            username: this.authKey,
-            password: this.authSecret,
-          },
-        },
-        );
+      const response = await this.clientApi.request({
+          url: `order/${orderId}/purchase`,
+        });
       global.console.info(orderId, response.data);
     } catch (error) {
-      global.console.info(orderId, response.data);
+      global.console.info(orderId);
     }
     return true;
   }
