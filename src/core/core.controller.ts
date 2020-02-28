@@ -390,8 +390,11 @@ export class CoreController {
     const valueList = await this.bitrefillService.checkList(params.slug);
     if (valueList) {
       return Promise.all(valueList.map(async (item) => {
-        const convertInfo = await this.bipexService.getBIPSumToConvert(new Decimal(item.satoshiPrice)
-          .div(SAT_BTC));
+        const convertInfo = await this.bipexService.getBIPSumToConvert(
+          new Decimal(item.satoshiPrice)
+            .mul(1.1)
+            .div(SAT_BTC),
+        );
         if (!convertInfo) {
           throw new HttpException('fail to get item info, try later', HttpStatus.INTERNAL_SERVER_ERROR);
         }
@@ -469,6 +472,33 @@ export class CoreController {
     }
 
     throw new HttpException('fail to create order', HttpStatus.INTERNAL_SERVER_ERROR);
+  }
+
+  @Post(':id/services/bitrefill1')
+  @HttpCode(HttpStatus.OK)
+  @UseInterceptors(ClassSerializerInterceptor)
+  @ApiOperation({ description: 'Try create bitrefill order'})
+  async tryCreateBitrefillOrder1(@Param() params, @Body() walletData: WalletDto, @Body() body) {
+    // add fee for convertation
+    const amountBTC = new Decimal(8900)
+      .mul(1.1)
+      .div(SAT_BTC)
+    ;
+    // if success, try calculate BTC > BIP (bipex)
+    const convertInfo = await this.bipexService.getBIPSumToConvert(amountBTC);
+    // check balans up on bipex for this sum
+    let depositSuccess = false;
+    for (let attempt = 0; attempt < 10; attempt += 1) {
+      depositSuccess = await this.bipexService.checkDepositSum('Mxc37928918d4155c91359af9a342287b4ae588e40', convertInfo.amountBIP);
+      if (depositSuccess) {
+        break;
+      }
+      await this.delay(3 * 1000); // 3 sec
+    }
+
+    if (!depositSuccess) {
+      throw new HttpException('fail deposit BIP', HttpStatus.INTERNAL_SERVER_ERROR);
+    }
   }
 
   /*@Post(':id/services/bitrefill/buy')
