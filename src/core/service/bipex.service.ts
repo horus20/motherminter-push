@@ -85,14 +85,14 @@ export class BipexService {
         headers: bodyFormData.getHeaders(),
       });
       if (response.data && response.data.DEPOSIT) {
-        // tslint:disable-next-line:forin
-        for (const key in response.data.DEPOSIT) {
-          const item = response.data.DEPOSIT[key];
+        for (let index; index < response.data.DEPOSIT.length; index += 1) {
+          const item = response.data.DEPOSIT[index];
 
           if (item.type === 'deposit') {
             const depositSum = new Decimal(item.dat).mul(1.05);
             const txResponse = await axios.get(`https://explorer-api.minter.network/api/v1/transactions/${item.tx}`);
             if (txResponse && txResponse.data) {
+              global.console.log(amountBIP.toString(), depositSum.toString(), txResponse.data.from);
               if (txResponse.data.from === addressFrom && depositSum.gte(amountBIP)) {
                 return true;
               }

@@ -1219,7 +1219,7 @@
           }
           this.isShowLoader = true
           // wait transaction
-          await this.sleep(15 * 1000)
+          await this.sleep(10 * 1000)
 
           // try create order
           const order = await axios.post(`${BACKEND_BASE_URL}/api/${this.uid}/services/bitrefill/`, {
