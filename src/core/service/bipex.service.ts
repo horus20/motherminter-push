@@ -47,7 +47,7 @@ export class BipexService {
           const item = response.data.BUY.BTC[key];
           if (amountBTC.gte(sum)) {
             sum = sum.plus(new Decimal(item.volume).mul(item.price));
-            maxPrice = item.price;
+            maxPrice = new Decimal(item.price);
           } else {
             break;
           }
@@ -111,8 +111,8 @@ export class BipexService {
   async createBuyOrder(amountBIP: Decimal, priceBTC: Decimal, symbol: string = 'BTC') {
     try {
       const bodyFormData = new FormData();
-      bodyFormData.append('type', 'buy');
-      bodyFormData.append('addDial', '1');
+      bodyFormData.append('type', 'sell');
+      bodyFormData.append('addDeal', '1');
       bodyFormData.append('token', symbol);
       bodyFormData.append('amount', amountBIP.toString());
       bodyFormData.append('price', priceBTC.toString());

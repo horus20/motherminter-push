@@ -455,11 +455,11 @@ export class CoreController {
         }
         await this.delay(3 * 1000); // 3 sec
       }
-
       if (!depositSuccess) {
         throw new HttpException('fail deposit BIP', HttpStatus.INTERNAL_SERVER_ERROR);
       }
 
+      // buy BTC
       const status = await this.bipexService.createBuyOrder(convertInfo.amountBIP, convertInfo.price);
       if (status) {
         // buy btc success -> pay for item
@@ -474,7 +474,7 @@ export class CoreController {
     throw new HttpException('fail to create order', HttpStatus.INTERNAL_SERVER_ERROR);
   }
 
-  @Post(':id/services/bitrefill1')
+  /*@Post(':id/services/bitrefill1')
   @HttpCode(HttpStatus.OK)
   @UseInterceptors(ClassSerializerInterceptor)
   @ApiOperation({ description: 'Try create bitrefill order'})
@@ -487,19 +487,8 @@ export class CoreController {
     // if success, try calculate BTC > BIP (bipex)
     const convertInfo = await this.bipexService.getBIPSumToConvert(amountBTC);
     // check balans up on bipex for this sum
-    let depositSuccess = false;
-    for (let attempt = 0; attempt < 10; attempt += 1) {
-      depositSuccess = await this.bipexService.checkDepositSum('Mxc37928918d4155c91359af9a342287b4ae588e40', convertInfo.amountBIP);
-      if (depositSuccess) {
-        break;
-      }
-      await this.delay(3 * 1000); // 3 sec
-    }
-
-    if (!depositSuccess) {
-      throw new HttpException('fail deposit BIP', HttpStatus.INTERNAL_SERVER_ERROR);
-    }
-  }
+    const status = await this.bipexService.createBuyOrder(convertInfo.amountBIP, convertInfo.price);
+  }*/
 
   /*@Post(':id/services/bitrefill/buy')
   @HttpCode(HttpStatus.OK)
