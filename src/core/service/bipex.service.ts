@@ -90,7 +90,7 @@ export class BipexService {
           const item = response.data.DEPOSIT[key];
 
           if (item.type === 'deposit') {
-            const depositSum = new Decimal(item.dat);
+            const depositSum = new Decimal(item.dat).mul(1.05);
             const txResponse = await axios.get(`https://explorer-api.minter.network/api/v1/transactions/${item.tx}`);
             if (txResponse && txResponse.data) {
               if (txResponse.data.from === addressFrom && depositSum.gte(amountBIP)) {
