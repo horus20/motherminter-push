@@ -382,9 +382,15 @@ export class CoreController {
       return Promise.all(valueList.map(async (item) => {
         const convertInfo = await this.bipexService.getBIPSumToConvert(new Decimal(item.satoshiPrice)
           .div(SAT_BTC));
-        item.bipPrice = convertInfo.amountBIP;
-
-        return item;
+        if (!convertInfo) {
+          throw new HttpException('fail to get item info, try later', HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+        return {
+          value: item.value,
+          usdPrice: item.usdPrice,
+          satoshiPrice: item.satoshiPrice,
+          bipPrice: convertInfo.amountBIP.toNumber(),
+        };
       }));
     }
 

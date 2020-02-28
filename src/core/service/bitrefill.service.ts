@@ -24,7 +24,8 @@ export class BitrefillService {
     // this.client = axios.create({ method: 'POST', baseURL: 'https://api.bitrefill.com/v1'});
     this.client = axios.create({ baseURL: 'https://www.bitrefill.com/api/', headers: {
         authorization: `Token ${this.authToken}`,
-      }});
+      },
+    });
   }
 
   /*async createOrder(params) {
@@ -84,9 +85,8 @@ export class BitrefillService {
         url: `product/${slug}`,
         method: 'GET',
       });
-      global.console.info(slug, response.data);
-
       if (response.data && response.data.packages) {
+        global.console.info(slug, response.data.packages);
         return response.data.packages;
       }
     } catch (error) {
