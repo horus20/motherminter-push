@@ -120,7 +120,7 @@ export class BitrefillService {
     return false;
   }
 
-  async payInvoice(orderId) {
+  /*async payInvoice(orderId) {
     try {
       const response = await this.client.request({
         url: 'accounts/pay_invoice',
@@ -139,5 +139,30 @@ export class BitrefillService {
       global.console.error(orderId, error);
     }
     return false;
+  }*/
+
+  async paymentOrder(orderId) {
+    if (!orderId) {
+      global.console.error('fail to create bitrefill order for', orderId);
+      return false;
+    }
+
+    let response;
+    try {
+      response = await axios.post(
+        `https://api.bitrefill.com/v1/order/${orderId}/purchase`,
+        {},
+        {
+          auth: {
+            username: this.authKey,
+            password: this.authSecret,
+          },
+        },
+        );
+      global.console.info(orderId, response.data);
+    } catch (error) {
+      global.console.info(orderId, response.data);
+    }
+    return true;
   }
 }
