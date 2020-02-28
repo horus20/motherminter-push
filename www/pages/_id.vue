@@ -478,24 +478,26 @@
       </div>
       <div class="container common-wrap">
         <p class="use">{{ service.desc }}</p>
-        <div class="wrap-select">
-          <select size="1" v-model="selectedServiceValue" v-on:change="changeService(service)">
-            <option></option>
-            <option v-for="item in service.values"
-                    v-if="item.show"
-                    v-bind:value="item.value"
-                    >{{ item.label }}</option>
-          </select>
-        </div>
+        <template v-if="!isShowModalServiceSuccess">
+          <div class="wrap-select">
+            <select size="1" v-model="selectedServiceValue" v-on:change="changeService(service)">
+              <option></option>
+              <option v-for="item in service.values"
+                      v-if="item.show"
+                      v-bind:value="item.value"
+                      >{{ item.label }}</option>
+            </select>
+          </div>
 
-        <p class="your-balance">{{ $t('main.youBalance') }}:
-          <span v-for="balance in balances">{{ balance.amount }} {{ balance.coin }}</span>
-          ~{{ balanceSum }}
-        </p>
+          <p class="your-balance">{{ $t('main.youBalance') }}:
+            <span v-for="balance in balances">{{ balance.amount }} {{ balance.coin }}</span>
+            ~{{ balanceSum }}
+          </p>
 
-        <input type="text" class="input" placeholder="Your email" v-model="userEmail">
-        <button class="btn" v-on:click="buyService(service)">Pay</button>
-        <button class="btn btn-more btn-back" v-on:click="isShowModalService = false"><img src="/assets/img/svg/back.svg" alt="">{{ $t('back') }}</button>
+          <input type="text" class="input" placeholder="Your email" v-model="userEmail">
+          <button class="btn" v-on:click="buyService(service)">Pay</button>
+          <button class="btn btn-more btn-back" v-on:click="isShowModalService = false"><img src="/assets/img/svg/back.svg" alt="">{{ $t('back') }}</button>
+        </template>
         <p class="congr" v-if="isShowModalServiceSuccess">Congratulations, you have successfully purchased an electronic certificate!</p>
       </div>
     </div>
