@@ -339,7 +339,17 @@ export class CoreController {
   @UseInterceptors(ClassSerializerInterceptor)
   @ApiOperation({ description: 'Send raw signed transaction to network'})
   async send(@Param() params, @Body() walletData: WalletDto, @Body() body): Promise<string> {
-    return this.walletService.send(params.id, walletData, body.rawTx);
+    let wallet;
+    if (walletData.custom) {
+      wallet = await this.walletService.custom(null, params.id, walletData);
+      if (!wallet) {
+        throw new HttpException('need login', HttpStatus.UNAUTHORIZED);
+      }
+    } else {
+      wallet = await this.walletService.login(params.id, walletData);
+    }
+
+    return this.walletService.send(wallet, body.rawTx);
   }
 
   /**

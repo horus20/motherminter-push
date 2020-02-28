@@ -1266,6 +1266,7 @@
           // send to back
           const txHash = await axios.post(`${BACKEND_BASE_URL}/api/${this.uid}/send`, {
             mxaddress: this.address,
+            custom: this.isCustomWallet,
             rawTx: serializedTx,
           })
 

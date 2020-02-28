@@ -156,9 +156,7 @@ export class WalletService {
     return true;
   }
 
-  async send(id: string, walletData: WalletDto, rawTx: string): Promise<string> {
-    const wallet = await this.login(id, walletData);
-
+  async send(wallet: Wallet, rawTx: string): Promise<string> {
     return this.warehouseService.sendRawTx(wallet.mxaddress, rawTx);
   }
 
